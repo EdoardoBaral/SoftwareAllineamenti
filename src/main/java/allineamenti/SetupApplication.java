@@ -53,4 +53,22 @@ public class SetupApplication {
 		
 		return listaVerticali;
 	}
+	
+	public List<String> leggiVersioniPom() throws IOException
+	{
+		List<String> listaVersioni = new ArrayList<>();
+		String nomeFile = "VersioniPOM.txt";
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource(nomeFile).getFile());
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		
+		String riga;
+		while ((riga = br.readLine()) != null )
+		{
+			if (!"".equals(riga))
+				listaVersioni.add(riga);
+		}
+		
+		return listaVersioni;
+	}
 }

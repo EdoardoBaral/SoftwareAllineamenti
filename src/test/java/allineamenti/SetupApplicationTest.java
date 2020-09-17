@@ -1,5 +1,6 @@
 package allineamenti;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -29,5 +30,15 @@ public class SetupApplicationTest
 		
 		assertNotNull(listaVerticali);
 		assertTrue(!listaVerticali.isEmpty());
+	}
+	
+	@Test
+	public void leggiVersioniPomTest() throws IOException
+	{
+		SetupApplication setupApplication = new SetupApplication();
+		List<String> listaVersioniPom = setupApplication.leggiVersioniPom();
+		
+		assertNotNull(listaVersioniPom);
+		assertFalse(listaVersioniPom.isEmpty());
 	}
 }
