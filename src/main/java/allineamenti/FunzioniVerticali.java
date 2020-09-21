@@ -537,6 +537,7 @@ public class FunzioniVerticali
 		System.out.println("--------------------");
 	}
 	
+	/* Metodo main da tenere nel caso sia necessaria la sola procedura di aggiornamento dei POM dei verticali */
 	public static void main(String[] args)
 	{
 		String percorso = "D:\\Openshift\\Verticali\\cdbp0";
