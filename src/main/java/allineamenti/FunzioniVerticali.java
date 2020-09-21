@@ -47,7 +47,7 @@ public class FunzioniVerticali
 		System.out.println("--- Merge di tutti i verticali dal branch master\n");
 		pullOriginMasterVerticali(listaVerticali, percorso);
 		proceduraGestioneConflitti(listaVerticali, percorso);
-//		confermaVersioniPomVerticali();
+		
 		proceduraSostituzioneVersioniPom(percorso);
 
 		statusVerticali(listaVerticali, percorso);
