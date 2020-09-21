@@ -2,11 +2,25 @@ package allineamenti;
 
 import static allineamenti.GitCommands.executeCommand;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class FunzioniVerticali
 {
@@ -33,7 +47,8 @@ public class FunzioniVerticali
 		System.out.println("--- Merge di tutti i verticali dal branch master\n");
 		pullOriginMasterVerticali(listaVerticali, percorso);
 		proceduraGestioneConflitti(listaVerticali, percorso);
-		confermaVersioniPomVerticali();
+//		confermaVersioniPomVerticali();
+		proceduraSostituzioneVersioniPom(percorso);
 
 		statusVerticali(listaVerticali, percorso);
 		verificaModificheNonCommittate();
@@ -422,5 +437,109 @@ public class FunzioniVerticali
 			return true;
 		else
 			return false;
+	}
+	
+	public static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali)
+	{
+		System.out.println("--- Verifica e sostituzione automatica delle versioni aggiornate nei POM dei verticali");
+		System.out.println("    1) Assicurati che nel file VersioniPOM.txt siano presenti tutte le versioni da aggiornare") ;
+		System.out.println("    2) Digita S per avviare la procedura oppure N per saltarla") ;
+		System.out.print(">>> Scelta: ");
+		String scelta = inputScelta();
+		
+		if("N".equalsIgnoreCase(scelta))
+			return;
+		
+		SetupApplication setupApplication = new SetupApplication();
+		try
+		{
+			List<String> listaVersioni = setupApplication.leggiVersioniPom();
+			ricercaFilePom(percorsoCartellaVerticali, listaVersioni);
+		}
+		catch(IOException ex)
+		{
+			System.out.println("Errore nell'aggiornamento delle versioni dei POM");
+			ex.printStackTrace();
+		}
+		System.out.println();
+	}
+	
+	public static void ricercaFilePom(String percorsoRoot, List<String> listaVersioni)
+	{
+		File file = new File(percorsoRoot);
+		ricercaFilePomRicorsiva(file, listaVersioni);
+	}
+	
+	public static void ricercaFilePomRicorsiva(File file, List<String> listaVersioni)
+	{
+		if(!file.isDirectory())
+		{
+			if("pom.xml".equalsIgnoreCase(file.getName()))
+				sostituisciVersioni(file, listaVersioni);
+		}
+		else
+		{
+			if(!"target".equalsIgnoreCase(file.getName()))
+			{
+				File[] listaFiles = file.listFiles();
+				for(File f : listaFiles)
+					ricercaFilePomRicorsiva(f, listaVersioni);
+			}
+		}
+	}
+	
+	public static void sostituisciVersioni(File filePom, List<String> listaVersioni)
+	{
+		System.out.println("--- Aggiornamento versioni nel file "+ filePom.getAbsolutePath());
+		try
+		{
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(filePom);
+			
+			boolean aggiornamentoFileNecessario = false;
+			
+			for(String riga : listaVersioni)
+			{
+				String nomeTag = riga.substring(1, riga.indexOf('>'));
+				String versioneAggiornata = riga.substring(riga.indexOf('>')+1, riga.lastIndexOf('<'));
+				
+				NodeList nodeList = document.getElementsByTagName(nomeTag);
+				if(nodeList.getLength() > 0)
+					aggiornamentoFileNecessario = true;
+				
+				for(int i=0; i<nodeList.getLength(); i++)
+				{
+					Node node = nodeList.item(i);
+					System.out.println("--- [PRIMA] "+ node.getNodeName() +" - "+ node.getTextContent());
+					node.setTextContent(versioneAggiornata);
+					System.out.println("--- [DOPO]  "+ node.getNodeName() +" - "+ node.getTextContent());
+				}
+			}
+			
+			if(aggiornamentoFileNecessario)
+			{
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				transformer.setOutputProperty("omit-xml-declaration", "yes");
+				DOMSource source = new DOMSource(document);
+				StreamResult result = new StreamResult(filePom);
+				
+				transformer.transform(source, result);
+				System.out.println("--- Scrittura completata");
+			}
+		}
+		catch (ParserConfigurationException | SAXException | IOException | TransformerException ex)
+		{
+			System.err.println("--- Errore nella sostituzione delle versioni nel POM "+ filePom.getAbsolutePath());
+			ex.printStackTrace();
+		}
+		System.out.println("--------------------");
+	}
+	
+	public static void main(String[] args)
+	{
+		String percorso = "D:\\Openshift\\Verticali\\cdbp0";
+		proceduraSostituzioneVersioniPom(percorso);
 	}
 }
