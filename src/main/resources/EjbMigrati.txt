@@ -30,7 +30,6 @@
 --B2: identitadigitale-ejb
 --B2: jiffy-ejb
 --B2: masterpass-ejb
---B2: opricorrenti-ejb
 --B2: pagamentobollette-ejb
 --B2: prestiti-ejb
 --B2: ricaricacellulare-ejb
@@ -39,7 +38,7 @@
 --B2: variazionelimiti-definitiva-ejb
 
 --B3: comunicazioni-ejb
---B3: digitalwallet-ejb
+--B3: opricorrenti-ejb
 --B3: pagamentimultipli-ejb
 --B3: pagamentiribamultipli-ejb
 --B3: revoche-ejb
@@ -53,4 +52,5 @@
 --B5: pulsantiera-ejb
 --B5: trading-ejb
 
+--B6: digitalwallet-ejb
 --B6: listaoperazioni-ejb
