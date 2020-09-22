@@ -41,7 +41,7 @@ public class FunzioniVerticali
 			System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL+"'\n");
 			pullOriginVerticali(listaVerticali, percorso);
 			proceduraGestioneConflitti(listaVerticali, percorso);
-			confermaVersioniPomVerticali();
+//			confermaVersioniPomVerticali(); //Commentata perché tanto alla fine viene fatto l'aggiornamento automatico delle versioni nei POM
 		}
 
 		System.out.println("--- Merge di tutti i verticali dal branch master\n");
@@ -62,9 +62,9 @@ public class FunzioniVerticali
 			do
 			{
 				System.out.println("--- Specificare i nomi dei due verticali che determinano l'intervallo dei verticali da compilare, estremi inclusi");
-				System.out.print("    1) Primo verticale");
+				System.out.print("    1) Primo verticale: ");
 				v1 = inputScelta();
-				System.out.print("    2) Secondo verticale");
+				System.out.print("    2) Secondo verticale: ");
 				v2 = inputScelta();
 
 				if(!verificaIntervalloVerticali(v1, v2))
@@ -79,7 +79,7 @@ public class FunzioniVerticali
 
 			pushVerticali(listaVerticali, v1, v2, percorso);
 
-			System.out.println("Vuoi eseguire la push su un altro intervallo di verticali (S/N)?");
+			System.out.print(">>> Vuoi eseguire la push su un altro intervallo di verticali (S/N)? ");
 			String scelta = inputScelta();
 			System.out.println();
 
