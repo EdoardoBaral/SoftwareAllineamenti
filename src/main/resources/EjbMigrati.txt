@@ -3,6 +3,7 @@
 --B1: bonificimultipli-ejb
 --B1: bustine-ejb
 --B1: callmeback-ejb
+--B1: condizioni-ejb
 --B1: customerjourney-ejb
 --B1: deviceregistry-ejb
 --B1: digitalcollaboration-ejb
@@ -21,9 +22,11 @@
 --B2: pendingprocesslist-ejb
 --B2: rapporticliente-ejb
 --B2: ristampapin-ejb
+--B2: stampe-ejb
 --B2: xmedindi-ejb
 --B2: xmedindi-self-ejb
 
+--B3: condizionieconomiche-ejb
 --B3: nfc-ejb
 --B3: notification-ejb
 

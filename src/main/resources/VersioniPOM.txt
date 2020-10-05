@@ -8,6 +8,7 @@
 <bustine.version>1.1.0-env-ptea-SNAPSHOT</bustine.version>
 <callmeback.version>1.2.0-env-ptea-SNAPSHOT</callmeback.version>
 <customerjourney.version>1.2.0-env-ptea-SNAPSHOT</customerjourney.version>
+<condizioni.version> </condizioni.version>
 <deviceregistry.version>1.1.0-env-ptea-SNAPSHOT</deviceregistry.version>
 <digitalcollaboration.version>1.2.0-env-ptea-SNAPSHOT</digitalcollaboration.version>
 <etichette.version>1.4.0-env-ptea-SNAPSHOT</etichette.version>
@@ -25,9 +26,11 @@
 <pendingprocesslist.version>1.2.0-env-ptea-SNAPSHOT</pendingprocesslist.version>
 <rapporticliente.version>1.1.0-env-ptea-SNAPSHOT</rapporticliente.version>
 <ristampa-pin.version>1.2.0-env-ptea-SNAPSHOT</ristampa-pin.version>
+<stampe.version> </stampe.version>
 <xmedindi.version>1.13.0-env-ptea-SNAPSHOT</xmedindi.version>
 <xmedindi-self.version>1.2.0-env-ptea-SNAPSHOT</xmedindi-self.version>
 
+<condizionieconomiche.version> </condizionieconomiche.version>
 <nfc.version>1.34.0-env-ptea-SNAPSHOT</nfc.version>
 <notification.version>1.43.0-env-ptea-SNAPSHOT</notification.version>
 
