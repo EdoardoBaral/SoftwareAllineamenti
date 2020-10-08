@@ -8,7 +8,7 @@
 <bustine.version>1.1.0-env-ptea-SNAPSHOT</bustine.version>
 <callmeback.version>1.2.0-env-ptea-SNAPSHOT</callmeback.version>
 <customerjourney.version>1.2.0-env-ptea-SNAPSHOT</customerjourney.version>
-<condizioni.version> </condizioni.version>
+<condizioni.version>1.1.0-env-ptea-SNAPSHOT</condizioni.version>
 <deviceregistry.version>1.1.0-env-ptea-SNAPSHOT</deviceregistry.version>
 <digitalcollaboration.version>1.2.0-env-ptea-SNAPSHOT</digitalcollaboration.version>
 <etichette.version>1.4.0-env-ptea-SNAPSHOT</etichette.version>
@@ -24,13 +24,13 @@
 <monetaattiva.version>0.25.0-env-ptea-SNAPSHOT</monetaattiva.version>
 <movepay.version>1.5.0-env-ptea-SNAPSHOT</movepay.version>
 <pendingprocesslist.version>1.2.0-env-ptea-SNAPSHOT</pendingprocesslist.version>
-<rapporticliente.version>1.1.0-env-ptea-SNAPSHOT</rapporticliente.version>
+<rapporticliente.version>1.2.0-env-ptea-SNAPSHOT</rapporticliente.version>
 <ristampa-pin.version>1.2.0-env-ptea-SNAPSHOT</ristampa-pin.version>
-<stampe.version> </stampe.version>
+<stampe.version>1.1.0-env-ptea-SNAPSHOT</stampe.version>
 <xmedindi.version>1.13.0-env-ptea-SNAPSHOT</xmedindi.version>
 <xmedindi-self.version>1.2.0-env-ptea-SNAPSHOT</xmedindi-self.version>
 
-<condizionieconomiche.version> </condizionieconomiche.version>
+<condizionieconomiche.version>1.2.0-env-ptea-SNAPSHOT</condizionieconomiche.version>
 <nfc.version>1.34.0-env-ptea-SNAPSHOT</nfc.version>
 <notification.version>1.43.0-env-ptea-SNAPSHOT</notification.version>
 
@@ -38,25 +38,25 @@
 <agenda.version>1.1.0-env-ptea-SNAPSHOT</agenda.version>
 <applepay.version>1.3.0-env-ptea-SNAPSHOT</applepay.version>
 <assegni.version>1.6.0-env-ptea-SNAPSHOT</assegni.version>
-<bollettinopostale.version>1.1.0-env-ptea-SNAPSHOT</bollettinopostale.version>
-<bonificoestero.version>1.1.0-env-ptea-SNAPSHOT</bonificoestero.version>
+<bollettinopostale.version>1.2.0-env-ptea-SNAPSHOT</bollettinopostale.version>
+<bonificoestero.version>1.2.0-env-ptea-SNAPSHOT</bonificoestero.version>
 <cardless.version>1.2.0-env-ptea-SNAPSHOT</cardless.version>
-<carte.version>1.1.0-env-ptea-SNAPSHOT</carte.version>
+<carte.version>1.2.0-env-ptea-SNAPSHOT</carte.version>
 <duplicatocarta.version>1.2.0-env-ptea-SNAPSHOT</duplicatocarta.version>
 <f24.version>1.1.0-env-ptea-SNAPSHOT</f24.version>
 <giroconto.version>1.3.0-env-ptea-SNAPSHOT</giroconto.version>
-<identitadigitale.version>1.29.0-env-ptea-SNAPSHOT</identitadigitale.version>
-<jiffy.version>1.12.0-env-ptea-SNAPSHOT</jiffy.version>
+<identitadigitale.version>1.30.0-env-ptea-SNAPSHOT</identitadigitale.version>
+<jiffy.version>1.13.0-env-ptea-SNAPSHOT</jiffy.version>
 <moneytransfer.version>1.1.0-env-ptea-SNAPSHOT</moneytransfer.version>
-<pagamentibollette.version>1.60.0-env-ptea-SNAPSHOT</pagamentibollette.version>
+<pagamentibollette.version>1.61.0-env-ptea-SNAPSHOT</pagamentibollette.version>
 <prestiti.version>1.2.0-env-ptea-SNAPSHOT</prestiti.version>
 <ricaricacellulare.version>1.3.0-env-ptea-SNAPSHOT</ricaricacellulare.version>
 <ricarichevarie.version>1.33.0-env-ptea-SNAPSHOT</ricarichevarie.version>
-<tasse.version>1.41.0-env-ptea-SNAPSHOT</tasse.version>
-<variazionelimiti-definitiva.version>1.2.0-env-ptea-SNAPSHOT</variazionelimiti-definitiva.version>
+<tasse.version>1.42.0-env-ptea-SNAPSHOT</tasse.version>
+<variazionelimiti-definitiva.version>1.3.0-env-ptea-SNAPSHOT</variazionelimiti-definitiva.version>
 
-<bonus.version>1.2.0-env-ptea-SNAPSHOT<bonus.version>
-<masterpass.version>1.18.0-env-ptea-SNAPSHOT</masterpass.version>
+<bonus.version>1.4.0-env-ptea-SNAPSHOT<bonus.version>
+<masterpass.version>1.19.0-env-ptea-SNAPSHOT</masterpass.version>
 <opricorrenti.version>1.6.0-env-ptea-SNAPSHOT</opricorrenti.version>
 <pagamentimultipli.version>1.39.0-env-ptea-SNAPSHOT</pagamentimultipli.version>
 <pagamentiribamultipli.version>1.2.0-env-ptea-SNAPSHOT</pagamentiribamultipli.version>

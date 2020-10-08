@@ -72,8 +72,11 @@ public class FunzioniEjb
 		do
 		{
 			Scanner scanner = new Scanner(System.in);
-			System.out.print(">>> Inserisci il percorso della cartella contenente gli EJB (es. 'D:\\Openshift\\EJB'): ");
+			System.out.println(">>> Inserisci il percorso della cartella contenente gli EJB (es. 'D:\\Openshift\\EJB'): ");
+			System.out.println(">>> Oppure inserisci una delle seguenti chiavi presenti: ");
+			StringConstants.PATH_EJB.forEach((k, v) -> System.out.println(k + " -> " + v));
 			percorso = scanner.nextLine();
+			percorso = StringConstants.PATH_EJB.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_EJB.get(percorso.toLowerCase()) : percorso;
 			System.out.println();
 		} while(!verificaPercorsoCartella(percorso));
 		

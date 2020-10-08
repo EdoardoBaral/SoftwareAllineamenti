@@ -1,5 +1,8 @@
 package allineamenti;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class StringConstants
 {
 	public static final String BRANCH_MASTER = "master";
@@ -24,4 +27,14 @@ public class StringConstants
 	public static final String ALLINEAMENTO_EJB = "ejb ";
 	public static final String ALLINEAMENTO_VERTICALI = "verticali ";
 	public static final String ESCI = "exit";
+
+	public static final Map<String, String> PATH_EJB  = new HashMap<String, String>() {{
+		put("edoejb", "D:\\Openshift\\EJB");
+		put("fejb", "D:\\GIT\\cdbp0\\toBeBuildEJB");
+	}};
+	public static final Map<String, String> PATH_VERTICALI  = new HashMap<String, String>() {{
+		put("edovert", "D:\\Openshift\\Verticali\\cdbp0");
+		put("fvert", "D:\\GIT\\cdbp0\\toBeBuild");
+	}};
+
 }

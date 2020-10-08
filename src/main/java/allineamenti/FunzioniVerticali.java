@@ -106,8 +106,11 @@ public class FunzioniVerticali
 		do
 		{
 			Scanner scanner = new Scanner(System.in);
-			System.out.print(">>> Inserisci il percorso della cartella contenente i verticali (es. 'D:\\Openshift\\Verticali\\cdbp0'): ");
+			System.out.println(">>> Inserisci il percorso della cartella contenente i verticali (es. 'D:\\Openshift\\Verticali\\cdbp0'): ");
+			System.out.println(">>> Oppure inserisci una delle seguenti chiavi presenti: ");
+			StringConstants.PATH_VERTICALI.forEach((k, v) -> System.out.println(k + " -> " + v));
 			percorso = scanner.nextLine();
+			percorso = StringConstants.PATH_VERTICALI.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_VERTICALI.get(percorso.toLowerCase()) : percorso;
 			System.out.println();
 		} while(!verificaPercorsoCartella(percorso));
 		
