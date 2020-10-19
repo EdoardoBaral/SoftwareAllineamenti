@@ -20,7 +20,6 @@
 --B2: monetaattiva-ejb
 --B2: movepay-ejb
 --B2: pendingprocesslist-ejb
---B2: rapporticliente-ejb
 --B2: ristampapin-ejb
 --B2: stampe-ejb
 --B2: xmedindi-ejb
@@ -29,6 +28,7 @@
 --B3: condizionieconomiche-ejb
 --B3: nfc-ejb
 --B3: notification-ejb
+--B3: rapporticliente-ejb
 
 --B4: adue-ejb
 --B4: agenda-ejb
