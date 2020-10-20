@@ -1,6 +1,7 @@
 package allineamenti;
 
 import static allineamenti.GitCommands.executeCommand;
+import static allineamenti.GitCommands.gitCheckout;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -96,45 +97,45 @@ public class FunzioniEjb
 	
 	public static void proceduraCheckoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
 	{
-		boolean checkoutFlag = false;
-		do
-		{
-			checkoutTuttiEjb(mapEjb, nomeBranch, percorso);
-			System.out.println();
-			mostraBranchTuttiEjb(mapEjb, percorso);
-			System.out.println();
-			
-			System.out.print(">>> Confermi che tutti gli EJB sono passati correttamente al branch '"+ nomeBranch +"' (S/N)? ");
+		/*
+		 * TODO - Occorre modificare la procedura di checkout degli EJB in modo da:
+		 *  1) verificare dall'output di "git checkout" se l'EJB è passato correttamente al branch indicato
+		 *  2) se sì, mostrare solo un output del tipo "nomeEjb - nomeBranch - OK" altrimenti "nomeEjb - nomeBranch - ERRORE" e inserire il nome dell'EJB in listaEjbNonSwitchati
+		 *  3) se listaEjbNonSwitchati è vuota, considerare il checkout terminato, altrimenti ripetere la procedura sui soli EJB nella lista (pull e checkout)
+		 */
+		List<String> listaEjbNonSwitchati = checkoutTuttiEjb(mapEjb, nomeBranch, percorso);
+		
+		while(!listaEjbNonSwitchati.isEmpty()) {
+			System.out.println("Si e' verificato un problema nel checkout degli EJB che va risolto manualmente");
+			System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout degli EJB (S: continua - N: termina programma): ");
 			String cmd = inputScelta();
-			System.out.println();
 			
-			if("S".equalsIgnoreCase(cmd))
+			if("N".equalsIgnoreCase(cmd))
 			{
-				checkoutFlag = true;
+				System.out.println("TERMINAZIONE PROGRAMMA");
+				System.exit(0);
 			}
-			else if("N".equalsIgnoreCase(cmd))
+			else if("S".equalsIgnoreCase(cmd))
 			{
-				System.out.println("Si e' verificato un problema nel checkout degli EJB che va risolto manualmente");
-				System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout degli EJB (S: continua - N: termina programma): ");
-				cmd = inputScelta();
-				if("N".equalsIgnoreCase(cmd))
-				{
-					System.out.println("TERMINAZIONE PROGRAMMA");
-					System.exit(0);
-				}
-				else if("S".equalsIgnoreCase(cmd))
-				{
-					pullTuttiEjb(mapEjb, percorso);
-				}
+				pullEjbNonSwitchati(listaEjbNonSwitchati, percorso);
+				listaEjbNonSwitchati = checkoutEjbNonSwitchati(listaEjbNonSwitchati, nomeBranch, percorso);
 			}
-		} while(!checkoutFlag);
+		}
 	}
 	
-	public static void checkoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
+	public static List<String> checkoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
 	{
 		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
+		List<String> listaEjbNonSwitchati = new ArrayList<>();
+		
 		for(String ejb : listaEjb)
-			checkoutEjb(percorso +"\\"+ ejb, nomeBranch);
+		{
+			boolean checkoutAvvenuto = checkoutEjb(percorso + "\\" + ejb, nomeBranch);
+			if (!checkoutAvvenuto)
+				listaEjbNonSwitchati.add(ejb);
+		}
+		
+		return listaEjbNonSwitchati;
 	}
 	
 	public static List<String> convertiMapEjbInLista(Map<String, List<String>> mapEjb)
@@ -150,20 +151,26 @@ public class FunzioniEjb
 		return listaEjb;
 	}
 	
-	public static void checkoutEjb(String percorso, String nomeBranch)
+	public static boolean checkoutEjb(String percorso, String nomeBranch)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
+			boolean checkoutAvvenuto = gitCheckout(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
+			if(checkoutAvvenuto)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
+			
+			System.out.println("--------------------");
+			return checkoutAvvenuto;
 		}
 		catch(IOException ex)
 		{
 			System.out.println("Errore durante il checkout dell'EJB '"+ percorso +"' sul branch '"+ nomeBranch +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		
-		System.out.println("--------------------");
 	}
 	
 	public static void mostraBranchTuttiEjb(Map<String, List<String>> mapEjb, String percorso)

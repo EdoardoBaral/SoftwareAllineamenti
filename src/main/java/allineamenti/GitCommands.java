@@ -21,4 +21,21 @@ public class GitCommands
 		while( (s2 = errorStream.readLine()) != null )
 			System.out.println(s2);
 	}
+	
+	public static boolean gitCheckout(String comando, String percorsoCartella) throws IOException
+	{
+		File fileCartella = new File(percorsoCartella);
+		Process p = Runtime.getRuntime().exec(comando, null, fileCartella);
+		BufferedReader inputStream = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		boolean checkoutAvvenuto = false;
+		
+		String s1;
+		while( (s1 = inputStream.readLine()) != null )
+		{
+			if(s1.contains("Already on") || s1.contains("Switched to branch"))
+				checkoutAvvenuto = true;
+		}
+		
+		return checkoutAvvenuto;
+	}
 }
