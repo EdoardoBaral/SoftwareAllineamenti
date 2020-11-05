@@ -41,8 +41,8 @@
 
 --B6: bonificimultipli-ejb
 --B6: condizionieconomiche-ejb
---B6: incassiribamultipli-ejb
 --B6: etichette-ejb
+--B6: incassiribamultipli-ejb
 --B6: xmedindi-ejb
 
 --B7: rubriche-ejb
