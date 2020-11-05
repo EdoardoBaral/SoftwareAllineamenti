@@ -34,10 +34,10 @@
 --B4: variazionelimiti-definitiva-ejb
 --B4: variazionelimiti-temporanea-ejb
 
---B5: pfm-ejb
 --B5: cardless-ejb
 --B5: commonssmallbusiness-ejb
 --B5: condizioni-ejb
+--B5: pfm-ejb
 
 --B6: bonificimultipli-ejb
 --B6: condizionieconomiche-ejb
