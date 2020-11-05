@@ -24,6 +24,7 @@
 --B4: jiffy-v2-ejb
 --B4: listaprodotti-ejb
 --B4: listiniinfofin-ejb
+--B4: monetaattiva-ejb
 --B4: movepay-ejb
 --B4: pagamenti-ejb
 --B4: pendingprocesslist-ejb
