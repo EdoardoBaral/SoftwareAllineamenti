@@ -4,16 +4,9 @@
 
 <banca.version>1.2.0</banca.version>
 <customerjourney.version>1.2.0</customerjourney.version>
-<demoapp.version>1.3.0</demoapp.version>
 <deviceregistry.version>1.4.0</deviceregistry.version>
-<investimenti.version>1.44.0</investimenti.version>
-<kofax.version>1.1.0</kofax.version>
-<profilo.version>1.1.0</profilo.version>
-<ricerca.version>1.2.0</ricerca.version>
 <stampe.version>1.5.0</stampe.version>
 <userpreferences.version>1.3.0</userpreferences.version>
-<wallet.version>1.1.0</wallet.version>
-<wishlist.version>1.1.0</wishlist.version>
 
 <callmeback.version>1.4.0</callmeback.version>
 <commons.version>1.2.0</commons.version>
@@ -30,7 +23,6 @@
 <digitalcollaboration.version>1.5.0</digitalcollaboration.version>
 <duplicatocarta.version>1.5.0</duplicatocarta.version>
 <filialevirtuale.version>1.4.0</filialevirtuale.version>
-<firmaunica.version>1.17.0</firmaunica.version>
 <gestorelimiti.version>1.3.0</gestorelimiti.version>
 <guestarea.version>1.3.0</guestarea.version>
 <jiffy-v2.version>1.6.0</jiffy-v2.version>
@@ -63,7 +55,6 @@
 
 <autorizzazioni.version>1.5.0</autorizzazioni.version>
 <bustine.version>1.4.0</bustine.version>
-<f24revocation.version>1.4.0</f24revocation.version>
 <jiffy.version>1.17.0</jiffy.version>
 <matchingidbpfm.version>1.5.0</matchingidbpfm.version>
 <salvadanaio.version>1.3.0</salvadanaio.version>
@@ -85,7 +76,6 @@
 
 <applepay.version>1.6.0</applepay.version>
 <bonus.version>1.6.0</bonus.version>
-<catalogo-prodotti.version>1.7.0</catalogo-prodotti.version>
 <masterpass.version>1.21.0</masterpass.version>
 <nfc.version>1.37.0</nfc.version>
 <opricorrenti.version>1.9.0</opricorrenti.version>
@@ -98,8 +88,6 @@
 
 <miogestore.version>1.123.0</miogestore.version>
 
-<appuntamento.version>1.4.0</appuntamento.version>
-<archiviomobile.version>1.2.0</archiviomobile.version>
 <bloccosblocco.version>1.2.0</bloccosblocco.version>
 <condivisione.version>1.8.0</condivisione.version>
 <conto.version>1.6.0</conto.version>
