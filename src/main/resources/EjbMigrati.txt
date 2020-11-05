@@ -91,14 +91,14 @@
 
 --B15: miogestore
 
---B116: appuntamento
---B116: archiviomobile
---B116: bloccosblocco
---B116: condivisione
---B116: conto
---B116: globalposition
---B116: identitadigitale
---B116: proposte
+--B16: appuntamento
+--B16: archiviomobile
+--B16: bloccosblocco
+--B16: condivisione
+--B16: conto
+--B16: globalposition
+--B16: identitadigitale
+--B16: proposte
 
 --B17: digitalwallet
 --B17: pulsantiera
