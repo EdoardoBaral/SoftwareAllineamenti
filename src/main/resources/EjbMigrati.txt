@@ -21,7 +21,7 @@
 --B4: filialevirtuale-ejb
 --B4: gestorelimiti-ejb
 --B4: guestarea-ejb
---B4: jiffy-v2-ejb
+--B4: jiffyv2-ejb
 --B4: listaprodotti-ejb
 --B4: listiniinfofin-ejb
 --B4: monetaattiva-ejb
@@ -29,7 +29,6 @@
 --B4: pagamenti-ejb
 --B4: pendingprocesslist-ejb
 --B4: prestiti-ejb
---B4: rapporticliente-ejb
 --B4: ricarichevarie-ejb
 --B4: saldo-ejb
 --B4: variazionelimiti-definitiva-ejb
@@ -39,6 +38,7 @@
 --B5: commonssmallbusiness-ejb
 --B5: condizioni-ejb
 --B5: pfm-ejb
+--B5: rapporticliente-ejb
 
 --B6: bonificimultipli-ejb
 --B6: condizionieconomiche-ejb
@@ -62,7 +62,7 @@
 --B10: f24-ejb
 --B10: giroconto-ejb
 --B10: moneytransfer-ejb
---B10: pagamentibollette-ejb
+--B10: pagamentobollette-ejb
 --B10: ricaricacellulare-ejb
 --B10: xmedindi-self-ejb
 
@@ -77,7 +77,7 @@
 --B12: nfc-ejb
 --B12: opricorrenti-ejb
 --B12: pagamentimultipli-ejb
---B12: ristampa-pin-ejb
+--B12: ristampapin-ejb
 
 --B13: ricordamidi-ejb
 
