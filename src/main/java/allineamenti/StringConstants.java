@@ -30,11 +30,11 @@ public class StringConstants
 
 	public static final Map<String, String> PATH_EJB  = new HashMap<String, String>() {{
 		put("edoejb", "D:\\Openshift\\EJB");
-		put("fejb", "D:\\GIT\\cdbp0\\toBeBuildEJB");
+		put("felixejb", "D:\\GIT\\cdbp0\\toBeBuildEJB");
 	}};
 	public static final Map<String, String> PATH_VERTICALI  = new HashMap<String, String>() {{
 		put("edovert", "D:\\Openshift\\Verticali\\cdbp0");
-		put("fvert", "D:\\GIT\\cdbp0\\toBeBuild");
+		put("felixvert", "D:\\GIT\\cdbp0\\toBeBuild");
 	}};
 
 }
