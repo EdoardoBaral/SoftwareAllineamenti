@@ -1,6 +1,5 @@
 package allineamenti;
 
-import static allineamenti.GitCommands.executeCommand;
 import static allineamenti.GitCommands.gitCheckout;
 import static allineamenti.GitCommands.gitCommitConflitto;
 import static allineamenti.GitCommands.gitCommitVuoto;
@@ -34,7 +33,7 @@ public class FunzioniEjb
 		pullTuttiEjb(mapEjb, percorso);
 		
 		String nomeBloccoEjb;
-		boolean allineamentoEjbTerminato = false;
+		boolean allineamentoEjbTerminato;
 		do
 		{
 			System.out.print(">>> Quale blocco di EJB intendi compilare (es. B1, B2...)? ");
@@ -43,7 +42,7 @@ public class FunzioniEjb
 				System.out.println("Il blocco selezionato non esiste. Riprovare\n");
 			System.out.println();
 			
-			boolean flagConflitti = false;
+			boolean flagConflitti;
 			
 			if(!nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
 			{
@@ -114,7 +113,8 @@ public class FunzioniEjb
 	{
 		List<String> listaEjbNonSwitchati = checkoutTuttiEjb(mapEjb, nomeBranch, percorso);
 		
-		while(!listaEjbNonSwitchati.isEmpty()) {
+		while(!listaEjbNonSwitchati.isEmpty())
+		{
 			System.out.println("Si e' verificato un problema nel checkout degli EJB che va risolto manualmente");
 			System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout degli EJB (S: continua - N: termina programma): ");
 			String cmd = inputScelta();
@@ -152,7 +152,7 @@ public class FunzioniEjb
 	{
 		for(String ejb : ejbNonSwitchati)
 		{
-			boolean checkoutAvvenuto = checkoutEjb(percorso + "\\" + ejb, nomeBranch);
+			boolean checkoutAvvenuto = checkoutEjb(percorso +"\\"+ ejb, nomeBranch);
 			if (checkoutAvvenuto)
 				ejbNonSwitchati.remove(ejb);
 		}
@@ -192,30 +192,6 @@ public class FunzioniEjb
 			System.out.println("--------------------");
 			return false;
 		}
-	}
-	
-	public static void mostraBranchTuttiEjb(Map<String, List<String>> mapEjb, String percorso)
-	{
-		System.out.println("--- Status di tutti gli EJB migrati\n");
-		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
-		for(String ejb : listaEjb)
-			mostraBranchEjb(percorso +"\\"+ ejb);
-	}
-	
-	public static void mostraBranchEjb(String percorso)
-	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_BRANCH);
-		try
-		{
-			executeCommand(StringConstants.COMANDO_GIT_BRANCH, percorso);
-		}
-		catch(IOException ex)
-		{
-			System.out.println("Errore durante la verifica del branch dell'EJB '"+ percorso +"'");
-			ex.printStackTrace();
-		}
-		
-		System.out.println("--------------------");
 	}
 	
 	public static void pullTuttiEjb(Map<String, List<String>> mapEjb, String percorso)

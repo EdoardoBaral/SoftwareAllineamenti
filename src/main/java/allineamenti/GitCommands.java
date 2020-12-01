@@ -9,21 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public class GitCommands
 {
-	static void executeCommand(String comando, String percorsoCartella) throws IOException
-	{
-		File fileCartella = new File(percorsoCartella);
-		Process p = Runtime.getRuntime().exec(comando, null, fileCartella);
-		BufferedReader inputStream = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		BufferedReader errorStream = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-		
-		String s1, s2;
-		while( (s1 = inputStream.readLine()) != null )
-			System.out.println(s1);
-		
-		while( (s2 = errorStream.readLine()) != null )
-			System.out.println(s2);
-	}
-	
 	static boolean gitCheckout(String comando, String percorsoCartella) throws IOException, InterruptedException
 	{
 		File fileCartella = new File(percorsoCartella);
@@ -132,12 +117,12 @@ public class GitCommands
 		String s1, s2;
 		while( (s1 = inputStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s1, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error"))
+			if(StringUtils.containsIgnoreCase(s1, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error") || StringUtils.containsIgnoreCase(s1, "rejected"))
 				return false;
 		}
 		while( (s2 = errorStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s2, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error"))
+			if(StringUtils.containsIgnoreCase(s2, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error") || StringUtils.containsIgnoreCase(s1, "rejected"))
 				return false;
 		}
 		
