@@ -3,12 +3,12 @@
 <isp-ib-om.version>1.2.0</isp-ib-om.version>
 
 <banca.version>1.2.0</banca.version>
+<callmeback.version>1.4.0</callmeback.version>
 <customerjourney.version>1.2.0</customerjourney.version>
 <deviceregistry.version>1.4.0</deviceregistry.version>
 <stampe.version>1.5.0</stampe.version>
 <userpreferences.version>1.3.0</userpreferences.version>
 
-<callmeback.version>1.4.0</callmeback.version>
 <commons.version>1.2.0</commons.version>
 <notification.version>1.45.0</notification.version>
 <postvendita-common.version>1.2.0</postvendita-common.version>

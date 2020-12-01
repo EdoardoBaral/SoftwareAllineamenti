@@ -235,17 +235,18 @@ public class FunzioniEjb
 	
 	public static void pullEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
+		System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
 		try
 		{
 			gitPull(StringConstants.COMANDO_GIT_PULL, percorso);
+			System.out.println(" --> OK");
 		}
 		catch (IOException ex)
 		{
+			System.out.println(" --> ERROR");
 			System.out.println("Errore durante la pull dell'EJB '"+ percorso +"'");
 			ex.printStackTrace();
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static boolean pullOriginEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso, String nomeBranch)
@@ -306,7 +307,6 @@ public class FunzioniEjb
 	
 	public static void commitConflittiEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT);
 		try
 		{
 			boolean flagCommit = gitCommitConflitto(StringConstants.COMANDO_GIT_COMMIT, percorso);
@@ -359,28 +359,18 @@ public class FunzioniEjb
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
 		
-		System.out.print(">>> Ci sono conflitti da risolvere (S/N)? ");
-		String scelta = inputScelta();
+		System.out.println("--- Ci sono conflitti da risolvere");
+		System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
+		System.out.println("    2) Non effettuare il commit per risolvere i conflitti, ci pensa il software");
+		System.out.println("    3) Digitare S per far continuare il programma");
+		System.out.print(">>> Comando: ");
+		inputScelta();
 		System.out.println();
 		
-		if("S".equalsIgnoreCase(scelta))
-		{
-			do
-			{
-				System.out.println("--- Ci sono conflitti da risolvere");
-				System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
-				System.out.println("    2) Non effettuare il commit per risolvere i conflitti, ci pensa il software");
-				System.out.println("    3) Digitare S per far continuare il programma");
-				System.out.print(">>> Comando: ");
-				scelta = inputScelta();
-				System.out.println();
-			} while(!"S".equalsIgnoreCase(scelta));
-			
-			System.out.println("--- Commit per risolvere i conflitti su tutti gli EJB del blocco"+ nomeBloccoEjb +"\n");
-			commitConflittiEjbBlocco(bloccoEjb, percorso);
-			System.out.println();
-			System.out.println("--- Conflitti sugli EJB del blocco "+ nomeBloccoEjb +" risolti\n");
-		}
+		System.out.println("--- Commit per risolvere i conflitti su tutti gli EJB del blocco "+ nomeBloccoEjb +"\n");
+		commitConflittiEjbBlocco(bloccoEjb, percorso);
+		System.out.println();
+		System.out.println("--- Conflitti sugli EJB del blocco "+ nomeBloccoEjb +" risolti\n");
 	}
 	
 	public static void confermaVersioniPomEjbBlocco(String nomeBloccoEjb)

@@ -132,15 +132,15 @@ public class GitCommands
 		String s1, s2;
 		while( (s1 = inputStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s1, "fatal: unable to access"))
+			if(StringUtils.containsIgnoreCase(s1, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error"))
 				return false;
 		}
 		while( (s2 = errorStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s2, "fatal: unable to access"))
+			if(StringUtils.containsIgnoreCase(s2, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error"))
 				return false;
 		}
 		
-		return false;
+		return true;
 	}
 }

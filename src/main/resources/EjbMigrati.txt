@@ -1,10 +1,10 @@
 --B1: banca-ejb
+--B1: callmeback-ejb
 --B1: customerjourney-ejb
 --B1: deviceregistry-ejb
 --B1: stampe-ejb
 --B1: userpreferences-ejb
 
---B2: callmeback-ejb
 --B2: commons-ejb
 --B2: notification-ejb
 --B2: postvendita-common-ejb
