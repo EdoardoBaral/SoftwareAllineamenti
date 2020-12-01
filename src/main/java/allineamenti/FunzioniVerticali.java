@@ -1,11 +1,18 @@
 package allineamenti;
 
-import static allineamenti.GitCommands.executeCommand;
+import static allineamenti.GitCommands.gitCheckout;
+import static allineamenti.GitCommands.gitCommitConflitto;
+import static allineamenti.GitCommands.gitCommitVuoto;
+import static allineamenti.GitCommands.gitPull;
+import static allineamenti.GitCommands.gitPullOrigin;
+import static allineamenti.GitCommands.gitPush;
+import static allineamenti.GitCommands.gitStatus;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,29 +39,37 @@ public class FunzioniVerticali
 		String percorso = inputPercorsoCartellaVerticali();
 
 		proceduraCheckoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
+		System.out.println();
 
 		System.out.println("--- Pull di tutti i verticali\n");
 		pullTuttiVerticali(listaVerticali, percorso);
-
-		if(!StringConstants.BRANCH_SVIL.equals(nomeBranch))
+		
+		boolean flagConflitti;
+		
+		if(!StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
 		{
 			System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL+"'\n");
-			pullOriginVerticali(listaVerticali, percorso);
-			proceduraGestioneConflitti(listaVerticali, percorso);
-//			confermaVersioniPomVerticali(); //Commentata perché tanto alla fine viene fatto l'aggiornamento automatico delle versioni nei POM
+			flagConflitti = pullOriginVerticali(listaVerticali, percorso);
+			if(flagConflitti)
+				proceduraGestioneConflitti(listaVerticali, percorso);
 		}
 
 		System.out.println("--- Merge di tutti i verticali dal branch master\n");
-		pullOriginMasterVerticali(listaVerticali, percorso);
-		proceduraGestioneConflitti(listaVerticali, percorso);
+		flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
+		if(flagConflitti)
+			proceduraGestioneConflitti(listaVerticali, percorso);
 		
 		proceduraSostituzioneVersioniPom(percorso);
 
-		statusVerticali(listaVerticali, percorso);
-		verificaModificheNonCommittate();
+		boolean verticaliTuttiCommittati = statusVerticali(listaVerticali, percorso);
+		if(verticaliTuttiCommittati)
+			System.out.println("I verticali sono tutti allineati e non presentano modifiche non committate");
+		else
+			verificaModificheNonCommittate();
+		
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 
-		boolean checkTerminazionePush = false;
+		boolean checkTerminazionePush;
 		do
 		{
 			boolean flagIntervalloValido = true;
@@ -109,6 +124,7 @@ public class FunzioniVerticali
 			System.out.println(">>> Inserisci il percorso della cartella contenente i verticali (es. 'D:\\Openshift\\Verticali\\cdbp0'): ");
 			System.out.println(">>> Oppure inserisci una delle seguenti chiavi presenti: ");
 			StringConstants.PATH_VERTICALI.forEach((k, v) -> System.out.println(k + " -> " + v));
+			System.out.print(">>> Scelta: ");
 			percorso = scanner.nextLine();
 			percorso = StringConstants.PATH_VERTICALI.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_VERTICALI.get(percorso.toLowerCase()) : percorso;
 			System.out.println();
@@ -130,83 +146,72 @@ public class FunzioniVerticali
 	
 	public static void proceduraCheckoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
-		boolean checkoutFlag = false;
-		do
+		List<String> listaVerticaliNonSwitchati = checkoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
+		
+		while(!listaVerticaliNonSwitchati.isEmpty())
 		{
-			checkoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
-			System.out.println();
-			mostraBranchTuttiVerticali(listaVerticali, percorso);
-			System.out.println();
-			
-			System.out.print(">>> Confermi che tutti i verticali sono passati correttamente al branch '"+ nomeBranch +"' (S/N)? ");
+			System.out.println("Si e' verificato un problema nel checkout dei verticali che va risolto manualmente");
+			System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout dei verticali (S: continua - N: termina programma): ");
 			String cmd = inputScelta();
-			System.out.println();
 			
-			if("S".equalsIgnoreCase(cmd))
+			if("N".equalsIgnoreCase(cmd))
 			{
-				checkoutFlag = true;
+				System.out.println("TERMINAZIONE PROGRAMMA");
+				System.exit(0);
 			}
-			else if("N".equalsIgnoreCase(cmd))
+			else if("S".equalsIgnoreCase(cmd))
 			{
-				System.out.println("Si e' verificato un problema nel checkout dei verticali che va risolto manualmente");
-				System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout dei verticali (S: continua - N: termina programma): ");
-				cmd = inputScelta();
-				if("N".equalsIgnoreCase(cmd))
-				{
-					System.out.println("TERMINAZIONE PROGRAMMA");
-					System.exit(0);
-				}
-				else if("S".equalsIgnoreCase(cmd))
-				{
-					pullTuttiVerticali(listaVerticali, percorso);
-				}
+				pullVerticaliNonSwitchati(listaVerticali, percorso);
+				listaVerticaliNonSwitchati = checkoutVerticaliNonSwitchati(listaVerticaliNonSwitchati, nomeBranch, percorso);
 			}
-		} while(!checkoutFlag);
+		}
 	}
 	
-	public static void checkoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
+	public static List<String> checkoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
+		List<String> listaVerticaliNonSwitchati = new ArrayList<>();
+		
 		for(String verticale : listaVerticali)
-			checkoutVerticale(percorso +"\\"+ verticale, nomeBranch);
+		{
+			boolean checkoutAvvenuto = checkoutVerticale(percorso +"\\"+ verticale, nomeBranch);
+			if(!checkoutAvvenuto)
+				listaVerticaliNonSwitchati.add(verticale);
+		}
+		
+		return listaVerticaliNonSwitchati;
 	}
 	
-	public static void checkoutVerticale(String percorso, String nomeBranch)
+	public static List<String> checkoutVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String nomeBranch, String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch);
+		for(String verticale : verticaliNonSwitchati)
+		{
+			boolean checkoutAvvenuto = checkoutVerticale(percorso +"\\"+ verticale, nomeBranch);
+			if(checkoutAvvenuto)
+				verticaliNonSwitchati.remove(verticale);
+		}
+		
+		return verticaliNonSwitchati;
+	}
+	
+	public static boolean checkoutVerticale(String percorso, String nomeBranch)
+	{
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
+			boolean checkoutAvvenuto = gitCheckout(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
+			if(checkoutAvvenuto)
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
+			else
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
+			
+			return checkoutAvvenuto;
 		}
-		catch(IOException ex)
+		catch(IOException | InterruptedException ex)
 		{
 			System.out.println("Errore durante il checkout del verticale '"+ percorso +"' sul branch '"+ nomeBranch +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		
-		System.out.println("--------------------");
-	}
-	
-	public static void mostraBranchTuttiVerticali(List<String> listaVerticali, String percorso)
-	{
-		System.out.println("--- Status di tutti i verticali\n");
-		for(String verticale : listaVerticali)
-			mostraBranchVerticale(percorso +"\\"+ verticale);
-	}
-	
-	public static void mostraBranchVerticale(String percorso)
-	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_BRANCH);
-		try
-		{
-			executeCommand(StringConstants.COMANDO_GIT_BRANCH, percorso);
-		}
-		catch(IOException ex)
-		{
-			System.out.println("Errore durante la verifica del branch del verticale '"+ percorso +"'");
-			ex.printStackTrace();
-		}
-		
-		System.out.println("--------------------");
 	}
 	
 	public static void pullTuttiVerticali(List<String> listaVerticali, String percorso)
@@ -216,84 +221,74 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
-	public static void pullVerticale(String percorso)
+	public static void pullVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
-		try
-		{
-			executeCommand(StringConstants.COMANDO_GIT_PULL, percorso);
-		}
-		catch (IOException ex)
-		{
-			System.out.println("Errore durante la pull del verticale '"+ percorso +"'");
-			ex.printStackTrace();
-		}
-		System.out.println("--------------------");
-	}
-	
-	public static void pullOriginVerticali(List<String> listaVerticali, String percorso)
-	{
-		for(String verticale : listaVerticali)
-			pullOriginVerticale(percorso +"\\"+ verticale);
+		for(String verticale : verticaliNonSwitchati)
+			pullVerticale(percorso +"\\"+ verticale);
 		System.out.println();
 	}
 	
-	public static void pullOriginVerticale(String percorso)
+	public static void pullVerticale(String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL);
+		System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL, percorso);
+			gitPull(StringConstants.COMANDO_GIT_PULL, percorso);
+			System.out.println(" --> OK");
+		}
+		catch (IOException ex)
+		{
+			System.out.println(" --> ERROR");
+			System.out.println("Errore durante la pull del verticale '"+ percorso +"'");
+			ex.printStackTrace();
+		}
+	}
+	
+	public static boolean pullOriginVerticali(List<String> listaVerticali, String percorso)
+	{
+		boolean flagConflitti = false;
+		for(String verticale : listaVerticali)
+			flagConflitti = flagConflitti | pullOriginVerticale(percorso +"\\"+ verticale);
+		System.out.println();
+		
+		return flagConflitti;
+	}
+	
+	public static boolean pullOriginVerticale(String percorso)
+	{
+		try
+		{
+			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL, percorso);
+			if(!flagConflitti)
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL +" --> OK");
+			else
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL +" --> CONFLITTI");
+			
+			return flagConflitti;
 		}
 		catch (IOException ex)
 		{
 			System.out.println("Errore durante il merge del verticale '"+ percorso +"' dal branch '"+ StringConstants.BRANCH_SVIL +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static void proceduraGestioneConflitti(List<String> listaVerticali, String percorso)
 	{
-		System.out.print(">>> Ci sono conflitti da risolvere (S/N)? ");
-		String scelta = inputScelta();
+		System.out.println("--- Ci sono conflitti da risolvere");
+		System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
+		System.out.println("    2) Non effettuare il commit per risolvere i conflitti, ci pensa il software");
+		System.out.println("    3) Digitare S per far continuare il programma");
+		System.out.print(">>> Comando: ");
+		inputScelta();
 		System.out.println();
 		
-		if("S".equalsIgnoreCase(scelta))
-		{
-			do
-			{
-				System.out.println("--- Ci sono conflitti da risolvere");
-				System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
-				System.out.println("    2) Non effettuare il commit per risolvere i conflitti, ci pensa il software");
-				System.out.println("    3) Digitare S per far continuare il programma");
-				System.out.print(">>> Comando: ");
-				scelta = inputScelta();
-				System.out.println();
-			} while(!"S".equalsIgnoreCase(scelta));
-			
-			System.out.println("--- Commit per risolvere i conflitti su tutti i verticali\n");
-			commitConflittiVerticali(listaVerticali, percorso);
-			System.out.println();
-			System.out.println("--- Conflitti sui verticali risolti\n");
-		}
-	}
-	
-	public static void confermaVersioniPomVerticali()
-	{
-		String scelta;
-		System.out.println("--- Verifica versioni POM dei verticali");
-		System.out.println("    1) Verificare le versioni nei POM dei verticali");
-		System.out.println("    2) Se necessario, aggiornare nei POM le versioni necessarie e committare da IntelliJ");
-		System.out.println("    3) S: continuare - N: terminare il programma");
-		System.out.print(">>> Comando: ");
-		scelta = inputScelta();
+		System.out.println("--- Commit per risolvere i conflitti su tutti i verticali\n");
+		commitConflittiVerticali(listaVerticali, percorso);
 		System.out.println();
-		if("N".equalsIgnoreCase(scelta))
-		{
-			System.out.println("TERMINAZIONE PROGRAMMA");
-			System.exit(0);
-		}
+		System.out.println("--- Conflitti sui verticali risolti\n");
 	}
 	
 	public static void commitConflittiVerticali(List<String> listaVerticali, String percorso)
@@ -304,61 +299,82 @@ public class FunzioniVerticali
 	
 	public static void commitConflittiVerticale(String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_COMMIT, percorso);
+			boolean flagCommit = gitCommitConflitto(StringConstants.COMANDO_GIT_COMMIT, percorso);
+			if(flagCommit)
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> CONFLITTI RISOLTI");
+			else
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
 		}
 		catch (IOException ex)
 		{
 			System.out.println("Errore durante il commit per i conflitti del verticale '"+ percorso +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
 		}
-		System.out.println("--------------------");
 	}
 	
-	public static void pullOriginMasterVerticali(List<String> listaVerticali, String percorso)
+	public static boolean pullOriginMasterVerticali(List<String> listaVerticali, String percorso)
 	{
+		boolean flagConflitti = false;
 		for(String verticale : listaVerticali)
-			pullOriginMasterVerticale(percorso +"\\"+ verticale);
+			flagConflitti = flagConflitti | pullOriginMasterVerticale(percorso +"\\"+ verticale);
 		System.out.println();
+		
+		return flagConflitti;
 	}
 	
-	public static void pullOriginMasterVerticale(String percorso)
+	public static boolean pullOriginMasterVerticale(String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER, percorso);
+			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER, percorso);
+			if(!flagConflitti)
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> OK");
+			else
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> CONFLITTI");
+			
+			return flagConflitti;
 		}
 		catch (IOException ex)
 		{
 			System.out.println("Errore durante il merge del verticale '"+ percorso +"' dal branch '"+ StringConstants.BRANCH_MASTER +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		System.out.println("--------------------");
 	}
 	
-	public static void statusVerticali(List<String> listaVerticali, String percorso)
+	public static boolean statusVerticali(List<String> listaVerticali, String percorso)
 	{
+		boolean tuttoCommittato = false;
 		for(String verticale : listaVerticali)
-			statusVerticale(percorso +"\\"+ verticale);
+			tuttoCommittato = tuttoCommittato | statusVerticale(percorso +"\\"+ verticale);
 		System.out.println();
+		
+		return tuttoCommittato;
 	}
 	
-	public static void statusVerticale(String percorso)
+	public static boolean statusVerticale(String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_STATUS, percorso);
+			boolean flagCommit = gitStatus(StringConstants.COMANDO_GIT_STATUS, percorso);
+			if(flagCommit)
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> NESSUNA MODIFICA DA COMMITTARE");
+			else
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> CI SONO MODIFICHE DA COMMITTARE");
+			
+			return flagCommit;
 		}
 		catch (IOException ex)
 		{
 			System.out.println("Errore durante la verifica dello status del verticale '"+ percorso +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static void verificaModificheNonCommittate()
@@ -391,18 +407,19 @@ public class FunzioniVerticali
 		{
 			if(StringConstants.BRANCH_SVIL.equals(nomeBranch))
 			{
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_RELEASE);
-				executeCommand(StringConstants.COMANDO_GIT_RELEASE, percorso);
+				System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_RELEASE);
+				gitCommitVuoto(StringConstants.COMANDO_GIT_RELEASE, percorso);
 			}
 			else
 			{
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_TAG_PROMOTE);
-				executeCommand(StringConstants.COMANDO_GIT_TAG_PROMOTE, percorso);
+				System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_TAG_PROMOTE);
+				gitCommitVuoto(StringConstants.COMANDO_GIT_TAG_PROMOTE, percorso);
 			}
+			System.out.println(" --> OK");
 		}
-		catch(IOException ex)
+		catch(IOException | InterruptedException ex)
 		{
-			System.out.println("Errore durante il commit vuoto per innescare la build del verticale '"+ percorso +"'");
+			System.out.println(" --> ERRORE");
 			ex.printStackTrace();
 		}
 	}
@@ -417,17 +434,20 @@ public class FunzioniVerticali
 	
 	public static void pushVerticale(String percorso)
 	{
-		System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PUSH, percorso);
+			boolean flagPush = gitPush(StringConstants.COMANDO_GIT_PUSH, percorso);
+			if(flagPush)
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> OK");
+			else
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> ERRORE");
 		}
 		catch (IOException ex)
 		{
 			System.out.println("Errore durante la push dei commit del verticale '"+ percorso +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static boolean verificaIntervalloVerticali(String v1, String v2)

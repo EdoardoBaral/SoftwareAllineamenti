@@ -1,6 +1,12 @@
 package allineamenti;
 
-import static allineamenti.GitCommands.executeCommand;
+import static allineamenti.GitCommands.gitCheckout;
+import static allineamenti.GitCommands.gitCommitConflitto;
+import static allineamenti.GitCommands.gitCommitVuoto;
+import static allineamenti.GitCommands.gitPull;
+import static allineamenti.GitCommands.gitPullOrigin;
+import static allineamenti.GitCommands.gitPush;
+import static allineamenti.GitCommands.gitStatus;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +33,7 @@ public class FunzioniEjb
 		pullTuttiEjb(mapEjb, percorso);
 		
 		String nomeBloccoEjb;
-		boolean allineamentoEjbTerminato = false;
+		boolean allineamentoEjbTerminato;
 		do
 		{
 			System.out.print(">>> Quale blocco di EJB intendi compilare (es. B1, B2...)? ");
@@ -36,20 +42,29 @@ public class FunzioniEjb
 				System.out.println("Il blocco selezionato non esiste. Riprovare\n");
 			System.out.println();
 			
-			System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch precedente\n");
-			pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, nomeBranch);
+			boolean flagConflitti;
 			
-			proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-			confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+			if(!nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
+			{
+				System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch precedente\n");
+				flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, nomeBranch);
+				if(flagConflitti)
+					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
+				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+			}
 			
 			System.out.println("--- Merge di tutti gli EJB migrati dal branch master\n");
-			pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			
-			proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
+			flagConflitti = pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+			if(flagConflitti)
+				proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
 			confermaVersioniPomEjbBlocco(nomeBloccoEjb);
 			
-			statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			verificaModificheNonCommittate(nomeBloccoEjb);
+			boolean tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+			if(tuttoCommittatoEjbBlocco)
+				System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
+			else
+				verificaModificheNonCommittate(nomeBloccoEjb);
+			
 			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
 			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			
@@ -96,45 +111,53 @@ public class FunzioniEjb
 	
 	public static void proceduraCheckoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
 	{
-		boolean checkoutFlag = false;
-		do
+		List<String> listaEjbNonSwitchati = checkoutTuttiEjb(mapEjb, nomeBranch, percorso);
+		
+		while(!listaEjbNonSwitchati.isEmpty())
 		{
-			checkoutTuttiEjb(mapEjb, nomeBranch, percorso);
-			System.out.println();
-			mostraBranchTuttiEjb(mapEjb, percorso);
-			System.out.println();
-			
-			System.out.print(">>> Confermi che tutti gli EJB sono passati correttamente al branch '"+ nomeBranch +"' (S/N)? ");
+			System.out.println("Si e' verificato un problema nel checkout degli EJB che va risolto manualmente");
+			System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout degli EJB (S: continua - N: termina programma): ");
 			String cmd = inputScelta();
-			System.out.println();
 			
-			if("S".equalsIgnoreCase(cmd))
+			if("N".equalsIgnoreCase(cmd))
 			{
-				checkoutFlag = true;
+				System.out.println("TERMINAZIONE PROGRAMMA");
+				System.exit(0);
 			}
-			else if("N".equalsIgnoreCase(cmd))
+			else if("S".equalsIgnoreCase(cmd))
 			{
-				System.out.println("Si e' verificato un problema nel checkout degli EJB che va risolto manualmente");
-				System.out.print(">>> Richiesta conferma per poter continuare e ritentare il checkout degli EJB (S: continua - N: termina programma): ");
-				cmd = inputScelta();
-				if("N".equalsIgnoreCase(cmd))
-				{
-					System.out.println("TERMINAZIONE PROGRAMMA");
-					System.exit(0);
-				}
-				else if("S".equalsIgnoreCase(cmd))
-				{
-					pullTuttiEjb(mapEjb, percorso);
-				}
+				pullEjbNonSwitchati(listaEjbNonSwitchati, percorso);
+				listaEjbNonSwitchati = checkoutEjbNonSwitchati(listaEjbNonSwitchati, nomeBranch, percorso);
 			}
-		} while(!checkoutFlag);
+		}
 	}
 	
-	public static void checkoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
+	
+	public static List<String> checkoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
 	{
 		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
+		List<String> listaEjbNonSwitchati = new ArrayList<>();
+		
 		for(String ejb : listaEjb)
-			checkoutEjb(percorso +"\\"+ ejb, nomeBranch);
+		{
+			boolean checkoutAvvenuto = checkoutEjb(percorso + "\\" + ejb, nomeBranch);
+			if (!checkoutAvvenuto)
+				listaEjbNonSwitchati.add(ejb);
+		}
+		
+		return listaEjbNonSwitchati;
+	}
+	
+	public static List<String> checkoutEjbNonSwitchati(List<String> ejbNonSwitchati, String nomeBranch, String percorso)
+	{
+		for(String ejb : ejbNonSwitchati)
+		{
+			boolean checkoutAvvenuto = checkoutEjb(percorso +"\\"+ ejb, nomeBranch);
+			if (checkoutAvvenuto)
+				ejbNonSwitchati.remove(ejb);
+		}
+		
+		return ejbNonSwitchati;
 	}
 	
 	public static List<String> convertiMapEjbInLista(Map<String, List<String>> mapEjb)
@@ -150,44 +173,25 @@ public class FunzioniEjb
 		return listaEjb;
 	}
 	
-	public static void checkoutEjb(String percorso, String nomeBranch)
+	public static boolean checkoutEjb(String percorso, String nomeBranch)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
+			boolean checkoutAvvenuto = gitCheckout(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
+			if(checkoutAvvenuto)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
+			
+			return checkoutAvvenuto;
 		}
-		catch(IOException ex)
+		catch(IOException | InterruptedException ex)
 		{
 			System.out.println("Errore durante il checkout dell'EJB '"+ percorso +"' sul branch '"+ nomeBranch +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		
-		System.out.println("--------------------");
-	}
-	
-	public static void mostraBranchTuttiEjb(Map<String, List<String>> mapEjb, String percorso)
-	{
-		System.out.println("--- Status di tutti gli EJB migrati\n");
-		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
-		for(String ejb : listaEjb)
-			mostraBranchEjb(percorso +"\\"+ ejb);
-	}
-	
-	public static void mostraBranchEjb(String percorso)
-	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_BRANCH);
-		try
-		{
-			executeCommand(StringConstants.COMANDO_GIT_BRANCH, percorso);
-		}
-		catch(IOException ex)
-		{
-			System.out.println("Errore durante la verifica del branch dell'EJB '"+ percorso +"'");
-			ex.printStackTrace();
-		}
-		
-		System.out.println("--------------------");
 	}
 	
 	public static void pullTuttiEjb(Map<String, List<String>> mapEjb, String percorso)
@@ -198,27 +202,34 @@ public class FunzioniEjb
 		System.out.println();
 	}
 	
+	public static void pullEjbNonSwitchati(List<String> ejbNonSwitchati, String percorso)
+	{
+		for(String ejb : ejbNonSwitchati)
+			pullEjb(percorso +"\\"+ ejb);
+		System.out.println();
+	}
+	
 	public static void pullEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
+		System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PULL, percorso);
+			gitPull(StringConstants.COMANDO_GIT_PULL, percorso);
+			System.out.println(" --> OK");
 		}
 		catch (IOException ex)
 		{
+			System.out.println(" --> ERROR");
 			System.out.println("Errore durante la pull dell'EJB '"+ percorso +"'");
 			ex.printStackTrace();
 		}
-		System.out.println("--------------------");
 	}
 	
-	public static void pullOriginEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso, String nomeBranch)
+	public static boolean pullOriginEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso, String nomeBranch)
 	{
 		String nomeBranchOrigine;
 		switch(nomeBranch)
 		{
-			case StringConstants.BRANCH_SVIL:
 			case StringConstants.BRANCH_SVIS:
 			case StringConstants.BRANCH_SVIA:
 				nomeBranchOrigine = StringConstants.BRANCH_SVIL;
@@ -230,28 +241,38 @@ public class FunzioniEjb
 				nomeBranchOrigine = StringConstants.BRANCH_SVIA;
 				break;
 			default:
-				nomeBranchOrigine = null;
+				System.out.println("--- Impossibile effettuare il merge dal branch precedente");
+				return false;
 		}
 		
 		List<String> listaEjb = mapEjb.get(nomeBloccoEjb);
+		boolean flagConflitti = false;
 		for(String ejb : listaEjb)
-			pullOriginEjb(percorso +"\\"+ ejb, nomeBranchOrigine);
+			flagConflitti = flagConflitti | pullOriginEjb(percorso +"\\"+ ejb, nomeBranchOrigine); //Se almeno un EJB presenta dei conflitti, il valore di flagConflitti passerà a true
 		System.out.println();
+		
+		return flagConflitti;
 	}
 	
-	public static void pullOriginEjb(String percorso, String nomeBranchOrigine)
+	public static boolean pullOriginEjb(String percorso, String nomeBranchOrigine)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine, percorso);
+			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine, percorso);
+			if(!flagConflitti)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine +" --> OK");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine +" --> CONFLITTI");
+			
+			return flagConflitti;
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
-			System.out.println("Errore durante il merge dell'EJB '"+ percorso +"' dal branch '"+ nomeBranchOrigine +"'");
+			System.out.println("Errore durante il checkout dell'EJB '"+ percorso +"' sul branch '"+ nomeBranchOrigine +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static void commitConflittiEjbBlocco(List<String> bloccoEjb, String percorso)
@@ -262,68 +283,70 @@ public class FunzioniEjb
 	
 	public static void commitConflittiEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_COMMIT, percorso);
+			boolean flagCommit = gitCommitConflitto(StringConstants.COMANDO_GIT_COMMIT, percorso);
+			if(flagCommit)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> CONFLITTI RISOLTI");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
 		}
 		catch (IOException ex)
 		{
 			System.out.println("Errore durante il commit per i conflitti dell'EJB '"+ percorso +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
 		}
-		System.out.println("--------------------");
 	}
 	
-	public static void pullOriginMasterEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
+	public static boolean pullOriginMasterEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> listaEjbBlocco = mapEjb.get(nomeBloccoEjb);
+		boolean flagConflitti = false;
 		for(String ejb : listaEjbBlocco)
-			pullOriginMasterEjb(percorso +"\\"+ ejb);
+			flagConflitti = flagConflitti | pullOriginMasterEjb(percorso +"\\"+ ejb);
 		System.out.println();
+		
+		return flagConflitti;
 	}
 	
-	public static void pullOriginMasterEjb(String percorso)
+	public static boolean pullOriginMasterEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER, percorso);
+			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER, percorso);
+			if(!flagConflitti)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> OK");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> CONFLITTI");
+			
+			return flagConflitti;
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante il merge dell'EJB '"+ percorso +"' dal branch '"+ StringConstants.BRANCH_MASTER +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static void proceduraGestioneConflitti(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
 		
-		System.out.print(">>> Ci sono conflitti da risolvere (S/N)? ");
-		String scelta = inputScelta();
+		System.out.println("--- Ci sono conflitti da risolvere");
+		System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
+		System.out.println("    2) Non effettuare il commit per risolvere i conflitti, ci pensa il software");
+		System.out.println("    3) Digitare S per far continuare il programma");
+		System.out.print(">>> Comando: ");
+		inputScelta();
 		System.out.println();
 		
-		if("S".equalsIgnoreCase(scelta))
-		{
-			do
-			{
-				System.out.println("--- Ci sono conflitti da risolvere");
-				System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
-				System.out.println("    2) Non effettuare il commit per risolvere i conflitti, ci pensa il software");
-				System.out.println("    3) Digitare S per far continuare il programma");
-				System.out.print(">>> Comando: ");
-				scelta = inputScelta();
-				System.out.println();
-			} while(!"S".equalsIgnoreCase(scelta));
-			
-			System.out.println("--- Commit per risolvere i conflitti su tutti gli EJB del blocco"+ nomeBloccoEjb +"\n");
-			commitConflittiEjbBlocco(bloccoEjb, percorso);
-			System.out.println();
-			System.out.println("--- Conflitti sugli EJB del blocco "+ nomeBloccoEjb +" risolti\n");
-		}
+		System.out.println("--- Commit per risolvere i conflitti su tutti gli EJB del blocco "+ nomeBloccoEjb +"\n");
+		commitConflittiEjbBlocco(bloccoEjb, percorso);
+		System.out.println();
+		System.out.println("--- Conflitti sugli EJB del blocco "+ nomeBloccoEjb +" risolti\n");
 	}
 	
 	public static void confermaVersioniPomEjbBlocco(String nomeBloccoEjb)
@@ -343,27 +366,36 @@ public class FunzioniEjb
 		}
 	}
 	
-	public static void statusEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
+	public static boolean statusEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
+		boolean tuttoCommittato = false;
 		for(String ejb : bloccoEjb)
-			statusEjb(percorso +"\\"+ ejb);
+			tuttoCommittato = tuttoCommittato | statusEjb(percorso +"\\"+ ejb);
 		System.out.println();
+		
+		return tuttoCommittato;
 	}
 	
-	public static void statusEjb(String percorso)
+	public static boolean statusEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_STATUS, percorso);
+			boolean flagCommit = gitStatus(StringConstants.COMANDO_GIT_STATUS, percorso);
+			if(flagCommit)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> NESSUNA MODIFICA DA COMMITTARE");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> CI SONO MODIFICHE DA COMMITTARE");
+			
+			return flagCommit;
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante la verifica dello status dell'EJB '"+ percorso +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
+			return false;
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static void verificaModificheNonCommittate(String bloccoEjb)
@@ -397,18 +429,19 @@ public class FunzioniEjb
 		{
 			if(StringConstants.BRANCH_SVIL.equals(nomeBranch))
 			{
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_RELEASE);
-				executeCommand(StringConstants.COMANDO_GIT_RELEASE, percorso);
+				System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_RELEASE);
+				gitCommitVuoto(StringConstants.COMANDO_GIT_RELEASE, percorso);
 			}
 			else
 			{
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO);
-				executeCommand(StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO, percorso);
+				System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO);
+				gitCommitVuoto(StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO, percorso);
 			}
+			System.out.println(" --> OK");
 		}
-		catch(IOException ex)
+		catch(IOException | InterruptedException ex)
 		{
-			System.out.println("Errore durante il commit vuoto per innescare la build dell'EJB '"+ percorso +"'");
+			System.out.println(" --> ERRORE");
 			ex.printStackTrace();
 		}
 	}
@@ -423,17 +456,20 @@ public class FunzioniEjb
 	
 	public static void pushEjb(String percorso)
 	{
-		System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH);
 		try
 		{
-			executeCommand(StringConstants.COMANDO_GIT_PUSH, percorso);
+			boolean flagPush = gitPush(StringConstants.COMANDO_GIT_PUSH, percorso);
+			if(flagPush)
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> OK");
+			else
+				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> ERRORE");
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante la push dei commit dell'EJB '"+ percorso +"'");
 			ex.printStackTrace();
+			System.out.println("--------------------");
 		}
-		System.out.println("--------------------");
 	}
 	
 	public static boolean verificaTerminazioneAllineamento(String nomeBranch)
