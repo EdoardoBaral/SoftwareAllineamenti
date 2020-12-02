@@ -18,7 +18,6 @@ public class StringConstants
 	public static final String COMANDO_GIT_BRANCH = "git rev-parse --abbrev-ref HEAD";
 	public static final String COMANDO_GIT_COMMIT = "git commit";
 	public static final String COMANDO_GIT_COMMIT_EJB_VUOTO = "git commit --allow-empty -m \"Commit vuoto per ricompilazione EJB\"";
-	public static final String COMANDO_GIT_COMMIT_VERTICALE_VUOTO = "git commit --allow-empty -m \"Commit vuoto per ricompilazione verticale\"";
 	public static final String COMANDO_GIT_RELEASE = "git commit --allow-empty -m \"RELEASE\"";
 	public static final String COMANDO_GIT_TAG_PROMOTE = "git commit --allow-empty -m \"TAG-PROMOTE\"";
 	public static final String COMANDO_GIT_STATUS = "git status";
@@ -26,6 +25,9 @@ public class StringConstants
 	
 	public static final String ALLINEAMENTO_EJB = "ejb ";
 	public static final String ALLINEAMENTO_VERTICALI = "verticali ";
+	public static final String SOSTITUZIONE_AUTOMATICA = "sostituzione ";
+	public static final String ALLINEAMENTO_EJB_POST_RILASCIO = "ejbPostRilascio ";
+	public static final String ALLINEAMENTO_VERTICALI_POST_RILASCIO = "verticaliPostRilascio ";
 	public static final String ESCI = "exit";
 
 	public static final Map<String, String> PATH_EJB  = new HashMap<String, String>() {{
