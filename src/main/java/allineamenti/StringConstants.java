@@ -26,6 +26,8 @@ public class StringConstants
 	public static final String ALLINEAMENTO_EJB = "ejb ";
 	public static final String ALLINEAMENTO_VERTICALI = "verticali ";
 	public static final String SOSTITUZIONE_AUTOMATICA = "sostituzione ";
+	public static final String ALLINEAMENTO_EJB_POST_RILASCIO = "ejbPostRilascio ";
+	public static final String ALLINEAMENTO_VERTICALI_POST_RILASCIO = "verticaliPostRilascio ";
 	public static final String ESCI = "exit";
 
 	public static final Map<String, String> PATH_EJB  = new HashMap<String, String>() {{

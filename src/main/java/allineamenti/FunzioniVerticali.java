@@ -48,8 +48,8 @@ public class FunzioniVerticali
 		
 		if(!StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
 		{
-			System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL+"'\n");
-			flagConflitti = pullOriginVerticali(listaVerticali, percorso);
+			System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL +"'\n");
+			flagConflitti = pullOriginVerticali(listaVerticali, percorso, StringConstants.BRANCH_SVIL);
 			if(flagConflitti)
 				proceduraGestioneConflitti(listaVerticali, percorso);
 		}
@@ -70,7 +70,49 @@ public class FunzioniVerticali
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
 		
-		System.out.println("--- Simulazione allineamento verticali ---\n");
+		System.out.println("--- Allineamento verticali in '"+ nomeBranch +"' terminato ---\n");
+	}
+	
+	static void eseguiAllineamentoVerticaliPostRilascio(List<String> listaVerticali, String comando)
+	{
+		String branchOrigine = comando.substring(22);
+		System.out.println("--- Allineamento verticali in env/svil post rilascio in Produzione - Branch origine del merge: "+ branchOrigine +" ---\n");
+		
+		String percorso = inputPercorsoCartellaVerticali();
+		
+		proceduraCheckoutTuttiVerticali(listaVerticali, StringConstants.BRANCH_SVIL, percorso);
+		System.out.println();
+		
+		System.out.println("--- Pull di tutti i verticali\n");
+		pullTuttiVerticali(listaVerticali, percorso);
+		
+		boolean flagConflitti;
+		
+		if(!StringConstants.BRANCH_SVIL.equalsIgnoreCase(branchOrigine))
+		{
+			System.out.println("--- Merge di tutti i verticali dal branch '"+ branchOrigine +"'\n");
+			flagConflitti = pullOriginVerticali(listaVerticali, percorso, branchOrigine);
+			if(flagConflitti)
+				proceduraGestioneConflitti(listaVerticali, percorso);
+		}
+		
+		System.out.println("--- Merge di tutti i verticali dal branch master\n");
+		flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
+		if(flagConflitti)
+			proceduraGestioneConflitti(listaVerticali, percorso);
+		
+		proceduraSostituzioneVersioniPom(percorso);
+		
+		boolean verticaliTuttiCommittati = statusVerticali(listaVerticali, percorso);
+		if(verticaliTuttiCommittati)
+			System.out.println("I verticali sono tutti allineati e non presentano modifiche non committate");
+		else
+			verificaModificheNonCommittate();
+		
+		commitVuotoVerticali(listaVerticali, branchOrigine, percorso);
+		proceduraPushIntervalliVerticali(listaVerticali, percorso);
+		
+		System.out.println("--- Allineamento verticali in 'env/svil' post rilascio in Produzione terminato ---\n");
 	}
 	
 	private static String inputScelta()
@@ -208,25 +250,25 @@ public class FunzioniVerticali
 		}
 	}
 	
-	private static boolean pullOriginVerticali(List<String> listaVerticali, String percorso)
+	private static boolean pullOriginVerticali(List<String> listaVerticali, String percorso, String branchOrigine)
 	{
 		boolean flagConflitti = false;
 		for(String verticale : listaVerticali)
-			flagConflitti = flagConflitti | pullOriginVerticale(percorso +"\\"+ verticale);
+			flagConflitti = flagConflitti | pullOriginVerticale(percorso +"\\"+ verticale, branchOrigine);
 		System.out.println();
 		
 		return flagConflitti;
 	}
 	
-	private static boolean pullOriginVerticale(String percorso)
+	private static boolean pullOriginVerticale(String percorso, String branchOrigine)
 	{
 		try
 		{
-			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL, percorso);
+			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine, percorso);
 			if(!flagConflitti)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL +" --> OK");
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine +" --> OK");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_SVIL +" --> CONFLITTI");
+				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine +" --> CONFLITTI");
 			
 			return flagConflitti;
 		}
