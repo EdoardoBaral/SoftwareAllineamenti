@@ -3,6 +3,7 @@ package allineamenti;
 import static allineamenti.FunzioniConsole.inputComandoAllineamento;
 import static allineamenti.FunzioniEjb.eseguiAllineamentoEjb;
 import static allineamenti.FunzioniVerticali.eseguiAllineamentoVerticali;
+import static allineamenti.FunzioniVerticali.eseguiSostituzioneAutomatica;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +28,8 @@ public class Main
 				eseguiAllineamentoEjb(mapEjb, comando);
 			else if(comando.contains(StringConstants.ALLINEAMENTO_VERTICALI))
 				eseguiAllineamentoVerticali(listaVerticali, comando);
+			else if(comando.contains(StringConstants.SOSTITUZIONE_AUTOMATICA))
+				eseguiSostituzioneAutomatica(listaVerticali, comando);
 		} while(!StringConstants.ESCI.equals(comando));
 		
 		System.out.println("TERMINAZIONE PROGRAMMA");

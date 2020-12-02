@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 
 public class FunzioniVerticali
 {
-	public static void eseguiAllineamentoVerticali(List<String> listaVerticali, String comando)
+	static void eseguiAllineamentoVerticali(List<String> listaVerticali, String comando)
 	{
 		String nomeBranch = comando.substring(10);
 		System.out.println("--- Allineamento verticali - Branch: "+ nomeBranch +" ---\n");
@@ -68,54 +68,18 @@ public class FunzioniVerticali
 			verificaModificheNonCommittate();
 		
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
-
-		boolean checkTerminazionePush;
-		do
-		{
-			boolean flagIntervalloValido = true;
-			String v1, v2;
-			do
-			{
-				System.out.println("--- Specificare i nomi dei due verticali che determinano l'intervallo dei verticali da compilare, estremi inclusi");
-				System.out.print("    1) Primo verticale: ");
-				v1 = inputScelta();
-				System.out.print("    2) Secondo verticale: ");
-				v2 = inputScelta();
-
-				if(!verificaIntervalloVerticali(v1, v2))
-				{
-					System.out.println("Uno dei verticali indicati o entrambi non sono validi");
-					System.out.println("Riprovare assicurandosi che entrambi i nomi siano validi e che siano indicati in ordine alfabetico");
-					flagIntervalloValido = false;
-				}
-				else
-					flagIntervalloValido = true;
-			} while(!flagIntervalloValido);
-
-			pushVerticali(listaVerticali, v1, v2, percorso);
-
-			System.out.print(">>> Vuoi eseguire la push su un altro intervallo di verticali (S/N)? ");
-			String scelta = inputScelta();
-			System.out.println();
-
-			if("S".equalsIgnoreCase(scelta))
-				checkTerminazionePush = false;
-			else
-				checkTerminazionePush = true;
-		} while(!checkTerminazionePush);
+		proceduraPushIntervalliVerticali(listaVerticali, percorso);
 		
 		System.out.println("--- Simulazione allineamento verticali ---\n");
 	}
 	
-	public static String inputScelta()
+	private static String inputScelta()
 	{
 		Scanner scanner = new Scanner(System.in);
-		String comando = scanner.nextLine();
-		
-		return comando;
+		return scanner.nextLine();
 	}
 	
-	public static String inputPercorsoCartellaVerticali()
+	private static String inputPercorsoCartellaVerticali()
 	{
 		String percorso;
 		do
@@ -133,7 +97,7 @@ public class FunzioniVerticali
 		return percorso;
 	}
 	
-	public static boolean verificaPercorsoCartella(String percorso)
+	private static boolean verificaPercorsoCartella(String percorso)
 	{
 		if(Files.exists(Paths.get(percorso)))
 			return true;
@@ -144,7 +108,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static void proceduraCheckoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
+	private static void proceduraCheckoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
 		List<String> listaVerticaliNonSwitchati = checkoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
 		
@@ -167,7 +131,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static List<String> checkoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
+	private static List<String> checkoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
 		List<String> listaVerticaliNonSwitchati = new ArrayList<>();
 		
@@ -181,7 +145,7 @@ public class FunzioniVerticali
 		return listaVerticaliNonSwitchati;
 	}
 	
-	public static List<String> checkoutVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String nomeBranch, String percorso)
+	private static List<String> checkoutVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String nomeBranch, String percorso)
 	{
 		for(String verticale : verticaliNonSwitchati)
 		{
@@ -193,7 +157,7 @@ public class FunzioniVerticali
 		return verticaliNonSwitchati;
 	}
 	
-	public static boolean checkoutVerticale(String percorso, String nomeBranch)
+	private static boolean checkoutVerticale(String percorso, String nomeBranch)
 	{
 		try
 		{
@@ -214,21 +178,21 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static void pullTuttiVerticali(List<String> listaVerticali, String percorso)
+	private static void pullTuttiVerticali(List<String> listaVerticali, String percorso)
 	{
 		for(String verticale : listaVerticali)
 			pullVerticale(percorso +"\\"+ verticale);
 		System.out.println();
 	}
 	
-	public static void pullVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String percorso)
+	private static void pullVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String percorso)
 	{
 		for(String verticale : verticaliNonSwitchati)
 			pullVerticale(percorso +"\\"+ verticale);
 		System.out.println();
 	}
 	
-	public static void pullVerticale(String percorso)
+	private static void pullVerticale(String percorso)
 	{
 		System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
 		try
@@ -244,7 +208,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static boolean pullOriginVerticali(List<String> listaVerticali, String percorso)
+	private static boolean pullOriginVerticali(List<String> listaVerticali, String percorso)
 	{
 		boolean flagConflitti = false;
 		for(String verticale : listaVerticali)
@@ -254,7 +218,7 @@ public class FunzioniVerticali
 		return flagConflitti;
 	}
 	
-	public static boolean pullOriginVerticale(String percorso)
+	private static boolean pullOriginVerticale(String percorso)
 	{
 		try
 		{
@@ -275,7 +239,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static void proceduraGestioneConflitti(List<String> listaVerticali, String percorso)
+	private static void proceduraGestioneConflitti(List<String> listaVerticali, String percorso)
 	{
 		System.out.println("--- Ci sono conflitti da risolvere");
 		System.out.println("    1) Risolvere su IntelliJ i conflitti segnalati");
@@ -291,13 +255,13 @@ public class FunzioniVerticali
 		System.out.println("--- Conflitti sui verticali risolti\n");
 	}
 	
-	public static void commitConflittiVerticali(List<String> listaVerticali, String percorso)
+	private static void commitConflittiVerticali(List<String> listaVerticali, String percorso)
 	{
 		for(String verticale : listaVerticali)
 			commitConflittiVerticale(percorso +"\\"+ verticale);
 	}
 	
-	public static void commitConflittiVerticale(String percorso)
+	private static void commitConflittiVerticale(String percorso)
 	{
 		try
 		{
@@ -315,7 +279,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static boolean pullOriginMasterVerticali(List<String> listaVerticali, String percorso)
+	private static boolean pullOriginMasterVerticali(List<String> listaVerticali, String percorso)
 	{
 		boolean flagConflitti = false;
 		for(String verticale : listaVerticali)
@@ -325,7 +289,7 @@ public class FunzioniVerticali
 		return flagConflitti;
 	}
 	
-	public static boolean pullOriginMasterVerticale(String percorso)
+	private static boolean pullOriginMasterVerticale(String percorso)
 	{
 		try
 		{
@@ -346,7 +310,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static boolean statusVerticali(List<String> listaVerticali, String percorso)
+	private static boolean statusVerticali(List<String> listaVerticali, String percorso)
 	{
 		boolean tuttoCommittato = false;
 		for(String verticale : listaVerticali)
@@ -356,7 +320,7 @@ public class FunzioniVerticali
 		return tuttoCommittato;
 	}
 	
-	public static boolean statusVerticale(String percorso)
+	private static boolean statusVerticale(String percorso)
 	{
 		try
 		{
@@ -377,7 +341,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static void verificaModificheNonCommittate()
+	private static void verificaModificheNonCommittate()
 	{
 		String scelta;
 		do
@@ -394,14 +358,14 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
-	public static void commitVuotoVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
+	private static void commitVuotoVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
 		for(String verticale : listaVerticali)
 			commitVuotoVerticale(percorso +"\\"+ verticale, nomeBranch);
 		System.out.println();
 	}
 	
-	public static void commitVuotoVerticale(String percorso, String nomeBranch)
+	private static void commitVuotoVerticale(String percorso, String nomeBranch)
 	{
 		try
 		{
@@ -424,7 +388,7 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static void pushVerticali(List<String> listaVerticali, String v1, String v2, String percorso)
+	private static void pushVerticali(List<String> listaVerticali, String v1, String v2, String percorso)
 	{
 		List<String> intervalloVerticali = listaVerticali.subList(listaVerticali.indexOf(v1), listaVerticali.indexOf(v2)+1);
 		for(String verticale : intervalloVerticali)
@@ -432,7 +396,7 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
-	public static void pushVerticale(String percorso)
+	private static void pushVerticale(String percorso)
 	{
 		try
 		{
@@ -450,16 +414,14 @@ public class FunzioniVerticali
 		}
 	}
 	
-	public static boolean verificaIntervalloVerticali(String v1, String v2)
+	private static boolean verificaIntervalloVerticali(String v1, String v2)
 	{
 		if(v1 == null || v2 == null)
 			return false;
 		if("".equals(v1) || "".equals(v2))
 			return false;
-		if(v1.compareTo(v2) < 0)
-			return true;
-		else
-			return false;
+		
+		return (v1.compareTo(v2) < 0);
 	}
 	
 	private static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali)
