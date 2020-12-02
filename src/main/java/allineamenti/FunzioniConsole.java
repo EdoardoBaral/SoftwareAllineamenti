@@ -4,14 +4,15 @@ import java.util.Scanner;
 
 public class FunzioniConsole
 {
-	public static void mostraAllineamentiPossibili()
+	public static void mostraFunzioniPossibili()
 	{
 		System.out.println("Operazioni possibili");
-		System.out.println("  DESCRIZIONE                  | COMANDO");
-		System.out.println("  -----------------------------|------------------------------------------------------");
-		System.out.println("  1) Allineamento EJB migrati: | ejb <nomeBranch>       (es. --> ejb env/svis )");
-		System.out.println("  2) Allineamento verticali:   | verticali <nomeBranch> (es. --> verticali env/svis )");
-		System.out.println("  3) Esci:                     | exit\n");
+		System.out.println("  DESCRIZIONE                                                | COMANDO");
+		System.out.println("  -----------------------------------------------------------|----------------------------------------------------------------");
+		System.out.println("  1) Allineamento EJB migrati:                               | ejb <nomeBranch>          (es. --> ejb env/svis )");
+		System.out.println("  2) Allineamento verticali:                                 | verticali <nomeBranch>    (es. --> verticali env/svis )");
+		System.out.println("  3) Sostituzione automatica versioni nei POM dei verticali: | sostituzione <nomeBranch> (es. --> sostituzione env/svis");
+		System.out.println("  3) Esci:                                                   | exit\n");
 	}
 	
 	public static String inputComando()
@@ -29,7 +30,7 @@ public class FunzioniConsole
 		String comando;
 		do
 		{
-			mostraAllineamentiPossibili();
+			mostraFunzioniPossibili();
 			comando = inputComando();
 		} while(!verificaComandoAllineamento(comando));
 		
@@ -40,19 +41,22 @@ public class FunzioniConsole
 	{
 		switch(comando)
 		{
-		case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIL):
-		case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIS):
-		case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_PTES):
-		case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIA):
-		case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_PTEA):
-		case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIL):
-		case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIS):
-		case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIA):
-		case StringConstants.ESCI:
-			return true;
-		default:
-			System.out.println("Azione non consentita. Riprovare\n");
-			return false;
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIL):
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIS):
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_PTES):
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIA):
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_PTEA):
+			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIL):
+			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIS):
+			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIA):
+			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIL):
+			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIS):
+			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIA):
+			case StringConstants.ESCI:
+				return true;
+			default:
+				System.out.println("Azione non consentita. Riprovare\n");
+				return false;
 		}
 	}
 }

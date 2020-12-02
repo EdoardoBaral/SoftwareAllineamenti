@@ -462,11 +462,12 @@ public class FunzioniVerticali
 			return false;
 	}
 	
-	public static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali)
+	private static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali)
 	{
 		System.out.println("--- Verifica e sostituzione automatica delle versioni aggiornate nei POM dei verticali");
 		System.out.println("    1) Assicurati che nel file VersioniPOM.txt siano presenti tutte le versioni da aggiornare") ;
 		System.out.println("    2) Digita S per avviare la procedura oppure N per saltarla") ;
+		System.out.println("    3) Una volta terminata la procedura, verifica da IntelliJ la correttezza delle modifiche e committa");
 		System.out.print(">>> Scelta: ");
 		String scelta = inputScelta();
 		
@@ -487,13 +488,13 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
-	public static void ricercaFilePom(String percorsoRoot, List<String> listaVersioni)
+	private static void ricercaFilePom(String percorsoRoot, List<String> listaVersioni)
 	{
 		File file = new File(percorsoRoot);
 		ricercaFilePomRicorsiva(file, listaVersioni);
 	}
 	
-	public static void ricercaFilePomRicorsiva(File file, List<String> listaVersioni)
+	private static void ricercaFilePomRicorsiva(File file, List<String> listaVersioni)
 	{
 		if(!file.isDirectory())
 		{
@@ -505,13 +506,14 @@ public class FunzioniVerticali
 			if(!"target".equalsIgnoreCase(file.getName()))
 			{
 				File[] listaFiles = file.listFiles();
-				for(File f : listaFiles)
-					ricercaFilePomRicorsiva(f, listaVersioni);
+				if(listaFiles != null)
+					for(File f : listaFiles)
+						ricercaFilePomRicorsiva(f, listaVersioni);
 			}
 		}
 	}
 	
-	public static void sostituisciVersioni(File filePom, List<String> listaVersioni)
+	private static void sostituisciVersioni(File filePom, List<String> listaVersioni)
 	{
 		System.out.println("--- Aggiornamento versioni nel file "+ filePom.getAbsolutePath());
 		try
@@ -558,6 +560,68 @@ public class FunzioniVerticali
 			ex.printStackTrace();
 		}
 		System.out.println("--------------------");
+	}
+	
+	static void eseguiSostituzioneAutomatica(List<String> listaVerticali, String comando)
+	{
+		String nomeBranch = comando.substring(13);
+		System.out.println("--- Procedura di sostituzione automatica delle versioni nei POM dei verticali - Branch: "+ nomeBranch +" ---\n");
+		
+		String percorso = inputPercorsoCartellaVerticali();
+		
+		System.out.println("--- Checkout di tutti i verticali\n");
+		proceduraCheckoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
+		System.out.println();
+		
+		System.out.println("--- Pull di tutti i verticali\n");
+		pullTuttiVerticali(listaVerticali, percorso);
+		System.out.println();
+		
+		boolean flagConflitti;
+		
+		System.out.println("--- Merge di tutti i verticali dal branch master\n");
+		flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
+		if(flagConflitti)
+			proceduraGestioneConflitti(listaVerticali, percorso);
+		
+		proceduraSostituzioneVersioniPom(percorso);
+		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
+		proceduraPushIntervalliVerticali(listaVerticali, percorso);
+		
+		System.out.println("--- Sostituzione automatica terminata ---\n");
+	}
+	
+	private static void proceduraPushIntervalliVerticali(List<String> listaVerticali, String percorso)
+	{
+		boolean checkTerminazionePush;
+		do
+		{
+			boolean flagIntervalloValido = true;
+			String v1, v2;
+			do
+			{
+				System.out.println("--- Specificare i nomi dei due verticali che determinano l'intervallo dei verticali da compilare, estremi inclusi");
+				System.out.print("    1) Primo verticale: ");
+				v1 = inputScelta();
+				System.out.print("    2) Secondo verticale: ");
+				v2 = inputScelta();
+				
+				if(!verificaIntervalloVerticali(v1, v2))
+				{
+					System.out.println("Uno dei verticali indicati o entrambi non sono validi");
+					System.out.println("Riprovare assicurandosi che entrambi i nomi siano validi e che siano indicati in ordine alfabetico");
+					flagIntervalloValido = false;
+				}
+			} while(!flagIntervalloValido);
+			
+			pushVerticali(listaVerticali, v1, v2, percorso);
+			
+			System.out.print(">>> Vuoi eseguire la push su un altro intervallo di verticali (S/N)? ");
+			String scelta = inputScelta();
+			System.out.println();
+			
+			checkTerminazionePush = !"S".equalsIgnoreCase(scelta);
+		} while(!checkTerminazionePush);
 	}
 	
 	/* Metodo main da tenere nel caso sia necessaria la sola procedura di aggiornamento dei POM dei verticali */
