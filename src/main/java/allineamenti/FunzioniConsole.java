@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class FunzioniConsole
 {
-	public static void mostraFunzioniPossibili()
+	static void mostraFunzioniPossibili()
 	{
 		System.out.println("Operazioni possibili");
 		System.out.println("  DESCRIZIONE                                                | COMANDO");
@@ -15,7 +15,7 @@ public class FunzioniConsole
 		System.out.println("  3) Esci:                                                   | exit\n");
 	}
 	
-	public static String inputComando()
+	private static String inputComando()
 	{
 		Scanner scanner = new Scanner(System.in);
 		System.out.print(">>> Comando: ");
@@ -25,7 +25,7 @@ public class FunzioniConsole
 		return comando;
 	}
 	
-	public static String inputComandoAllineamento()
+	static String inputComandoAllineamento()
 	{
 		String comando;
 		do
@@ -37,7 +37,7 @@ public class FunzioniConsole
 		return comando;
 	}
 	
-	public static boolean verificaComandoAllineamento(String comando)
+	private static boolean verificaComandoAllineamento(String comando)
 	{
 		switch(comando)
 		{
