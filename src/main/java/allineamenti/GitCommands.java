@@ -41,7 +41,7 @@ public class GitCommands
 		String s1;
 		while( (s1 = errorStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s1, "conflict"))
+			if(StringUtils.containsIgnoreCase(s1, "conflict") | StringUtils.containsIgnoreCase(s1, "fatal") | StringUtils.containsIgnoreCase(s1, "error"))
 				throw new IOException("Errore avvenuto durante la pull dell'EJB '"+ percorsoCartella +"'");
 		}
 	}
@@ -56,12 +56,12 @@ public class GitCommands
 		String s1, s2;
 		while( (s1 = inputStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s1, "conflict"))
+			if(StringUtils.containsIgnoreCase(s1, "conflict") | StringUtils.containsIgnoreCase(s1, "fatal") | StringUtils.containsIgnoreCase(s1, "error"))
 				return true;
 		}
 		while( (s2 = errorStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s2, "conflict"))
+			if(StringUtils.containsIgnoreCase(s2, "conflict") | StringUtils.containsIgnoreCase(s2, "fatal") | StringUtils.containsIgnoreCase(s2, "error"))
 				return true;
 		}
 		
@@ -122,7 +122,7 @@ public class GitCommands
 		}
 		while( (s2 = errorStream.readLine()) != null )
 		{
-			if(StringUtils.containsIgnoreCase(s2, "fatal: unable to access") || StringUtils.containsIgnoreCase(s1, "error") || StringUtils.containsIgnoreCase(s1, "rejected"))
+			if(StringUtils.containsIgnoreCase(s2, "fatal: unable to access") || StringUtils.containsIgnoreCase(s2, "error") || StringUtils.containsIgnoreCase(s2, "rejected"))
 				return false;
 		}
 		

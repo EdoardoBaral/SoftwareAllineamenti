@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SetupApplication {
-	public Map<String, List<String>> caricaListeEjb() throws IOException {
+public class SetupApplication
+{
+	public Map<String, List<String>> caricaListeEjb() throws IOException
+	{
 		final String nomeFile = "EjbMigrati.txt";
 		Map<String, List<String>> map = new HashMap<>();
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -18,17 +20,22 @@ public class SetupApplication {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		
 		String riga;
-		while ((riga = br.readLine()) != null) {
-			if (riga.length() > 0 && riga.contains("--B")) {
+		while ((riga = br.readLine()) != null)
+		{
+			if (riga.length() > 0 && riga.contains("--B"))
+			{
 				String nomeBlocco = riga.substring(2, riga.indexOf(':'));
 				String nomeEjb = riga.substring(riga.indexOf(':') + 2);
 				List<String> listaEjb = map.get(nomeBlocco);
 				
-				if (listaEjb == null) {
+				if (listaEjb == null)
+				{
 					listaEjb = new ArrayList<>();
 					listaEjb.add(nomeEjb);
 					map.put(nomeBlocco, listaEjb);
-				} else {
+				}
+				else
+				{
 					listaEjb.add(nomeEjb);
 					map.put(nomeBlocco, listaEjb);
 				}
@@ -38,7 +45,8 @@ public class SetupApplication {
 		return map;
 	}
 	
-	public List<String> caricaListaVerticali() throws IOException {
+	public List<String> caricaListaVerticali() throws IOException
+	{
 		final String nomeFile = "Verticali.txt";
 		List<String> listaVerticali = new ArrayList<>();
 		
@@ -47,7 +55,8 @@ public class SetupApplication {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		
 		String riga;
-		while ((riga = br.readLine()) != null) {
+		while ((riga = br.readLine()) != null)
+		{
 			listaVerticali.add(riga);
 		}
 		

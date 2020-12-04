@@ -22,7 +22,12 @@ public class FunzioniEjb
 {
 	static void eseguiAllineamentoEjb(Map<String, List<String>> mapEjb, String comando)
 	{
-		String nomeBranch = comando.substring(4);
+		String[] partiComando = comando.split(" ");
+		String nomeBranch = partiComando[1];
+		String branchOrigine = null;
+		if(partiComando.length == 3)
+			branchOrigine = partiComando[2];
+		
 		System.out.println("--- Allineamento EJB migrati - Branch: "+ nomeBranch +" ---\n");
 		
 		String percorso = inputPercorsoCartellaEjb();
@@ -46,8 +51,16 @@ public class FunzioniEjb
 			
 			if(!nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
 			{
-				System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch precedente\n");
-				flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, StringConstants.BRANCH_SVIL);
+				if(branchOrigine == null)
+				{
+					System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ StringConstants.BRANCH_SVIL +"'\n");
+					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, StringConstants.BRANCH_SVIL);
+				}
+				else
+				{
+					System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"'\n");
+					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, branchOrigine);
+				}
 				if(flagConflitti)
 					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
 				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
@@ -73,59 +86,6 @@ public class FunzioniEjb
 		} while(!mapEjb.containsKey(nomeBloccoEjb) || !allineamentoEjbTerminato);
 	}
 	
-	static void eseguiAllineamentoEjbPostRilascio(Map<String, List<String>> mapEjb, String comando)
-	{
-		String branchOrigine = comando.substring(16);
-		System.out.println("--- Allineamento EJB migrati in env/svil post rilascio in Produzione - Branch origine del merge: "+ branchOrigine +" ---\n");
-		
-		String percorso = inputPercorsoCartellaEjb();
-		
-		proceduraCheckoutTuttiEjb(mapEjb, StringConstants.BRANCH_SVIL, percorso);
-		
-		System.out.println("--- Pull di tutti gli EJB migrati\n");
-		pullTuttiEjb(mapEjb, percorso);
-		
-		String nomeBloccoEjb;
-		boolean allineamentoEjbTerminato;
-		do
-		{
-			System.out.print(">>> Quale blocco di EJB intendi compilare (es. B1, B2...)? ");
-			nomeBloccoEjb = inputScelta();
-			if(!mapEjb.containsKey(nomeBloccoEjb))
-				System.out.println("Il blocco selezionato non esiste. Riprovare\n");
-			System.out.println();
-			
-			boolean flagConflitti;
-			
-			if(!branchOrigine.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
-			{
-				System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"'\n");
-				flagConflitti = pullOriginPostRilascioEjbBlocco(mapEjb, nomeBloccoEjb, percorso, branchOrigine);
-				if(flagConflitti)
-					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
-			}
-			
-			System.out.println("--- Merge di tutti gli EJB migrati dal branch master\n");
-			flagConflitti = pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			if(flagConflitti)
-				proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-			confermaVersioniPomEjbBlocco(nomeBloccoEjb);
-			
-			boolean tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			if(tuttoCommittatoEjbBlocco)
-				System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
-			else
-				verificaModificheNonCommittate(nomeBloccoEjb);
-			
-			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, StringConstants.BRANCH_SVIL, percorso);
-			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			
-			System.out.println("--- Allineamento post rilascio in Produzione degli EJB migrati del blocco "+ nomeBloccoEjb +" completato\n");
-			allineamentoEjbTerminato = verificaTerminazioneAllineamento(branchOrigine);
-		} while(!mapEjb.containsKey(nomeBloccoEjb) || !allineamentoEjbTerminato);
-	}
-	
 	private static String inputScelta()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -139,7 +99,7 @@ public class FunzioniEjb
 		{
 			Scanner scanner = new Scanner(System.in);
 			System.out.println(">>> Inserisci il percorso della cartella contenente gli EJB (es. 'D:\\Openshift\\EJB') oppure inserisci una delle seguenti chiavi presenti: ");
-			StringConstants.PATH_EJB.forEach((k, v) -> System.out.println(k + " -> " + v));
+			StringConstants.PATH_EJB.forEach((k, v) -> System.out.println("   -- "+ k + " --> " + v));
 			System.out.print(">>> Scelta: ");
 			percorso = scanner.nextLine();
 			percorso = StringConstants.PATH_EJB.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_EJB.get(percorso.toLowerCase()) : percorso;
@@ -282,17 +242,6 @@ public class FunzioniEjb
 		boolean flagConflitti = false;
 		for(String ejb : listaEjb)
 			flagConflitti = flagConflitti | pullOriginEjb(percorso +"\\"+ ejb, nomeBranch); //Se almeno un EJB presenta dei conflitti, il valore di flagConflitti passerà a true
-		System.out.println();
-		
-		return flagConflitti;
-	}
-	
-	private static boolean pullOriginPostRilascioEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso, String nomeBranchOrigine)
-	{
-		List<String> listaEjb = mapEjb.get(nomeBloccoEjb);
-		boolean flagConflitti = false;
-		for(String ejb : listaEjb)
-			flagConflitti = flagConflitti | pullOriginEjb(percorso +"\\"+ ejb, nomeBranchOrigine); //Se almeno un EJB presenta dei conflitti, il valore di flagConflitti passerà a true
 		System.out.println();
 		
 		return flagConflitti;

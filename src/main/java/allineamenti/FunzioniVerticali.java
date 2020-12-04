@@ -33,7 +33,11 @@ public class FunzioniVerticali
 {
 	static void eseguiAllineamentoVerticali(List<String> listaVerticali, String comando)
 	{
-		String nomeBranch = comando.substring(10);
+		String[] partiComando = comando.split(" ");
+		String nomeBranch = partiComando[1];
+		String branchOrigine = null;
+		if(partiComando.length == 3)
+			branchOrigine = partiComando[2];
 		System.out.println("--- Allineamento verticali - Branch: "+ nomeBranch +" ---\n");
 
 		String percorso = inputPercorsoCartellaVerticali();
@@ -48,8 +52,16 @@ public class FunzioniVerticali
 		
 		if(!StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
 		{
-			System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL +"'\n");
-			flagConflitti = pullOriginVerticali(listaVerticali, percorso, StringConstants.BRANCH_SVIL);
+			if(branchOrigine == null)
+			{
+				System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL +"'\n");
+				flagConflitti = pullOriginVerticali(listaVerticali, percorso, StringConstants.BRANCH_SVIL);
+			}
+			else
+			{
+				System.out.println("--- Merge di tutti i verticali dal branch '"+ branchOrigine +"'\n");
+				flagConflitti = pullOriginVerticali(listaVerticali, percorso, branchOrigine);
+			}
 			if(flagConflitti)
 				proceduraGestioneConflitti(listaVerticali, percorso);
 		}
@@ -71,48 +83,6 @@ public class FunzioniVerticali
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
 		
 		System.out.println("--- Allineamento verticali in '"+ nomeBranch +"' terminato ---\n");
-	}
-	
-	static void eseguiAllineamentoVerticaliPostRilascio(List<String> listaVerticali, String comando)
-	{
-		String branchOrigine = comando.substring(22);
-		System.out.println("--- Allineamento verticali in env/svil post rilascio in Produzione - Branch origine del merge: "+ branchOrigine +" ---\n");
-		
-		String percorso = inputPercorsoCartellaVerticali();
-		
-		proceduraCheckoutTuttiVerticali(listaVerticali, StringConstants.BRANCH_SVIL, percorso);
-		System.out.println();
-		
-		System.out.println("--- Pull di tutti i verticali\n");
-		pullTuttiVerticali(listaVerticali, percorso);
-		
-		boolean flagConflitti;
-		
-		if(!StringConstants.BRANCH_SVIL.equalsIgnoreCase(branchOrigine))
-		{
-			System.out.println("--- Merge di tutti i verticali dal branch '"+ branchOrigine +"'\n");
-			flagConflitti = pullOriginVerticali(listaVerticali, percorso, branchOrigine);
-			if(flagConflitti)
-				proceduraGestioneConflitti(listaVerticali, percorso);
-		}
-		
-		System.out.println("--- Merge di tutti i verticali dal branch master\n");
-		flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
-		if(flagConflitti)
-			proceduraGestioneConflitti(listaVerticali, percorso);
-		
-		proceduraSostituzioneVersioniPom(percorso);
-		
-		boolean verticaliTuttiCommittati = statusVerticali(listaVerticali, percorso);
-		if(verticaliTuttiCommittati)
-			System.out.println("I verticali sono tutti allineati e non presentano modifiche non committate");
-		else
-			verificaModificheNonCommittate();
-		
-		commitVuotoVerticali(listaVerticali, branchOrigine, percorso);
-		proceduraPushIntervalliVerticali(listaVerticali, percorso);
-		
-		System.out.println("--- Allineamento verticali in 'env/svil' post rilascio in Produzione terminato ---\n");
 	}
 	
 	private static String inputScelta()
@@ -626,12 +596,5 @@ public class FunzioniVerticali
 			
 			checkTerminazionePush = !"S".equalsIgnoreCase(scelta);
 		} while(!checkTerminazionePush);
-	}
-	
-	/* Metodo main da tenere nel caso sia necessaria la sola procedura di aggiornamento dei POM dei verticali */
-	public static void main(String[] args)
-	{
-		String percorso = "D:\\Openshift\\Verticali\\cdbp0";
-		proceduraSostituzioneVersioniPom(percorso);
 	}
 }
