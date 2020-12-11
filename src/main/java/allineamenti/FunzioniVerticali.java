@@ -29,8 +29,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * Classe che contiene tutti i metodi necessari per gestire la procedura di allineamento dei verticali in carico ad Alten
+ *
+ * @author Edoardo Baral
+ */
 public class FunzioniVerticali
 {
+	/**
+	 * Metodo statico che esegue la procedura di allineamento dei verticali
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param comando: comando digitato dall'utente sul terminale per avviare l'allineamento
+	 */
 	static void eseguiAllineamentoVerticali(List<String> listaVerticali, String comando)
 	{
 		String[] partiComando = comando.split(" ");
@@ -85,12 +95,20 @@ public class FunzioniVerticali
 		System.out.println("--- Allineamento verticali in '"+ nomeBranch +"' terminato ---\n");
 	}
 	
+	/**
+	 * Metodo statico privato che permette l'acquisizione di un comando digitato dall'utente su terminale
+	 * @return il comando digitato dall'utente su terminale
+	 */
 	private static String inputScelta()
 	{
 		Scanner scanner = new Scanner(System.in);
 		return scanner.nextLine();
 	}
 	
+	/**
+	 * Metodo statico privato che permette l'acquisizione del percorso della cartella contenente i verticali di Alten, digitato dall'utente su terminale
+	 * @return il percorso della cartella digitato dall'utente
+	 */
 	private static String inputPercorsoCartellaVerticali()
 	{
 		String percorso;
@@ -109,6 +127,11 @@ public class FunzioniVerticali
 		return percorso;
 	}
 	
+	/**
+	 * Metodo statico privato ceh verifica la validità del percorso della cartella dei verticali, indicata dall'utente su terminale
+	 * @param percorso: percorso della cartella contenente i verticali
+	 * @return true se il percorso è valido, false altrimenti
+	 */
 	private static boolean verificaPercorsoCartella(String percorso)
 	{
 		if(Files.exists(Paths.get(percorso)))
@@ -120,6 +143,12 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che avvia la procedura di checkout per far passare tutti i verticali sul branch passato come argomento
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param nomeBranch: nome del branch su cui effettuare il checkout
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void proceduraCheckoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
 		List<String> listaVerticaliNonSwitchati = checkoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
@@ -143,6 +172,13 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il checkout di tutti i verticali sul branch indicato
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param nomeBranch: branch su cui effettuare il checkout
+	 * @param percorso: percorso della cartella contenente i verticali
+	 * @return la lista dei verticali che non sono passati sul branch voluto oppure una lista vuota nel caso in cui il checkout sia avvenuto correttamente per tutti i verticali
+	 */
 	private static List<String> checkoutTuttiVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
 		List<String> listaVerticaliNonSwitchati = new ArrayList<>();
@@ -157,6 +193,13 @@ public class FunzioniVerticali
 		return listaVerticaliNonSwitchati;
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il checkout dei soli verticali per cui l'operazione è precedentemente fallita
+	 * @param verticaliNonSwitchati: lista dei verticali che in precedenza non sono passati al branch indicato
+	 * @param nomeBranch: branch su cui effettuare il checkout
+	 * @param percorso: percorso della cartella contenente i verticali
+	 * @return la lista dei verticali che non sono passati sul branch voluto oppure una lista vuota nel caso in cui il checkout sia avvenuto correttamente per tutti i verticali
+	 */
 	private static List<String> checkoutVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String nomeBranch, String percorso)
 	{
 		for(String verticale : verticaliNonSwitchati)
@@ -169,6 +212,12 @@ public class FunzioniVerticali
 		return verticaliNonSwitchati;
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il checkout del verticale indicato su un determinato branch
+	 * @param percorso: percorso del verticale su cui effettuare il checkout
+	 * @param nomeBranch: nome del branch su cui effettuare il checkout
+	 * @return true se il checkout è avvenuto correttamente, false altrimenti
+	 */
 	private static boolean checkoutVerticale(String percorso, String nomeBranch)
 	{
 		try
@@ -190,6 +239,11 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo che effettua la pull su tutti i verticali di Alten, per sincronizzare il repository locale del verticale con il corrispondente repository remoto
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void pullTuttiVerticali(List<String> listaVerticali, String percorso)
 	{
 		for(String verticale : listaVerticali)
@@ -197,6 +251,11 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo che effettua la pull su tutti i verticali che in precedenza non sono passati sul branch desiderato con il checkout
+	 * @param verticaliNonSwitchati: lista dei verticali per cui il checkout non è avvenuto correttamente
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void pullVerticaliNonSwitchati(List<String> verticaliNonSwitchati, String percorso)
 	{
 		for(String verticale : verticaliNonSwitchati)
@@ -204,6 +263,10 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che effettua la pull sul singolo verticale passato come argomento
+	 * @param percorso: percorso dell'EJB su cui effettuare la pull
+	 */
 	private static void pullVerticale(String percorso)
 	{
 		System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
@@ -220,6 +283,13 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il merge di tutti i verticali dal branch passato come argomento
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella contenente i verticali
+	 * @param branchOrigine: nome del branch da cui effettuare il merge
+	 * @return true se durante il merge si sono verificati dei conflitti da risolvere su almeno uno dei verticali, false altrimenti
+	 */
 	private static boolean pullOriginVerticali(List<String> listaVerticali, String percorso, String branchOrigine)
 	{
 		boolean flagConflitti = false;
@@ -230,6 +300,12 @@ public class FunzioniVerticali
 		return flagConflitti;
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il merge di un singolo verticale dal branch indicato
+	 * @param percorso: percorso del verticale da allineare
+	 * @param branchOrigine: nome del branch da cui effettuare il merge
+	 * @return true se durante il merge si sono verificati dei conflitti da risolvere, false altrimenti
+	 */
 	private static boolean pullOriginVerticale(String percorso, String branchOrigine)
 	{
 		try
@@ -251,6 +327,11 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che permette di avviare la procedura di gestione dei conflitti emersi durante un merge da un altro branch
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void proceduraGestioneConflitti(List<String> listaVerticali, String percorso)
 	{
 		System.out.println("--- Ci sono conflitti da risolvere");
@@ -267,12 +348,21 @@ public class FunzioniVerticali
 		System.out.println("--- Conflitti sui verticali risolti\n");
 	}
 	
+	/**
+	 * Metodo statico privato che permette di risolvere eventuali conflitti sui verticali, emersi durante un merge, mediante un commit
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void commitConflittiVerticali(List<String> listaVerticali, String percorso)
 	{
 		for(String verticale : listaVerticali)
 			commitConflittiVerticale(percorso +"\\"+ verticale);
 	}
 	
+	/**
+	 * Metodo statico privato che permette di risolvere eventuali conflitti su un verticale, emersi durante un merge, mediante un commit
+	 * @param percorso: percorso del verticale per cui vanno risolti eventuali conflitti
+	 */
 	private static void commitConflittiVerticale(String percorso)
 	{
 		try
@@ -291,6 +381,12 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il merge di tutti i verticali dal branch master
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella contenente i verticali
+	 * @return true se sono presenti dei conflitti da risolvere emersi durante il merge, false se non ci sono conflitti
+	 */
 	private static boolean pullOriginMasterVerticali(List<String> listaVerticali, String percorso)
 	{
 		boolean flagConflitti = false;
@@ -301,6 +397,11 @@ public class FunzioniVerticali
 		return flagConflitti;
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare il merge del singolo verticale dal branch master
+	 * @param percorso: percorso della cartella del verticale da allineare al branch master
+	 * @return true se sono presenti dei conflitti da risolvere emersi durante il merge, false se non ci sono conflitti
+	 */
 	private static boolean pullOriginMasterVerticale(String percorso)
 	{
 		try
@@ -322,6 +423,12 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che verifica se nei verticalidi Alten sono presenti modifiche non ancora committate
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella che contiene i verticali di Alten
+	 * @return true se tutti i verticali non presentano aluna modifica da committare, false se almeno uno presenta modifiche non ancora committate
+	 */
 	private static boolean statusVerticali(List<String> listaVerticali, String percorso)
 	{
 		boolean tuttoCommittato = false;
@@ -332,6 +439,11 @@ public class FunzioniVerticali
 		return tuttoCommittato;
 	}
 	
+	/**
+	 * Metodo statico privato che verifica se nel singolo verticale sono presenti modifiche non ancora committate
+	 * @param percorso: percorso della cartella del verticale
+	 * @return true se il verticale non presenta alcuna modifica da committare, false altrimenti
+	 */
 	private static boolean statusVerticale(String percorso)
 	{
 		try
@@ -353,6 +465,9 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che permette all'utente di verificare la presenza di modifiche non committate per i verticali di Alten
+	 */
 	private static void verificaModificheNonCommittate()
 	{
 		String scelta;
@@ -370,6 +485,12 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare un commit vuoto per forzare la ricompilazione dei verticali
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param nomeBranch: nome del branch su cui si sta operando
+	 * @param percorso: percorso della cartella che contiene i verticali
+	 */
 	private static void commitVuotoVerticali(List<String> listaVerticali, String nomeBranch, String percorso)
 	{
 		for(String verticale : listaVerticali)
@@ -377,6 +498,11 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare un commit vuoto per forzare la ricompilazione del verticale indicato
+	 * @param percorso: percorso della cartella del verticale da ricompilare
+	 * @param nomeBranch: nome del branch su cui si sta operando
+	 */
 	private static void commitVuotoVerticale(String percorso, String nomeBranch)
 	{
 		try
@@ -400,6 +526,15 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo static privato che permette di effettuare la push sui verticali, in modo da inviare i commit nuovi sul repository remoto.
+	 * Per evitare di sovraccaricare Jenkins, le buil vengono lanciate a blocchi: data la lista completa dei verticali, l'utente deve
+	 * indicare due verticali che delimitano l'intervallo dei verticali per cui va effettuata la push
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param v1: primo verticale che rappresenta l'estremo inferiore dell'intervallo di verticali da ricompilare
+	 * @param v2: secondo verticale che rappresenta l'estremo superiore dell'intervallo di verticali da ricompilare
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void pushVerticali(List<String> listaVerticali, String v1, String v2, String percorso)
 	{
 		List<String> intervalloVerticali = listaVerticali.subList(listaVerticali.indexOf(v1), listaVerticali.indexOf(v2)+1);
@@ -408,6 +543,10 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo static privato che permette di effettuare la push sul verticale indicato, in modo da inviare i commit nuovi sul repository remoto
+	 * @param percorso: percorso della cartella del verticale
+	 */
 	private static void pushVerticale(String percorso)
 	{
 		try
@@ -426,6 +565,13 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che verifica la validità dell'intervallo di verticali indicato dall'utente: data la lista dei verticali
+	 * ordinata alfabeticamente, il primo verticale deve precedere il secondo nell'ordine alfabetico altrimenti l'intervallo non è valido
+	 * @param v1: primo verticale, estremo inferiore dell'intervallo
+	 * @param v2: secondo verticale, estremo superiore dell'intervallo
+	 * @return true se il primo verticale precede alfabeticamente il secondo e l'intervallo è valido, false altrimenti
+	 */
 	private static boolean verificaIntervalloVerticali(String v1, String v2)
 	{
 		if(v1 == null || v2 == null)
@@ -436,6 +582,10 @@ public class FunzioniVerticali
 		return (v1.compareTo(v2) < 0);
 	}
 	
+	/**
+	 * Metodo statico privato che permette di eseguire la procedura di sostituzione automatica delle versioni nei POM padri dei verticali
+	 * @param percorsoCartellaVerticali: percorso della cartella dei verticali
+	 */
 	private static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali)
 	{
 		System.out.println("--- Verifica e sostituzione automatica delle versioni aggiornate nei POM dei verticali");
@@ -462,12 +612,22 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare una ricerca ricorsiva nei file POM dei verticali per operare la sostituzione automatica delle versioni
+	 * @param percorsoRoot: percorso della cartella che contiene tutti i verticali
+	 * @param listaVersioni: lista di stringhe che contiene tutti i tag XML che vanno aggiornati nei POM padri dei verticali, ove presenti
+	 */
 	private static void ricercaFilePom(String percorsoRoot, List<String> listaVersioni)
 	{
 		File file = new File(percorsoRoot);
 		ricercaFilePomRicorsiva(file, listaVersioni);
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare una ricerca ricorsiva nei file POM dei verticali per operare la sostituzione automatica delle versioni
+	 * @param file: file (o cartella) esaminato dalla ricerca ricorsiva
+	 * @param listaVersioni: lista di stringhe che contiene tutti i tag XML che vanno aggiornati nei POM padri dei verticali, ove presenti
+	 */
 	private static void ricercaFilePomRicorsiva(File file, List<String> listaVersioni)
 	{
 		if(!file.isDirectory())
@@ -487,6 +647,12 @@ public class FunzioniVerticali
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che opera la sostituzione vera e propria delle versioni nei POM dei verticali. I file POM vengono prima parsificati come XML dopodiché, per ognuno dei
+	 * tag presenti nella lista, si verifica se è presente nel file POM e, nel caso, si aggiorna con il corrispondente preso dalla lista
+	 * @param filePom: file POM su cu va operata la sostituzione delle versioni
+	 * @param listaVersioni: lista di stringhe che contiene tutti i tag XML che vanno aggiornati nei POM, ove presenti
+	 */
 	private static void sostituisciVersioni(File filePom, List<String> listaVersioni)
 	{
 		System.out.println("--- Aggiornamento versioni nel file "+ filePom.getAbsolutePath());
@@ -536,6 +702,11 @@ public class FunzioniVerticali
 		System.out.println("--------------------");
 	}
 	
+	/**
+	 * Metodo statico che permette di avviare la procedura di sostituzione automatica delle versioni nei POM padri dei verticali
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param comando: stringa che rappresenta il comando digitato dall'utente nel terminale
+	 */
 	static void eseguiSostituzioneAutomatica(List<String> listaVerticali, String comando)
 	{
 		String nomeBranch = comando.substring(13);
@@ -565,6 +736,11 @@ public class FunzioniVerticali
 		System.out.println("--- Sostituzione automatica terminata ---\n");
 	}
 	
+	/**
+	 * Metodo statico privato che gestisce la procedura di push a blocchi sui verticali
+	 * @param listaVerticali: lista dei verticali di Alten
+	 * @param percorso: percorso della cartella contenente i verticali
+	 */
 	private static void proceduraPushIntervalliVerticali(List<String> listaVerticali, String percorso)
 	{
 		boolean checkTerminazionePush;

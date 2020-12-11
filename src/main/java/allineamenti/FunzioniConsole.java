@@ -2,8 +2,20 @@ package allineamenti;
 
 import java.util.Scanner;
 
+/**
+ * Classe che contiene i metodi principali per avviare le varie procedure di allineamento e sostituzione.
+ *
+ * @author Edoardo Baral
+ */
 public class FunzioniConsole
 {
+	/**
+	 * Metodo statico che mostra su terminale le possibili funzionalità del programma di allineamento
+	 * 1) allineamento degli EJB migrati
+	 * 2) allineamento dei verticali
+	 * 3) procedura di sostituzione automatica delle versioni nei POM dei verticali
+	 * 4) terminazione
+	 */
 	static void mostraFunzioniPossibili()
 	{
 		System.out.println("Operazioni possibili");
@@ -15,6 +27,10 @@ public class FunzioniConsole
 		System.out.println("  4) Esci:                                                   | exit\n");
 	}
 	
+	/**
+	 * Metodo statico privato che permette l'acquisizione di una stringa immessa dall'utente nel terminale
+	 * @return il comando digitato dall'utente sul terminale
+	 */
 	private static String inputComando()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -25,6 +41,11 @@ public class FunzioniConsole
 		return comando;
 	}
 	
+	/**
+	 * Metodo statico che permette di acquisire il comando dell'utente per avviare una delle possibili funzionalità principali. Il metodo verifica anche che il comando immesso dall'utente
+	 * sia valido.
+	 * @return il comando digitato dall'utente su terminale
+	 */
 	static String inputComandoAllineamento()
 	{
 		String comando;
@@ -37,6 +58,11 @@ public class FunzioniConsole
 		return comando;
 	}
 	
+	/**
+	 * Metodo statico che verifica la validità del comando digitato dall'utente
+	 * @param comando: comando digitato dall'utente
+	 * @return true se il comando è valido, false altrimenti
+	 */
 	private static boolean verificaComandoAllineamento(String comando)
 	{
 		switch(comando)

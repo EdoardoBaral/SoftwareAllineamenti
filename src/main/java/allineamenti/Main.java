@@ -11,8 +11,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Classe principale del progetto, che contiene il metodo main() necessario all'avvio del programma di allineamento.
+ *
+ * @author Edoardo Baral
+ */
 public class Main
 {
+	/**
+	 * Metodo principale del progetto, necessario per avviare il programma di allineamento.
+	 * @param args: parametri passati da riga di comando, facoltativi
+	 * @throws IOException nel caso in cui i metodi sottostanti riscontrino errori nella lettura dei file di testo ausiliari
+	 */
 	public static void main(String[] args) throws IOException
 	{
 		SetupApplication setupApplication = new SetupApplication();

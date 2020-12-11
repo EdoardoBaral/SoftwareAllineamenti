@@ -20,8 +20,18 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Classe che contiene i metodi necessari per le operazioni di allineamento sugli EJB migrati di Alten
+ *
+ * @author Edoardo Baral
+ */
 public class FunzioniEjb
 {
+	/**
+	 * Metodo statico che esegue la procedura di allineamento degli EJB migrati di Alten
+	 * @param mapEjb: hashmap che contiene gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @param comando: comando digitato dall'utente sul terminale per avviare l'allineamento
+	 */
 	static void eseguiAllineamentoEjb(Map<String, List<String>> mapEjb, String comando)
 	{
 		String[] partiComando = comando.split(" ");
@@ -90,12 +100,20 @@ public class FunzioniEjb
 		} while(!mapEjb.containsKey(nomeBloccoEjb) || !allineamentoEjbTerminato);
 	}
 	
+	/**
+	 * Metodo statico privato che permette di acquisire da terminale un comando digitato dall'utente
+	 * @return il comando digitato dall'utente su terminale
+	 */
 	private static String inputScelta()
 	{
 		Scanner scanner = new Scanner(System.in);
 		return scanner.nextLine();
 	}
 	
+	/**
+	 * Metodo statico privato che permette l'acquisizione da terminale del percorso della cartella che contiene gli EJB di Alten
+	 * @return il percorso della cartella contenente gli EJB da allineare
+	 */
 	private static String inputPercorsoCartellaEjb()
 	{
 		String percorso;
@@ -113,6 +131,11 @@ public class FunzioniEjb
 		return percorso;
 	}
 	
+	/**
+	 * Metodo statico privato che verifica la validità del percorso della cartella contenente gli EJB
+	 * @param percorso: percorso della cartella
+	 * @return true se la cartella esiste nel percorso indicato, false altrimenti
+	 */
 	private static boolean verificaPercorsoCartella(String percorso)
 	{
 		if(Files.exists(Paths.get(percorso)))
@@ -124,6 +147,12 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che avvia la procedura di checkout per far passare tutti gli EJB sul branch passato come argomento
+	 * @param mapEjb: hashmap contenente tutti gli EJB suddivisi per blocchi di compilazione
+	 * @param nomeBranch: nome del branch su cui effettuare il checkout
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 */
 	private static void proceduraCheckoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
 	{
 		List<String> listaEjbNonSwitchati = checkoutTuttiEjb(mapEjb, nomeBranch, percorso);
@@ -147,7 +176,13 @@ public class FunzioniEjb
 		}
 	}
 	
-	
+	/**
+	 * Metodo statico privato che effettua il checkout di tutti gli EJB sul branch indicato
+	 * @param mapEjb: hashmap contenente tutti gli EJB suddivisi per blocchi di compilazione
+	 * @param nomeBranch: branch su cui effettuare il checkout
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 * @return la lista degli EJB che non sono passati sul branch voluto oppure una lista vuota nel caso in cui il checkout sia avvenuto correttamente per tutti gli EJB
+	 */
 	private static List<String> checkoutTuttiEjb(Map<String, List<String>> mapEjb, String nomeBranch, String percorso)
 	{
 		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
@@ -163,6 +198,13 @@ public class FunzioniEjb
 		return listaEjbNonSwitchati;
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il checkout dei soli EJB per cui l'operazione è precedentemente fallita
+	 * @param ejbNonSwitchati: lista degli EJB che in precedenza non sono passati al branch indicato
+	 * @param nomeBranch: branch su cui effettuare il checkout
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 * @return la lista degli EJB che non sono passati sul branch voluto oppure una lista vuota nel caso in cui il checkout sia avvenuto correttamente per tutti gli EJB
+	 */
 	private static List<String> checkoutEjbNonSwitchati(List<String> ejbNonSwitchati, String nomeBranch, String percorso)
 	{
 		for(String ejb : ejbNonSwitchati)
@@ -175,6 +217,11 @@ public class FunzioniEjb
 		return ejbNonSwitchati;
 	}
 	
+	/**
+	 * Metodo statico privato che recupera da mapEjb i nomi degli EJB di Alten e li inserisce all'interno di una lista
+	 * @param mapEjb: hashmap contenente gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @return la lista degli EJB di Alten ordinata alfabeticamente
+	 */
 	private static List<String> convertiMapEjbInLista(Map<String, List<String>> mapEjb)
 	{
 		List<String> listaEjb = new ArrayList<>();
@@ -188,6 +235,12 @@ public class FunzioniEjb
 		return listaEjb;
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il checkout dell'EJB indicato su un determinato branch
+	 * @param percorso: percorso dell'EJB su cui effettuare il checkout
+	 * @param nomeBranch: nome del branch su cui effettuare il checkout
+	 * @return true se il checkout è avvenuto correttamente, false altrimenti
+	 */
 	private static boolean checkoutEjb(String percorso, String nomeBranch)
 	{
 		try
@@ -209,6 +262,11 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che effettua la pull su tutti gli EJB di Alten, per sincronizzare il repository locale dell'EJB con il corrispondente repository remoto
+	 * @param mapEjb: hashmap contenente tutti gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 */
 	private static void pullTuttiEjb(Map<String, List<String>> mapEjb, String percorso)
 	{
 		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
@@ -217,6 +275,11 @@ public class FunzioniEjb
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che effettua la pull su tutti gli EJB che in precedenza non sono passati sul branch desiderato con il checkout
+	 * @param ejbNonSwitchati: lista degli EJB per cui il checkout non è avvenuto correttamente
+	 * @param percorso: percorso della cartella che contiene gli EJB
+	 */
 	private static void pullEjbNonSwitchati(List<String> ejbNonSwitchati, String percorso)
 	{
 		for(String ejb : ejbNonSwitchati)
@@ -224,6 +287,10 @@ public class FunzioniEjb
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che effettua la pull sul singolo EJB passato come argomento
+	 * @param percorso: percorso dell'EJB su cui effettuare la pull
+	 */
 	private static void pullEjb(String percorso)
 	{
 		System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
@@ -240,6 +307,14 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il merge di tutti gli EJB del blocco indicato dal branch passato come argomento
+	 * @param mapEjb: hashmap contenente gli EJB di Alten suddivisi in blocchi di compilazione
+	 * @param nomeBloccoEjb: blocco di EJB su cui effettuare il merge
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 * @param nomeBranch: nome del branch da cui effettuare il merge
+	 * @return true se durante il merge si sono verificati dei conflitti da risolvere su almeno uno degli EJB del blocco, false altrimenti
+	 */
 	private static boolean pullOriginEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso, String nomeBranch)
 	{
 		List<String> listaEjb = mapEjb.get(nomeBloccoEjb);
@@ -251,6 +326,12 @@ public class FunzioniEjb
 		return flagConflitti;
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il merge di un singolo EJB dal branch indicato
+	 * @param percorso: percorso dell'EJB da allineare
+	 * @param nomeBranchOrigine: nome del branch da cui effettuare il merge
+	 * @return true se durante il merge si sono verificati dei conflitti da risolvere, false altrimenti
+	 */
 	private static boolean pullOriginEjb(String percorso, String nomeBranchOrigine)
 	{
 		try
@@ -272,12 +353,21 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che permette di risolvere eventuali conflitti, emersi durante il merge, degli EJB di un blocco, mediante un commit
+	 * @param bloccoEjb: nome del blocco di EJB
+	 * @param percorso: percorso della cartella contenente gli EJB di Alten
+	 */
 	private static void commitConflittiEjbBlocco(List<String> bloccoEjb, String percorso)
 	{
 		for(String nomeEjb : bloccoEjb)
 			commitConflittiEjb(percorso +"\\"+ nomeEjb);
 	}
 	
+	/**
+	 * Metodo statico privato che permette di risolvere eventuali conflitti su un EJB, emersi durante un merge, mediante un commit
+	 * @param percorso: percorso dell'EJB per cui vanno risolti eventuali conflitti
+	 */
 	private static void commitConflittiEjb(String percorso)
 	{
 		try
@@ -296,6 +386,13 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che effettua il merge di tutti gli EJB del blocco indicato dal branch master
+	 * @param mapEjb: hashmap contenente gli EJB suddivisi nei blocchi di compilazione
+	 * @param nomeBloccoEjb: nome del blocco su cui effettuare il merge dal branch master
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 * @return true se sono presenti dei conflitti da risolvere emersi durante il merge, false se non ci sono conflitti
+	 */
 	private static boolean pullOriginMasterEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> listaEjbBlocco = mapEjb.get(nomeBloccoEjb);
@@ -307,6 +404,11 @@ public class FunzioniEjb
 		return flagConflitti;
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare il merge del singolo EJB dal branch master
+	 * @param percorso: percorso della cartella dell'EJB da allineare al branch master
+	 * @return true se sono presenti dei conflitti da risolvere emersi durante il merge, false se non ci sono conflitti
+	 */
 	private static boolean pullOriginMasterEjb(String percorso)
 	{
 		try
@@ -328,6 +430,12 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che permette di avviare la procedura di gestione dei conflitti emersi durante un merge da un altro branch
+	 * @param mapEjb: hashmap che contiene gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @param nomeBloccoEjb: nome del blocco EJB
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 */
 	private static void proceduraGestioneConflitti(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
@@ -346,6 +454,10 @@ public class FunzioniEjb
 		System.out.println("--- Conflitti sugli EJB del blocco "+ nomeBloccoEjb +" risolti\n");
 	}
 	
+	/**
+	 * Metodo statico privato che permette all'utente di verificare la correttezza delle versioni indicate nei POM padri degli EJB del blocco indicato
+	 * @param nomeBloccoEjb: nome del blocco EJB che si sta allineando
+	 */
 	private static void confermaVersioniPomEjbBlocco(String nomeBloccoEjb)
 	{
 		String scelta;
@@ -363,6 +475,13 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che verifica se negli EJB di un determinato blocco sono presenti modifiche non ancora committate
+	 * @param mapEjb: hashmap contenente gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @param nomeBloccoEjb: nome del blocco degli EJB
+	 * @param percorso: percorso della cartella che contiene gli EJB di Alten
+	 * @return true se tutti gli EJB del blocco non presentano aluna modifica da committare, false se almeno uno presenta modifiche non ancora committate
+	 */
 	private static boolean statusEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
@@ -374,6 +493,11 @@ public class FunzioniEjb
 		return tuttoCommittato;
 	}
 	
+	/**
+	 * Metodo statico privato che verifica se nel singolo EJB sono presenti modifiche non ancora committate
+	 * @param percorso: percorso della cartella dell'EJB
+	 * @return true se l'EJB non presenta alcuna modifica da committare, false altrimenti
+	 */
 	private static boolean statusEjb(String percorso)
 	{
 		try
@@ -395,6 +519,10 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che permette all'utente di verificare la presenza di modifiche non committate per gli EJB di un determinato blocco
+	 * @param bloccoEjb: nome del blocco EJB da verificare
+	 */
 	private static void verificaModificheNonCommittate(String bloccoEjb)
 	{
 		String scelta;
@@ -412,6 +540,13 @@ public class FunzioniEjb
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare un commit vuoto per forzare la ricompilazione degli EJB del blocco indicato
+	 * @param mapEjb: hashmap che contiene gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @param nomeBloccoEjb: nome del blocco di EJB su cui effettuare i commit
+	 * @param nomeBranch: nome del branch su cui si sta operando
+	 * @param percorso: percorso della cartella che contiene gli EJB
+	 */
 	private static void commitVuotoEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String nomeBranch, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
@@ -420,6 +555,11 @@ public class FunzioniEjb
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico privato che permette di effettuare un commit vuoto per forzare la ricompilazione dell'EJB indicato
+	 * @param percorso: percorso della cartella dell'EJB da ricompilare
+	 * @param nomeBranch: nome del branch su cui si sta operando
+	 */
 	private static void commitVuotoEjb(String percorso, String nomeBranch)
 	{
 		try
@@ -443,6 +583,12 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo static privato che permette di effettuare la push sugli EJB del blocco indicato, in modo da inviare i commit nuovi sul repository remoto
+	 * @param mapEjb: hashmap che contiene gli EJB di Alten suddivisi per blocchi di compilazione
+	 * @param nomeBloccoEjb: nome del blocco di EJB su cui va effettuata la push
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 */
 	private static void pushEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
@@ -451,6 +597,10 @@ public class FunzioniEjb
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo static privato che permette di effettuare la push sull'EJB indicato, in modo da inviare i commit nuovi sul repository remoto
+	 * @param percorso: percorso della cartella dell'EJB
+	 */
 	private static void pushEjb(String percorso)
 	{
 		try
@@ -469,6 +619,11 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo che permette all'utente di decidere se terminare l'allineamento o continuare con un altro blocco di EJB
+	 * @param nomeBranch: nome del branch su cui si sta operando
+	 * @return true se l'allineamento è terminato, false altrimenti
+	 */
 	private static boolean verificaTerminazioneAllineamento(String nomeBranch)
 	{
 		System.out.print(">>> Hai terminato l'allineamento degli EJB migrati del branch '"+ nomeBranch +"' (S/N)? ");
