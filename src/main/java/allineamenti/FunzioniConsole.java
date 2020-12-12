@@ -70,11 +70,15 @@ public class FunzioniConsole
 			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIL):
 			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIS):
 			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIA):
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIL +" "+ StringConstants.BRANCH_SVIA):
+			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIL +" "+ StringConstants.BRANCH_SVIS):
 			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIS +" "+ StringConstants.BRANCH_SVIA):
 			case (StringConstants.ALLINEAMENTO_EJB + StringConstants.BRANCH_SVIA +" "+ StringConstants.BRANCH_SVIS):
 			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIL):
 			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIS):
 			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIA):
+			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIL +" "+ StringConstants.BRANCH_SVIA):
+			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIL +" "+ StringConstants.BRANCH_SVIS):
 			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIS +" "+ StringConstants.BRANCH_SVIA):
 			case (StringConstants.ALLINEAMENTO_VERTICALI + StringConstants.BRANCH_SVIA +" "+ StringConstants.BRANCH_SVIS):
 			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIL):
