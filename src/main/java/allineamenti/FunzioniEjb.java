@@ -63,7 +63,18 @@ public class FunzioniEjb
 			
 			boolean flagConflitti;
 			
-			if(!nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
+			if(nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
+			{
+				if(branchOrigine != null)
+				{
+					System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"'\n");
+					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, branchOrigine);
+					if(flagConflitti)
+						proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
+					confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+				}
+			}
+			else
 			{
 				if(branchOrigine == null)
 				{

@@ -60,7 +60,17 @@ public class FunzioniVerticali
 		
 		boolean flagConflitti;
 		
-		if(!StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
+		if(nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
+		{
+			if(branchOrigine != null)
+			{
+				System.out.println("--- Merge di tutti i verticali dal branch '"+ branchOrigine +"'\n");
+				flagConflitti = pullOriginVerticali(listaVerticali, percorso, branchOrigine);
+				if(flagConflitti)
+					proceduraGestioneConflitti(listaVerticali, percorso);
+			}
+		}
+		else
 		{
 			if(branchOrigine == null)
 			{
@@ -730,6 +740,7 @@ public class FunzioniVerticali
 			proceduraGestioneConflitti(listaVerticali, percorso);
 		
 		proceduraSostituzioneVersioniPom(percorso);
+		verificaModificheNonCommittate();
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
 		
