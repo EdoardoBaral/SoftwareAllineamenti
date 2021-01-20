@@ -91,7 +91,7 @@ public class FunzioniVerticali
 		if(flagConflitti)
 			proceduraGestioneConflitti(listaVerticali, percorso);
 		
-		proceduraSostituzioneVersioniPom(percorso);
+		proceduraSostituzioneVersioniPom(percorso, listaVerticali);
 
 		boolean verticaliTuttiCommittati = statusVerticali(listaVerticali, percorso);
 		if(verticaliTuttiCommittati)
@@ -596,7 +596,7 @@ public class FunzioniVerticali
 	 * Metodo statico privato che permette di eseguire la procedura di sostituzione automatica delle versioni nei POM padri dei verticali
 	 * @param percorsoCartellaVerticali: percorso della cartella dei verticali
 	 */
-	private static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali)
+	private static void proceduraSostituzioneVersioniPom(String percorsoCartellaVerticali, List<String> listaVerticali)
 	{
 		System.out.println("--- Verifica e sostituzione automatica delle versioni aggiornate nei POM dei verticali");
 		System.out.println("    1) Assicurati che nel file VersioniPOM.txt siano presenti tutte le versioni da aggiornare") ;
@@ -612,7 +612,7 @@ public class FunzioniVerticali
 		try
 		{
 			List<String> listaVersioni = setupApplication.leggiVersioniPom();
-			ricercaFilePom(percorsoCartellaVerticali, listaVersioni);
+			sostituzioneVersioniPom(percorsoCartellaVerticali, listaVerticali, listaVersioni);
 		}
 		catch(IOException ex)
 		{
@@ -622,38 +622,13 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
-	/**
-	 * Metodo statico privato che permette di effettuare una ricerca ricorsiva nei file POM dei verticali per operare la sostituzione automatica delle versioni
-	 * @param percorsoRoot: percorso della cartella che contiene tutti i verticali
-	 * @param listaVersioni: lista di stringhe che contiene tutti i tag XML che vanno aggiornati nei POM padri dei verticali, ove presenti
-	 */
-	private static void ricercaFilePom(String percorsoRoot, List<String> listaVersioni)
+	private static void sostituzioneVersioniPom(String percorsoCartellaVerticali, List<String> listaVerticali, List<String> listaVersioni)
 	{
-		File file = new File(percorsoRoot);
-		ricercaFilePomRicorsiva(file, listaVersioni);
-	}
-	
-	/**
-	 * Metodo statico privato che permette di effettuare una ricerca ricorsiva nei file POM dei verticali per operare la sostituzione automatica delle versioni
-	 * @param file: file (o cartella) esaminato dalla ricerca ricorsiva
-	 * @param listaVersioni: lista di stringhe che contiene tutti i tag XML che vanno aggiornati nei POM padri dei verticali, ove presenti
-	 */
-	private static void ricercaFilePomRicorsiva(File file, List<String> listaVersioni)
-	{
-		if(!file.isDirectory())
+		for(String verticale : listaVerticali)
 		{
-			if("pom.xml".equalsIgnoreCase(file.getName()))
-				sostituisciVersioni(file, listaVersioni);
-		}
-		else
-		{
-			if(!"target".equalsIgnoreCase(file.getName()))
-			{
-				File[] listaFiles = file.listFiles();
-				if(listaFiles != null)
-					for(File f : listaFiles)
-						ricercaFilePomRicorsiva(f, listaVersioni);
-			}
+			String pathPomPadre = percorsoCartellaVerticali +"\\"+ verticale +"\\pom.xml";
+			File pom = new File(pathPomPadre);
+			sostituisciVersioni(pom, listaVersioni);
 		}
 	}
 	
@@ -739,7 +714,7 @@ public class FunzioniVerticali
 		if(flagConflitti)
 			proceduraGestioneConflitti(listaVerticali, percorso);
 		
-		proceduraSostituzioneVersioniPom(percorso);
+		proceduraSostituzioneVersioniPom(percorso, listaVerticali);
 		verificaModificheNonCommittate();
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
