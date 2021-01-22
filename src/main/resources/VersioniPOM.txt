@@ -8,6 +8,7 @@
 <deviceregistry.version>1.9.0-env-svis-SNAPSHOT</deviceregistry.version>
 <stampe.version>1.10.0-env-svis-SNAPSHOT</stampe.version>
 <userpreferences.version>1.8.0-env-svis-SNAPSHOT</userpreferences.version>
+<wishlist.version>1.2.0</wishlist.version>
 
 <commons.version>1.10.0-env-svis-SNAPSHOT</commons.version>
 <notification.version>1.50.0-env-svis-SNAPSHOT</notification.version>

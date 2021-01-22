@@ -4,6 +4,7 @@
 --B1: deviceregistry-ejb
 --B1: stampe-ejb
 --B1: userpreferences-ejb
+--B1: wishlist-ejb
 
 --B2: commons-ejb
 --B2: notification-ejb
