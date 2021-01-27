@@ -6,6 +6,7 @@
 <callmeback.version>1.9.0-env-svis-SNAPSHOT</callmeback.version>
 <customerjourney.version>1.9.0-env-svis-SNAPSHOT</customerjourney.version>
 <deviceregistry.version>1.9.0-env-svis-SNAPSHOT</deviceregistry.version>
+<ricerca.version>1.2.0</ricerca.version
 <stampe.version>1.10.0-env-svis-SNAPSHOT</stampe.version>
 <userpreferences.version>1.8.0-env-svis-SNAPSHOT</userpreferences.version>
 <wishlist.version>1.2.0</wishlist.version>
