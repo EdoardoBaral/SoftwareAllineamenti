@@ -18,6 +18,7 @@
 --B4: anagrafiche-ejb
 --B4: antiriciclaggio-ejb
 --B4: assegni-ejb
+--B4: condizionieconomiche-ejb
 --B4: digitalcollaboration-ejb
 --B4: duplicatocarta-ejb
 --B4: filialevirtuale-ejb
@@ -29,7 +30,6 @@
 --B4: monetaattiva-ejb
 --B4: movepay-ejb
 --B4: pagamenti-ejb
---B4: pendingprocesslist-ejb
 --B4: prestiti-ejb
 --B4: saldo-ejb
 --B4: variazionelimiti-definitiva-ejb
@@ -38,12 +38,12 @@
 --B5: cardless-ejb
 --B5: commonssmallbusiness-ejb
 --B5: condizioni-ejb
+--B5: moneytransfer-ejb
 --B5: pfm-ejb
 --B5: rapporticliente-ejb
 --B5: ricarichevarie-ejb
 
 --B6: bonificimultipli-ejb
---B6: condizionieconomiche-ejb
 --B6: etichette-ejb
 --B6: incassiribamultipli-ejb
 --B6: xmedindi-ejb
@@ -53,17 +53,17 @@
 --B8: interactiondb-ejb
 
 --B9: autorizzazioni-ejb
+--B9: bollettinopostale-ejb
 --B9: bustine-ejb
---B9: jiffy-ejb
+--B9: f24-ejb
 --B9: matchingidbpfm-ejb
+--B9: pendingprocesslist-ejb
 --B9: salvadanaio-ejb
 --B9: tasse-ejb
 
---B10: bollettinopostale-ejb
 --B10: bonifico-ejb
---B10: f24-ejb
 --B10: giroconto-ejb
---B10: moneytransfer-ejb
+--B10: jiffy-ejb
 --B10: pagamentobollette-ejb
 --B10: ricaricacellulare-ejb
 --B10: xmedindi-self-ejb
