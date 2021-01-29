@@ -22,11 +22,13 @@
 --B4: digitalcollaboration-ejb
 --B4: duplicatocarta-ejb
 --B4: filialevirtuale-ejb
+--B4: firmaunica-ejb
 --B4: gestorelimiti-ejb
 --B4: guestarea-ejb
 --B4: jiffyv2-ejb
 --B4: listaprodotti-ejb
 --B4: listiniinfofin-ejb
+--B4: mobileconfigurator-ejb
 --B4: monetaattiva-ejb
 --B4: movepay-ejb
 --B4: pagamenti-ejb
@@ -75,6 +77,7 @@
 
 --B12: applepay-ejb
 --B12: bonus-ejb
+--B12: catalogo-prodotti-ejb
 --B12: masterpass-ejb
 --B12: nfc-ejb
 --B12: opricorrenti-ejb
