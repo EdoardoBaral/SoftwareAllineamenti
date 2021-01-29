@@ -41,6 +41,7 @@ parlaconnoi-v1
 paygo-v1
 pendingprocesslist-v1
 pfm-v1
+price-v1
 prestiti-v1
 profiloclientelogin-v1
 profilocliente-v1
