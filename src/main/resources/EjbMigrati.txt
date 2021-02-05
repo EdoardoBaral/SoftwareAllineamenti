@@ -25,80 +25,81 @@
 --B4: firmaunica-ejb
 --B4: gestorelimiti-ejb
 --B4: guestarea-ejb
---B4: jiffyv2-ejb
---B4: listaprodotti-ejb
---B4: listiniinfofin-ejb
---B4: mobileconfigurator-ejb
---B4: monetaattiva-ejb
---B4: movepay-ejb
---B4: pagamenti-ejb
---B4: prestiti-ejb
---B4: saldo-ejb
---B4: variazionelimiti-definitiva-ejb
---B4: variazionelimiti-temporanea-ejb
 
---B5: cardless-ejb
---B5: commonssmallbusiness-ejb
---B5: condizioni-ejb
---B5: moneytransfer-ejb
---B5: pfm-ejb
---B5: rapporticliente-ejb
---B5: ricarichevarie-ejb
+--B5: jiffyv2-ejb
+--B5: listaprodotti-ejb
+--B5: listiniinfofin-ejb
+--B5: mobileconfigurator-ejb
+--B5: monetaattiva-ejb
+--B5: movepay-ejb
+--B5: pagamenti-ejb
+--B5: pendingprocesslist-ejb
+--B5: prestiti-ejb
+--B5: saldo-ejb
+--B5: variazionelimiti-definitiva-ejb
+--B5: variazionelimiti-temporanea-ejb
 
---B6: bonificimultipli-ejb
---B6: etichette-ejb
---B6: incassiribamultipli-ejb
---B6: xmedindi-ejb
+--B6: cardless-ejb
+--B6: commonssmallbusiness-ejb
+--B6: condizioni-ejb
+--B6: moneytransfer-ejb
+--B6: pfm-ejb
+--B6: rapporticliente-ejb
+--B6: ricarichevarie-ejb
 
---B7: rubriche-ejb
+--B7: bonificimultipli-ejb
+--B7: etichette-ejb
+--B7: incassiribamultipli-ejb
+--B7: xmedindi-ejb
 
---B8: interactiondb-ejb
+--B8: rubriche-ejb
 
---B9: autorizzazioni-ejb
---B9: bollettinopostale-ejb
---B9: bustine-ejb
---B9: f24-ejb
---B9: matchingidbpfm-ejb
---B9: pendingprocesslist-ejb
---B9: salvadanaio-ejb
---B9: tasse-ejb
+--B9: interactiondb-ejb
 
---B10: bonifico-ejb
---B10: giroconto-ejb
+--B10: autorizzazioni-ejb
+--B10: bollettinopostale-ejb
+--B10: bustine-ejb
+--B10: f24-ejb
 --B10: jiffy-ejb
---B10: pagamentobollette-ejb
---B10: ricaricacellulare-ejb
---B10: xmedindi-self-ejb
+--B10: matchingidbpfm-ejb
+--B10: salvadanaio-ejb
+--B10: tasse-ejb
 
---B11: bonificoestero-ejb
---B11: carte-ejb
---B11: pagamentiribamultipli-ejb
---B11: revoche-ejb
+--B11: bonifico-ejb
+--B11: giroconto-ejb
+--B11: pagamentobollette-ejb
+--B11: ricaricacellulare-ejb
+--B11: xmedindi-self-ejb
 
---B12: applepay-ejb
---B12: bonus-ejb
---B12: catalogo-prodotti-ejb
---B12: masterpass-ejb
---B12: nfc-ejb
---B12: opricorrenti-ejb
---B12: pagamentimultipli-ejb
---B12: ristampapin-ejb
+--B12: bonificoestero-ejb
+--B12: carte-ejb
+--B12: pagamentiribamultipli-ejb
+--B12: revoche-ejb
 
---B13: ricordamidi-ejb
+--B13: applepay-ejb
+--B13: bonus-ejb
+--B13: catalogo-prodotti-ejb
+--B13: masterpass-ejb
+--B13: nfc-ejb
+--B13: opricorrenti-ejb
+--B13: pagamentimultipli-ejb
+--B13: ristampapin-ejb
 
---B14: comunicazioni-ejb
+--B14: ricordamidi-ejb
 
---B15: miogestore-ejb
+--B15: comunicazioni-ejb
 
---B16: bloccosblocco-ejb
---B16: condivisione-ejb
---B16: conto-ejb
---B16: globalposition-ejb
---B16: identitadigitale-ejb
---B16: proposte-ejb
+--B16: miogestore-ejb
 
---B17: digitalwallet-ejb
---B17: pulsantiera-ejb
---B17: trading-ejb
+--B17: bloccosblocco-ejb
+--B17: condivisione-ejb
+--B17: conto-ejb
+--B17: globalposition-ejb
+--B17: identitadigitale-ejb
+--B17: proposte-ejb
 
---B18: listaoperazioni-ejb
+--B18: digitalwallet-ejb
+--B18: pulsantiera-ejb
+--B18: trading-ejb
+
+--B19: listaoperazioni-ejb
