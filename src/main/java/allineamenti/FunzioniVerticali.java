@@ -86,10 +86,13 @@ public class FunzioniVerticali
 				proceduraGestioneConflitti(listaVerticali, percorso);
 		}
 
-		System.out.println("--- Merge di tutti i verticali dal branch master\n");
-		flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
-		if(flagConflitti)
-			proceduraGestioneConflitti(listaVerticali, percorso);
+		if(StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
+		{
+			System.out.println("--- Merge di tutti i verticali dal branch master\n");
+			flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
+			if(flagConflitti)
+				proceduraGestioneConflitti(listaVerticali, percorso);
+		}
 		
 		proceduraSostituzioneVersioniPom(percorso, listaVerticali);
 
@@ -759,4 +762,12 @@ public class FunzioniVerticali
 			checkTerminazionePush = !"S".equalsIgnoreCase(scelta);
 		} while(!checkTerminazionePush);
 	}
+	
+//	public static void main(String[] args) throws Exception {
+//		SetupApplication setup = new SetupApplication();
+//		List<String> verticali = setup.caricaListaVerticali();
+//		String percorso = "D:\\Openshift\\Verticali\\cdbp0";
+//
+//		proceduraSostituzioneVersioniPom(percorso, verticali);
+//	}
 }

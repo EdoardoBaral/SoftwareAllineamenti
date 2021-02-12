@@ -91,11 +91,14 @@ public class FunzioniEjb
 				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
 			}
 			
-			System.out.println("--- Merge di tutti gli EJB migrati dal branch master\n");
-			flagConflitti = pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			if(flagConflitti)
-				proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-			confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+			if(StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
+			{
+				System.out.println("--- Merge di tutti gli EJB migrati dal branch master\n");
+				flagConflitti = pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+				if(flagConflitti)
+					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
+				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+			}
 			
 			boolean tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			if(tuttoCommittatoEjbBlocco)
