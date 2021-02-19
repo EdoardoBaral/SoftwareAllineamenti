@@ -15,7 +15,7 @@
 <notification.version>1.54.0-env-svia-SNAPSHOT</notification.version>
 <postvendita-common.version>1.12.0-env-svia-SNAPSHOT</postvendita-common.version>
 
-<profilocliente.version>1.54.0-env-svia-SNAPSHOT</profilocliente.version>
+<profilocliente.version>1.58.0-env-svia-SNAPSHOT</profilocliente.version>
 
 <adue.version>1.14.0-env-svia-SNAPSHOT</adue.version>
 <agenda.version>1.13.0-env-svia-SNAPSHOT</agenda.version>
@@ -25,7 +25,7 @@
 <condizionieconomiche.version>1.9.0-env-svia-SNAPSHOT</condizionieconomiche.version>
 <digitalcollaboration.version>1.12.0-env-svia-SNAPSHOT</digitalcollaboration.version>
 <duplicatocarta.version>1.14.0-env-svia-SNAPSHOT</duplicatocarta.version>
-<filialevirtuale.version>1.33.0-env-svia-SNAPSHOT</filialevirtuale.version>
+<filialevirtuale.version>1.34.0-env-svia-SNAPSHOT</filialevirtuale.version>
 <firmaunica.version>1.18.0-env-svia-SNAPSHOT</firmaunica.version>
 <gestorelimiti.version>1.12.0-env-svia-SNAPSHOT</gestorelimiti.version>
 <guestarea.version>1.22.0-env-svia-SNAPSHOT</guestarea.version>
@@ -43,11 +43,11 @@
 <variazionelimiti-definitiva.version>1.13.0-env-svia-SNAPSHOT</variazionelimiti-definitiva.version>
 <variazionelimiti-temporanea.version>1.9.0-env-svia-SNAPSHOT</variazionelimiti-temporanea.version>
 
-<cardless.version>1.22.0-env-svia-SNAPSHOT</cardless.version>
+<cardless.version>1.24.0-env-svia-SNAPSHOT</cardless.version>
 <commonssmallbusiness.version>1.9.0-env-svia-SNAPSHOT</commonssmallbusiness.version>
 <condizioni.version>1.9.0-env-svia-SNAPSHOT</condizioni.version>
 <moneytransfer.version>1.12.0-env-svia-SNAPSHOT</moneytransfer.version>
-<pfm.version>1.19.0-env-svia-SNAPSHOT</pfm.version>
+<pfm.version>1.20.0-env-svia-SNAPSHOT</pfm.version>
 <rapporticliente.version>1.11.0-env-svia-SNAPSHOT</rapporticliente.version>
 <ricarichevarie.version>1.43.0-env-svia-SNAPSHOT</ricarichevarie.version>
 
@@ -56,12 +56,12 @@
 <incassiribamultipli.version>1.11.0-env-svia-SNAPSHOT</incassiribamultipli.version>
 <xmedindi.version>1.23.0-env-svia-SNAPSHOT</xmedindi.version>
 
-<rubriche.version>1.13.0-env-svia-SNAPSHOT</rubriche.version>
+<rubriche.version>1.14.0-env-svia-SNAPSHOT</rubriche.version>
 
 <interactiondb.version>1.17.0-env-svia-SNAPSHOT</interactiondb.version>
 
 <autorizzazioni.version>1.11.0-env-svia-SNAPSHOT</autorizzazioni.version>
-<bollettinopostale.version>1.13.0-env-svia-SNAPSHOT</bollettinopostale.version>
+<bollettinopostale.version>1.14.0-env-svia-SNAPSHOT</bollettinopostale.version>
 <bustine.version>1.9.0-env-svia-SNAPSHOT</bustine.version>
 <f24.version>1.14.0-env-svia-SNAPSHOT</f24.version>
 <jiffy.version>1.23.0-env-svia-SNAPSHOT</jiffy.version>
@@ -70,14 +70,14 @@
 <tasse.version>1.55.0-env-svia-SNAPSHOT</tasse.version>
 
 <bonifico.version>1.28.0-env-svia-SNAPSHOT</bonifico.version>
-<giroconto.version>1.15.0-env-svia-SNAPSHOT</giroconto.version>
+<giroconto.version>1.17.0-env-svia-SNAPSHOT</giroconto.version>
 <pagamentibollette.version>1.72.0-env-svia-SNAPSHOT</pagamentibollette.version>
 <ricaricacellulare.version>1.16.0-env-svia-SNAPSHOT</ricaricacellulare.version>
 <xmedindi-self.version>1.11.0-env-svia-SNAPSHOT</xmedindi-self.version>
 
 <bonificoestero.version>1.21.0-env-svia-SNAPSHOT</bonificoestero.version>
 <carte.version>1.30.0-env-svia-SNAPSHOT</carte.version>
-<pagamentiribamultipli.version>1.13.0-env-svia-SNAPSHOT</pagamentiribamultipli.version>
+<pagamentiribamultipli.version>1.14.0-env-svia-SNAPSHOT</pagamentiribamultipli.version>
 <revoche.version>1.13.0-env-svia-SNAPSHOT</revoche.version>
 
 <applepay.version>1.11.0-env-svia-SNAPSHOT</applepay.version>
