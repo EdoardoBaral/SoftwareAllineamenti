@@ -33,7 +33,6 @@
 --B5: monetaattiva-ejb
 --B5: movepay-ejb
 --B5: pagamenti-ejb
---B5: pendingprocesslist-ejb
 --B5: prestiti-ejb
 --B5: saldo-ejb
 --B5: variazionelimiti-definitiva-ejb
@@ -60,13 +59,14 @@
 --B10: bollettinopostale-ejb
 --B10: bustine-ejb
 --B10: f24-ejb
---B10: jiffy-ejb
 --B10: matchingidbpfm-ejb
+--B10: pendingprocesslist-ejb
 --B10: salvadanaio-ejb
 --B10: tasse-ejb
 
 --B11: bonifico-ejb
 --B11: giroconto-ejb
+--B11: jiffy-ejb
 --B11: pagamentobollette-ejb
 --B11: ricaricacellulare-ejb
 --B11: xmedindi-self-ejb
