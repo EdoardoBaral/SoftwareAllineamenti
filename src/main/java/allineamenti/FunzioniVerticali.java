@@ -763,11 +763,11 @@ public class FunzioniVerticali
 		} while(!checkTerminazionePush);
 	}
 	
-//	public static void main(String[] args) throws Exception {
-//		SetupApplication setup = new SetupApplication();
-//		List<String> verticali = setup.caricaListaVerticali();
-//		String percorso = "D:\\Openshift\\Verticali\\cdbp0";
-//
-//		proceduraSostituzioneVersioniPom(percorso, verticali);
-//	}
+	public static void main(String[] args) throws Exception {
+		SetupApplication setup = new SetupApplication();
+		List<String> verticali = setup.caricaListaVerticali();
+		String percorso = "D:\\Openshift\\Verticali\\cdbp0";
+
+		proceduraSostituzioneVersioniPom(percorso, verticali);
+	}
 }
