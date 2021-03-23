@@ -39,7 +39,6 @@
 --B5: variazionelimiti-definitiva-ejb
 --B5: variazionelimiti-temporanea-ejb
 
---B6: cardless-ejb
 --B6: commonssmallbusiness-ejb
 --B6: condizioni-ejb
 --B6: moneytransfer-ejb
@@ -66,6 +65,7 @@
 --B10: tasse-ejb
 
 --B11: bonifico-ejb
+--B11: cardless-ejb
 --B11: giroconto-ejb
 --B11: pagamentobollette-ejb
 --B11: ricaricacellulare-ejb
