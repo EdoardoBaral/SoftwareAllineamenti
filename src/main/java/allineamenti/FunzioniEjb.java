@@ -54,7 +54,7 @@ public class FunzioniEjb
 		do
 		{
 			do {
-				System.out.print(">>> Quale blocco di EJB intendi compilare (es. B1, B2...)? ");
+				System.out.print(">>> Quale blocco di EJB intendi compilare (es. B0, B1, B2...)? ");
 				nomeBloccoEjb = StringUtils.upperCase(inputScelta());
 				if (!mapEjb.containsKey(nomeBloccoEjb))
 					System.out.println("Il blocco selezionato non esiste. Riprovare\n");

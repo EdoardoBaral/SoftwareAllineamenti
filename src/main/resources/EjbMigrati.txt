@@ -1,3 +1,5 @@
+--B0: isp-ib-om
+
 --B1: banca-ejb
 --B1: callmeback-ejb
 --B1: customerjourney-ejb
