@@ -444,9 +444,9 @@ public class FunzioniVerticali
 	 */
 	private static boolean statusVerticali(List<String> listaVerticali, String percorso)
 	{
-		boolean tuttoCommittato = false;
+		boolean tuttoCommittato = true;
 		for(String verticale : listaVerticali)
-			tuttoCommittato = tuttoCommittato | statusVerticale(percorso +"\\"+ verticale);
+			tuttoCommittato = tuttoCommittato & statusVerticale(percorso +"\\"+ verticale);
 		System.out.println();
 		
 		return tuttoCommittato;
