@@ -101,10 +101,12 @@ public class FunzioniEjb
 			}
 			
 			boolean tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
-			if(tuttoCommittatoEjbBlocco)
-				System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
-			else
+			while(!tuttoCommittatoEjbBlocco)
+			{
 				verificaModificheNonCommittate(nomeBloccoEjb);
+				tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+			}
+			System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
 			
 			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
 			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);

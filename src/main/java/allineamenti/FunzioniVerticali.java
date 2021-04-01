@@ -97,10 +97,12 @@ public class FunzioniVerticali
 		proceduraSostituzioneVersioniPom(percorso, listaVerticali);
 
 		boolean verticaliTuttiCommittati = statusVerticali(listaVerticali, percorso);
-		if(verticaliTuttiCommittati)
-			System.out.println("I verticali sono tutti allineati e non presentano modifiche non committate");
-		else
+		while(!verticaliTuttiCommittati)
+		{
 			verificaModificheNonCommittate();
+			verticaliTuttiCommittati = statusVerticali(listaVerticali, percorso);
+		}
+		System.out.println("I verticali sono tutti allineati e non presentano modifiche non committate");
 		
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
