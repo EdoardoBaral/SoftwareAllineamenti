@@ -499,9 +499,9 @@ public class FunzioniEjb
 	private static boolean statusEjbBlocco(Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
-		boolean tuttoCommittato = false;
+		boolean tuttoCommittato = true;
 		for(String ejb : bloccoEjb)
-			tuttoCommittato = tuttoCommittato | statusEjb(percorso +"\\"+ ejb);
+			tuttoCommittato = tuttoCommittato & statusEjb(percorso +"\\"+ ejb);
 		System.out.println();
 		
 		return tuttoCommittato;
