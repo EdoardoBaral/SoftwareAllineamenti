@@ -1,109 +1,109 @@
-<arch.core.ndce.version>1.42.0</arch.core.ndce.version>
+<arch.core.ndce.version>1.43.0-env-svis-SNAPSHOT</arch.core.ndce.version>
 
-<isp-ib-om.version>1.18.0-env-svia-SNAPSHOT</isp-ib-om.version>
+<isp-ib-om.version>1.18.0-env-svis-SNAPSHOT</isp-ib-om.version>
 
-<banca.version>1.12.0-env-svia-SNAPSHOT</banca.version>
-<callmeback.version>1.14.0-env-svia-SNAPSHOT</callmeback.version>
-<customerjourney.version>1.13.0-env-svia-SNAPSHOT</customerjourney.version>
-<deviceregistry.version>1.14.0-env-svia-SNAPSHOT</deviceregistry.version>
-<ricerca.version>1.6.0-env-svia-SNAPSHOT</ricerca.version>
-<stampe.version>1.14.0-env-svia-SNAPSHOT</stampe.version>
-<userpreferences.version>1.13.0-env-svia-SNAPSHOT</userpreferences.version>
-<wishlist.version>1.7.0-env-svia-SNAPSHOT</wishlist.version>
+<banca.version>1.12.0-env-svis-SNAPSHOT</banca.version>
+<callmeback.version>1.14.0-env-svis-SNAPSHOT</callmeback.version>
+<customerjourney.version>1.13.0-env-svis-SNAPSHOT</customerjourney.version>
+<deviceregistry.version>1.14.0-env-svis-SNAPSHOT</deviceregistry.version>
+<ricerca.version>1.6.0-env-svis-SNAPSHOT</ricerca.version>
+<stampe.version>1.14.0-env-svis-SNAPSHOT</stampe.version>
+<userpreferences.version>1.13.0-env-svis-SNAPSHOT</userpreferences.version>
+<wishlist.version>1.7.0-env-svis-SNAPSHOT</wishlist.version>
 
-<commons.version>1.14.0-env-svia-SNAPSHOT</commons.version>
-<notification.version>1.57.0-env-svia-SNAPSHOT</notification.version>
-<postvendita-common.version>1.14.0-env-svia-SNAPSHOT</postvendita-common.version>
+<commons.version>1.14.0-env-svis-SNAPSHOT</commons.version>
+<notification.version>1.57.0-env-svis-SNAPSHOT</notification.version>
+<postvendita-common.version>1.14.0-env-svis-SNAPSHOT</postvendita-common.version>
 
-<profilocliente.version>1.78.0-env-svia-SNAPSHOT</profilocliente.version>
+<profilocliente.version>1.78.0-env-svis-SNAPSHOT</profilocliente.version>
 
-<adue.version>1.17.0-env-svia-SNAPSHOT</adue.version>
-<agenda.version>1.16.0-env-svia-SNAPSHOT</agenda.version>
-<anagrafiche.version>1.14.0-env-svia-SNAPSHOT</anagrafiche.version>
-<antiriciclaggio.version>1.14.0-env-svia-SNAPSHOT</antiriciclaggio.version>
-<assegni.version>1.18.0-env-svia-SNAPSHOT</assegni.version>
-<condizionieconomiche.version>1.11.0-env-svia-SNAPSHOT</condizionieconomiche.version>
-<digitalcollaboration.version>1.14.0-env-svia-SNAPSHOT</digitalcollaboration.version>
-<duplicatocarta.version>1.16.0-env-svia-SNAPSHOT</duplicatocarta.version>
-<filialevirtuale.version>1.44.0-env-svia-SNAPSHOT</filialevirtuale.version>
-<firmaunica.version>1.20.0-env-svia-SNAPSHOT</firmaunica.version>
-<gestorelimiti.version>1.14.0-env-svia-SNAPSHOT</gestorelimiti.version>
-<guestarea.version>1.24.0-env-svia-SNAPSHOT</guestarea.version>
+<adue.version>1.17.0-env-svis-SNAPSHOT</adue.version>
+<agenda.version>1.16.0-env-svis-SNAPSHOT</agenda.version>
+<anagrafiche.version>1.14.0-env-svis-SNAPSHOT</anagrafiche.version>
+<antiriciclaggio.version>1.14.0-env-svis-SNAPSHOT</antiriciclaggio.version>
+<assegni.version>1.18.0-env-svis-SNAPSHOT</assegni.version>
+<condizionieconomiche.version>1.11.0-env-svis-SNAPSHOT</condizionieconomiche.version>
+<digitalcollaboration.version>1.14.0-env-svis-SNAPSHOT</digitalcollaboration.version>
+<duplicatocarta.version>1.16.0-env-svis-SNAPSHOT</duplicatocarta.version>
+<filialevirtuale.version>1.51.0-env-svis-SNAPSHOT</filialevirtuale.version>
+<firmaunica.version>1.20.0-env-svis-SNAPSHOT</firmaunica.version>
+<gestorelimiti.version>1.14.0-env-svis-SNAPSHOT</gestorelimiti.version>
+<guestarea.version>1.24.0-env-svis-SNAPSHOT</guestarea.version>
 
-<jiffy-v2.version>1.19.0-env-svia-SNAPSHOT</jiffy-v2.version>
-<listaprodotti.version>1.19.0-env-svia-SNAPSHOT</listaprodotti.version>
-<listiniinfofin.version>1.15.0-env-svia-SNAPSHOT</listiniinfofin.version>
-<mobileconfigurator.version>1.10.0-env-svia-SNAPSHOT</mobileconfigurator.version>
-<monetaattiva.version>0.36.0-env-svia-SNAPSHOT</monetaattiva.version>
-<movepay.version>1.25.0-env-svia-SNAPSHOT</movepay.version>
-<pagamenti.version>1.13.0-env-svia-SNAPSHOT</pagamenti.version>
-<pendingprocesslist.version>1.15.0-env-svia-SNAPSHOT</pendingprocesslist.version>
-<prestiti.version>1.16.0-env-svia-SNAPSHOT</prestiti.version>
-<saldo.version>1.26.0-env-svia-SNAPSHOT</saldo.version>
-<variazionelimiti-definitiva.version>1.17.0-env-svia-SNAPSHOT</variazionelimiti-definitiva.version>
-<variazionelimiti-temporanea.version>1.13.0-env-svia-SNAPSHOT</variazionelimiti-temporanea.version>
+<jiffy-v2.version>1.19.0-env-svis-SNAPSHOT</jiffy-v2.version>
+<listaprodotti.version>1.19.0-env-svis-SNAPSHOT</listaprodotti.version>
+<listiniinfofin.version>1.15.0-env-svis-SNAPSHOT</listiniinfofin.version>
+<mobileconfigurator.version>1.10.0-env-svis-SNAPSHOT</mobileconfigurator.version>
+<monetaattiva.version>0.36.0-env-svis-SNAPSHOT</monetaattiva.version>
+<movepay.version>1.25.0-env-svis-SNAPSHOT</movepay.version>
+<pagamenti.version>1.13.0-env-svis-SNAPSHOT</pagamenti.version>
+<pendingprocesslist.version>1.15.0-env-svis-SNAPSHOT</pendingprocesslist.version>
+<prestiti.version>1.16.0-env-svis-SNAPSHOT</prestiti.version>
+<saldo.version>1.26.0-env-svis-SNAPSHOT</saldo.version>
+<variazionelimiti-definitiva.version>1.17.0-env-svis-SNAPSHOT</variazionelimiti-definitiva.version>
+<variazionelimiti-temporanea.version>1.13.0-env-svis-SNAPSHOT</variazionelimiti-temporanea.version>
 
-<commonssmallbusiness.version>1.11.0-env-svia-SNAPSHOT</commonssmallbusiness.version>
-<condizioni.version>1.11.0-env-svia-SNAPSHOT</condizioni.version>
-<moneytransfer.version>1.14.0-env-svia-SNAPSHOT</moneytransfer.version>
-<pfm.version>1.24.0-env-svia-SNAPSHOT</pfm.version>
-<rapporticliente.version>1.13.0-env-svia-SNAPSHOT</rapporticliente.version>
-<ricarichevarie.version>1.46.0-env-svia-SNAPSHOT</ricarichevarie.version>
+<commonssmallbusiness.version>1.11.0-env-svis-SNAPSHOT</commonssmallbusiness.version>
+<condizioni.version>1.11.0-env-svis-SNAPSHOT</condizioni.version>
+<moneytransfer.version>1.14.0-env-svis-SNAPSHOT</moneytransfer.version>
+<pfm.version>1.24.0-env-svis-SNAPSHOT</pfm.version>
+<rapporticliente.version>1.13.0-env-svis-SNAPSHOT</rapporticliente.version>
+<ricarichevarie.version>1.46.0-env-svis-SNAPSHOT</ricarichevarie.version>
 
-<bonificimultipli.version>1.15.0-env-svia-SNAPSHOT</bonificimultipli.version>
-<etichette.version>1.18.0-env-svia-SNAPSHOT</etichette.version>
-<incassiribamultipli.version>1.13.0-env-svia-SNAPSHOT</incassiribamultipli.version>
-<xmedindi.version>1.25.0-env-svia-SNAPSHOT</xmedindi.version>
+<bonificimultipli.version>1.15.0-env-svis-SNAPSHOT</bonificimultipli.version>
+<etichette.version>1.18.0-env-svis-SNAPSHOT</etichette.version>
+<incassiribamultipli.version>1.13.0-env-svis-SNAPSHOT</incassiribamultipli.version>
+<xmedindi.version>1.25.0-env-svis-SNAPSHOT</xmedindi.version>
 
-<rubriche.version>1.29.0-env-svia-SNAPSHOT</rubriche.version>
+<rubriche.version>1.29.0-env-svis-SNAPSHOT</rubriche.version>
 
-<interactiondb.version>1.22.0-env-svia-SNAPSHOT</interactiondb.version>
+<interactiondb.version>1.22.0-env-svis-SNAPSHOT</interactiondb.version>
 
-<autorizzazioni.version>1.14.0-env-svia-SNAPSHOT</autorizzazioni.version>
-<bollettinopostale.version>1.17.0-env-svia-SNAPSHOT</bollettinopostale.version>
-<bustine.version>1.11.0-env-svia-SNAPSHOT</bustine.version>
-<f24.version>1.16.0-env-svia-SNAPSHOT</f24.version>
-<jiffy.version>1.25.0-env-svia-SNAPSHOT</jiffy.version>
-<matchingidbpfm.version>1.12.0-env-svia-SNAPSHOT</matchingidbpfm.version>
-<salvadanaio.version>1.22.0-env-svia-SNAPSHOT</salvadanaio.version>
-<tasse.version>1.58.0-env-svia-SNAPSHOT</tasse.version>
+<autorizzazioni.version>1.14.0-env-svis-SNAPSHOT</autorizzazioni.version>
+<bollettinopostale.version>1.17.0-env-svis-SNAPSHOT</bollettinopostale.version>
+<bustine.version>1.11.0-env-svis-SNAPSHOT</bustine.version>
+<f24.version>1.16.0-env-svis-SNAPSHOT</f24.version>
+<jiffy.version>1.25.0-env-svis-SNAPSHOT</jiffy.version>
+<matchingidbpfm.version>1.12.0-env-svis-SNAPSHOT</matchingidbpfm.version>
+<salvadanaio.version>1.22.0-env-svis-SNAPSHOT</salvadanaio.version>
+<tasse.version>1.58.0-env-svis-SNAPSHOT</tasse.version>
 
-<bonifico.version>1.31.0-env-svia-SNAPSHOT</bonifico.version>
-<cardless.version>1.27.0-env-svia-SNAPSHOT</cardless.version>
-<giroconto.version>1.20.0-env-svia-SNAPSHOT</giroconto.version>
-<pagamentibollette.version>1.74.0-env-svia-SNAPSHOT</pagamentibollette.version>
-<ricaricacellulare.version>1.18.0-env-svia-SNAPSHOT</ricaricacellulare.version>
-<xmedindi-self.version>1.13.0-env-svia-SNAPSHOT</xmedindi-self.version>
+<bonifico.version>1.31.0-env-svis-SNAPSHOT</bonifico.version>
+<cardless.version>1.27.0-env-svis-SNAPSHOT</cardless.version>
+<giroconto.version>1.20.0-env-svis-SNAPSHOT</giroconto.version>
+<pagamentibollette.version>1.74.0-env-svis-SNAPSHOT</pagamentibollette.version>
+<ricaricacellulare.version>1.18.0-env-svis-SNAPSHOT</ricaricacellulare.version>
+<xmedindi-self.version>1.13.0-env-svis-SNAPSHOT</xmedindi-self.version>
 
-<bonificoestero.version>1.23.0-env-svia-SNAPSHOT</bonificoestero.version>
-<carte.version>1.37.0-env-svia-SNAPSHOT</carte.version>
-<pagamentiribamultipli.version>1.17.0-env-svia-SNAPSHOT</pagamentiribamultipli.version>
-<revoche.version>1.15.0-env-svia-SNAPSHOT</revoche.version>
+<bonificoestero.version>1.23.0-env-svis-SNAPSHOT</bonificoestero.version>
+<carte.version>1.37.0-env-svis-SNAPSHOT</carte.version>
+<pagamentiribamultipli.version>1.17.0-env-svis-SNAPSHOT</pagamentiribamultipli.version>
+<revoche.version>1.15.0-env-svis-SNAPSHOT</revoche.version>
 
-<applepay.version>1.15.0-env-svia-SNAPSHOT</applepay.version>
-<bonus.version>1.13.0-env-svia-SNAPSHOT</bonus.version>
-<catalogo-prodotti.version>1.10.0-env-svia-SNAPSHOT</catalogo-prodotti.version>
-<masterpass.version>1.35.0-env-svia-SNAPSHOT</masterpass.version>
-<nfc.version>1.47.0-env-svia-SNAPSHOT</nfc.version>
-<opricorrenti.version>1.17.0-env-svia-SNAPSHOT</opricorrenti.version>
-<pagamentimultipli.version>1.51.0-env-svia-SNAPSHOT</pagamentimultipli.version>
-<ristampapin.version>1.15.0-env-svia-SNAPSHOT</ristampapin.version>
+<applepay.version>1.15.0-env-svis-SNAPSHOT</applepay.version>
+<bonus.version>1.14.0-env-svis-SNAPSHOT</bonus.version>
+<catalogo-prodotti.version>1.10.0-env-svis-SNAPSHOT</catalogo-prodotti.version>
+<masterpass.version>1.35.0-env-svis-SNAPSHOT</masterpass.version>
+<nfc.version>1.47.0-env-svis-SNAPSHOT</nfc.version>
+<opricorrenti.version>1.17.0-env-svis-SNAPSHOT</opricorrenti.version>
+<pagamentimultipli.version>1.51.0-env-svis-SNAPSHOT</pagamentimultipli.version>
+<ristampa-pin.version>1.15.0-env-svis-SNAPSHOT</ristampa-pin.version>
 
-<ricordamidi.version>1.25.0-env-svia-SNAPSHOT</ricordamidi.version>
+<ricordamidi.version>1.25.0-env-svis-SNAPSHOT</ricordamidi.version>
 
-<comunicazioni.version>1.222.0-env-svia-SNAPSHOT</comunicazioni.version>
+<comunicazioni.version>1.223.0-env-svis-SNAPSHOT</comunicazioni.version>
 
-<miogestore.version>1.143.0-env-svia-SNAPSHOT</miogestore.version>
+<miogestore.version>1.143.0-env-svis-SNAPSHOT</miogestore.version>
 
-<bloccosblocco.version>1.19.0-env-svia-SNAPSHOT</bloccosblocco.version>
-<condivisione.version>1.16.0-env-svia-SNAPSHOT</condivisione.version>
-<conto.version>1.37.0-env-svia-SNAPSHOT</conto.version>
-<globalposition.version>1.131.0-env-svia-SNAPSHOT</globalposition.version>
-<identitadigitale.version>1.42.0-env-svia-SNAPSHOT</identitadigitale.version>
-<proposte.version>1.11.0-env-svia-SNAPSHOT</proposte.version>
+<bloccosblocco.version>1.19.0-env-svis-SNAPSHOT</bloccosblocco.version>
+<condivisione.version>1.16.0-env-svis-SNAPSHOT</condivisione.version>
+<conto.version>1.37.0-env-svis-SNAPSHOT</conto.version>
+<globalposition.version>1.131.0-env-svis-SNAPSHOT</globalposition.version>
+<identitadigitale.version>1.42.0-env-svis-SNAPSHOT</identitadigitale.version>
+<proposte.version>1.11.0-env-svis-SNAPSHOT</proposte.version>
 
-<digitalwallet.version>1.54.0-env-svia-SNAPSHOT</digitalwallet.version>
-<pulsantiera.version>1.21.0-env-svia-SNAPSHOT</pulsantiera.version>
-<trading.version>1.19.0-env-svia-SNAPSHOT</trading.version>
+<digitalwallet.version>1.54.0-env-svis-SNAPSHOT</digitalwallet.version>
+<pulsantiera.version>1.21.0-env-svis-SNAPSHOT</pulsantiera.version>
+<trading.version>1.19.0-env-svis-SNAPSHOT</trading.version>
 
-<listaoperazioni.version>1.75.0-env-svia-SNAPSHOT</listaoperazioni.version>
+<listaoperazioni.version>1.75.0-env-svis-SNAPSHOT</listaoperazioni.version>
