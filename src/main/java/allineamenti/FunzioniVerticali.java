@@ -1,6 +1,7 @@
 package allineamenti;
 
 import static allineamenti.GitCommands.gitCheckout;
+import static allineamenti.GitCommands.gitClone;
 import static allineamenti.GitCommands.gitCommitConflitto;
 import static allineamenti.GitCommands.gitCommitVuoto;
 import static allineamenti.GitCommands.gitPull;
@@ -132,7 +133,7 @@ public class FunzioniVerticali
 			Scanner scanner = new Scanner(System.in);
 			System.out.println(">>> Inserisci il percorso della cartella contenente i verticali (es. 'D:\\Openshift\\Verticali\\cdbp0'): ");
 			System.out.println(">>> Oppure inserisci una delle seguenti chiavi presenti: ");
-			StringConstants.PATH_VERTICALI.forEach((k, v) -> System.out.println(k + " -> " + v));
+			StringConstants.PATH_VERTICALI.forEach((k, v) -> System.out.println("   -- "+ k + " --> " + v));
 			System.out.print(">>> Scelta: ");
 			percorso = scanner.nextLine();
 			percorso = StringConstants.PATH_VERTICALI.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_VERTICALI.get(percorso.toLowerCase()) : percorso;
@@ -763,6 +764,81 @@ public class FunzioniVerticali
 			
 			checkTerminazionePush = !"S".equalsIgnoreCase(scelta);
 		} while(!checkTerminazionePush);
+	}
+	
+	/**
+	 * Metodo statico che permette di avviare la procedura per scaricare in locale tutti i verticali di Alten
+	 * @param listaVerticali: lista dei verticali da scaricare
+	 */
+	static void eseguiCloneVerticali(List<String> listaVerticali)
+	{
+		String percorso = inputPercorsoCartellaDestinazioneVerticali();
+		
+		cloneTuttiVerticali(listaVerticali, percorso);
+		System.out.println("--- Download dei verticali terminato\n");
+	}
+	
+	/**
+	 * Metodo statico privato che permette all'utente di indicare il percorso della cartella che deve contenere i verticali da scaricare
+	 * @return il percorso della cartella indicato dall'utente
+	 */
+	private static String inputPercorsoCartellaDestinazioneVerticali()
+	{
+		String percorso;
+		do
+		{
+			Scanner scanner = new Scanner(System.in);
+			System.out.println(">>> Inserisci il percorso della cartella in cui vuoi scaricare i verticali (es. 'D:\\Openshift\\Verticali\\cdbp0') oppure inserisci una delle seguenti chiavi: ");
+			StringConstants.PATH_VERTICALI.forEach((k, v) -> System.out.println("   -- "+ k + " --> " + v));
+			System.out.print(">>> Scelta: ");
+			percorso = scanner.nextLine();
+			percorso = StringConstants.PATH_VERTICALI.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_VERTICALI.get(percorso.toLowerCase()) : percorso;
+			System.out.println();
+		} while(!verificaPercorsoCartella(percorso));
+		
+		return percorso;
+	}
+	
+	/**
+	 * Metodo statico privato che permette di scaricare tutti i verticali di Alten
+	 * @param listaVerticali: lista dei verticali da scaricare
+	 * @param percorso: percorso della cartella di destinazione dei verticali da scaricare
+	 */
+	private static void cloneTuttiVerticali(List<String> listaVerticali, String percorso)
+	{
+		for(String verticale : listaVerticali)
+		{
+			if(Files.exists(Paths.get(percorso +"\\"+ verticale)))
+				System.out.println("La cartella "+ percorso +"\\"+ verticale +" esiste gi\u00E0. Il download dell'EJB verr\u00E0 saltato");
+			else
+			{
+				cloneVerticale(percorso, verticale);
+			}
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Metodo statico privato che permette di scaricare il verticale specificato
+	 * @param percorso: percorso della cartella di destinazione dei verticali da scaricare
+	 * @param verticale: nome del verticale da scaricare
+	 */
+	private static void cloneVerticale(String percorso, String verticale)
+	{
+		String urlVerticale = StringConstants.URL_BITBUCKET + verticale +".git";
+		String comando = StringConstants.COMANDO_GIT_CLONE + urlVerticale;
+		System.out.print("-- Verticale: "+ percorso +" - "+ comando);
+		try
+		{
+			gitClone(comando, percorso, verticale);
+			System.out.println(" --> OK");
+		}
+		catch (IOException ex)
+		{
+			System.out.println(" --> ERROR");
+			System.out.println("Errore durante la clone del verticale '"+ verticale +"'");
+			ex.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) throws Exception {

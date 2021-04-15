@@ -29,11 +29,15 @@ public class StringConstants
 	static final String COMANDO_GIT_TAG_PROMOTE = "git commit --allow-empty -m \"TAG-PROMOTE\"";
 	static final String COMANDO_GIT_STATUS = "git status";
 	static final String COMANDO_GIT_PUSH = "git push";
+	static final String COMANDO_GIT_CLONE = "git clone ";
+	static final String URL_BITBUCKET = "https://bitbucket.intesasanpaolo.com/scm/cdbp0/";
 	
 	/** Comandi principali del programma di allineamento */
 	static final String ALLINEAMENTO_EJB = "ejb ";
 	static final String ALLINEAMENTO_VERTICALI = "verticali ";
 	static final String SOSTITUZIONE_AUTOMATICA = "sostituzione ";
+	static final String DOWNLOAD_EJB = "downloadEjb";
+	static final String DOWNLOAD_VERTICALI = "downloadVerticali";
 	static final String ESCI = "exit";
 
 	/** Inizializzazione delle hashmap contenenti i percorsi predefiniti delle cartelle degli EJB migrati e dei verticali */
@@ -46,5 +50,4 @@ public class StringConstants
 		put("edovert", "D:\\Openshift\\Verticali\\cdbp0");
 		put("felixvert", "D:\\GIT\\cdbp0\\toBeBuild");
 	}};
-
 }

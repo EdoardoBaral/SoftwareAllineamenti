@@ -2,7 +2,9 @@ package allineamenti;
 
 import static allineamenti.FunzioniConsole.inputComandoAllineamento;
 import static allineamenti.FunzioniEjb.eseguiAllineamentoEjb;
+import static allineamenti.FunzioniEjb.eseguiCloneEjb;
 import static allineamenti.FunzioniVerticali.eseguiAllineamentoVerticali;
+import static allineamenti.FunzioniVerticali.eseguiCloneVerticali;
 import static allineamenti.FunzioniVerticali.eseguiSostituzioneAutomatica;
 
 import java.io.IOException;
@@ -29,7 +31,7 @@ public class Main
 		Map<String, List<String>> mapEjb = setupApplication.caricaListeEjb();
 		List<String> listaVerticali = setupApplication.caricaListaVerticali();
 		
-		System.out.println(">>> NDCE GIT BRANCH MANAGER (v3.0) <<<\n");
+		System.out.println(">>> NDCE GIT BRANCH MANAGER (v4.0) <<<\n");
 		
 		String comando;
 		do
@@ -42,6 +44,10 @@ public class Main
 				eseguiAllineamentoVerticali(listaVerticali, comando);
 			else if(StringUtils.containsIgnoreCase(comando, StringConstants.SOSTITUZIONE_AUTOMATICA))
 				eseguiSostituzioneAutomatica(listaVerticali, comando);
+			else if(StringUtils.containsIgnoreCase(comando, StringConstants.DOWNLOAD_EJB))
+				eseguiCloneEjb(mapEjb);
+			else if(StringUtils.containsIgnoreCase(comando, StringConstants.DOWNLOAD_VERTICALI))
+				eseguiCloneVerticali(listaVerticali);
 		} while(!StringConstants.ESCI.equals(comando));
 		
 		System.out.println("TERMINAZIONE PROGRAMMA");

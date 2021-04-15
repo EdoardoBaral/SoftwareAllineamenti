@@ -1,6 +1,7 @@
 package allineamenti;
 
 import static allineamenti.GitCommands.gitCheckout;
+import static allineamenti.GitCommands.gitClone;
 import static allineamenti.GitCommands.gitCommitConflitto;
 import static allineamenti.GitCommands.gitCommitVuoto;
 import static allineamenti.GitCommands.gitPull;
@@ -645,5 +646,82 @@ public class FunzioniEjb
 		System.out.print(">>> Hai terminato l'allineamento degli EJB migrati del branch '"+ nomeBranch +"' (S/N)? ");
 		String scelta = inputScelta();
 		return "S".equalsIgnoreCase(scelta);
+	}
+	
+	/**
+	 * Metodo statico che permette di avviare la procedura per scaricare in locale tutti gli EJB di Alten
+	 * @param mapEjb: hashmap che contiene i nomi degli EJB di Alten suddivisa per blocchi di compilazione
+	 */
+	static void eseguiCloneEjb(Map<String, List<String>> mapEjb)
+	{
+		List<String> listaEjb = convertiMapEjbInLista(mapEjb);
+		String percorso = inputPercorsoCartellaDestinazioneEjb();
+		
+		cloneTuttiEjb(listaEjb, percorso);
+		System.out.println("--- Download degli EJB terminato\n");
+	}
+	
+	/**
+	 * Metodo statico privato che permette all'utente di indicare il percorso della cartella che deve contenere gli EJB da scaricare
+	 * @return il percorso della cartella indicato dall'utente
+	 */
+	private static String inputPercorsoCartellaDestinazioneEjb()
+	{
+		String percorso;
+		do
+		{
+			Scanner scanner = new Scanner(System.in);
+			System.out.println(">>> Inserisci il percorso della cartella in cui vuoi scaricare gli EJB (es. 'D:\\Openshift\\EJB') oppure inserisci una delle seguenti chiavi: ");
+			StringConstants.PATH_EJB.forEach((k, v) -> System.out.println("   -- "+ k + " --> " + v));
+			System.out.print(">>> Scelta: ");
+			percorso = scanner.nextLine();
+			percorso = StringConstants.PATH_EJB.containsKey(percorso.toLowerCase()) ? StringConstants.PATH_EJB.get(percorso.toLowerCase()) : percorso;
+			System.out.println();
+		} while(!verificaPercorsoCartella(percorso));
+		
+		return percorso;
+	}
+	
+	/**
+	 * Metodo statico privato che permette di scaricare tutti gli EJB di Alten
+	 * @param listaEjb: lista di tutti gli EJB di Alten
+	 * @param percorso: percorso della cartella di destinazione degli EJB da scaricare
+	 */
+	private static void cloneTuttiEjb(List<String> listaEjb, String percorso)
+	{
+		Collections.sort(listaEjb);
+		for(String ejb : listaEjb)
+		{
+			if(Files.exists(Paths.get(percorso +"\\"+ ejb)))
+				System.out.println("La cartella "+ percorso +"\\"+ ejb +" esiste gi\u00E0. Il download dell'EJB verr\u00E0 saltato");
+			else
+			{
+				cloneEjb(percorso, ejb);
+			}
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Metodo statico privato che permette di scaricare l'EJB specificato
+	 * @param percorso: percorso della cartella di destinazione degli EJB da scaricare
+	 * @param ejb: nome dell'EJB da scaricare
+	 */
+	private static void cloneEjb(String percorso, String ejb)
+	{
+		String urlEjb = StringConstants.URL_BITBUCKET + ejb +".git";
+		String comando = StringConstants.COMANDO_GIT_CLONE + urlEjb;
+		System.out.print("-- EJB: "+ percorso +" - "+ comando);
+		try
+		{
+			gitClone(comando, percorso, ejb);
+			System.out.println(" --> OK");
+		}
+		catch (IOException ex)
+		{
+			System.out.println(" --> ERROR");
+			System.out.println("Errore durante la clone dell'EJB '"+ ejb +"'");
+			ex.printStackTrace();
+		}
 	}
 }

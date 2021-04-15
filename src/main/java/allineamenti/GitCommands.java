@@ -182,4 +182,26 @@ public class GitCommands
 		
 		return true;
 	}
+	
+	/**
+	 * Metodo che permette l'esecuzione del comando 'git clone' per scaricare dal repository remoto una copia dell'EJB/verticale indicato come argomento
+	 * @param comando: stringa che rappresenta il comando Git per inviare i commit al repository remoto
+	 * @param percorsoCartella: percorso della cartella dell'EJB/verticale in esame
+	 * @repository: nome dell'EJB/verticale da scaricare
+	 * @return true se la push avviene con successo, false in caso di errore
+	 * @throws IOException se si verifica un errore nell'esecuzione del comando 'git clone'
+	 */
+	static void gitClone(String comando, String percorsoCartella, String repository) throws IOException
+	{
+		File fileCartella = new File(percorsoCartella);
+		Process p = Runtime.getRuntime().exec(comando, null, fileCartella);
+		BufferedReader errorStream = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+		
+		String s1;
+		while( (s1 = errorStream.readLine()) != null )
+		{
+			if(StringUtils.containsIgnoreCase(s1, "fatal") | StringUtils.containsIgnoreCase(s1, "error"))
+				throw new IOException("Errore avvenuto durante la clone di '"+ repository +"'");
+		}
+	}
 }

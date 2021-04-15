@@ -24,7 +24,9 @@ public class FunzioniConsole
 		System.out.println("  1) Allineamento EJB migrati:                               | ejb <nomeBranch> <branchOrigine>       | parametro branchOrigine facoltativo, es. --> ejb env/svis env/svia");
 		System.out.println("  2) Allineamento verticali:                                 | verticali <nomeBranch> <branchOrigine> | parametro branchOrigine facoltativo, es. --> verticali env/svis env/svia");
 		System.out.println("  3) Sostituzione automatica versioni nei POM dei verticali: | sostituzione <nomeBranch>              | es. --> sostituzione env/svis");
-		System.out.println("  4) Esci:                                                   | exit\n");
+		System.out.println("  4) Download EJB:                                           | downloadEjb");
+		System.out.println("  5) Downalod verticali:                                     | downloadVerticali");
+		System.out.println("  6) Esci:                                                   | exit\n");
 	}
 	
 	/**
@@ -84,6 +86,8 @@ public class FunzioniConsole
 			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIL):
 			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIS):
 			case (StringConstants.SOSTITUZIONE_AUTOMATICA + StringConstants.BRANCH_SVIA):
+			case (StringConstants.DOWNLOAD_EJB):
+			case (StringConstants.DOWNLOAD_VERTICALI):
 			case StringConstants.ESCI:
 				return true;
 			default:
