@@ -35,7 +35,6 @@
 --B5: monetaattiva-ejb
 --B5: movepay-ejb
 --B5: pagamenti-ejb
---B5: pendingprocesslist-ejb
 --B5: prestiti-ejb
 --B5: saldo-ejb
 --B5: variazionelimiti-definitiva-ejb
@@ -57,51 +56,53 @@
 
 --B9: interactiondb-ejb
 
---B10: autorizzazioni-ejb
---B10: bollettinopostale-ejb
---B10: bustine-ejb
---B10: f24-ejb
---B10: jiffy-ejb
---B10: matchingidbpfm-ejb
---B10: salvadanaio-ejb
---B10: tasse-ejb
+--B10: pendingprocesslist-ejb
 
---B11: bonifico-ejb
---B11: cardless-ejb
---B11: giroconto-ejb
---B11: pagamentobollette-ejb
---B11: ricaricacellulare-ejb
---B11: xmedindi-self-ejb
+--B11: autorizzazioni-ejb
+--B11: bollettinopostale-ejb
+--B11: bustine-ejb
+--B11: f24-ejb
+--B11: jiffy-ejb
+--B11: matchingidbpfm-ejb
+--B11: salvadanaio-ejb
+--B11: tasse-ejb
 
---B12: bonificoestero-ejb
---B12: carte-ejb
---B12: pagamentiribamultipli-ejb
---B12: revoche-ejb
+--B12: bonifico-ejb
+--B12: cardless-ejb
+--B12: giroconto-ejb
+--B12: pagamentobollette-ejb
+--B12: ricaricacellulare-ejb
+--B12: xmedindi-self-ejb
 
---B13: applepay-ejb
---B13: bonus-ejb
---B13: catalogo-prodotti-ejb
---B13: masterpass-ejb
---B13: nfc-ejb
---B13: opricorrenti-ejb
---B13: pagamentimultipli-ejb
---B13: ristampapin-ejb
+--B13: bonificoestero-ejb
+--B13: carte-ejb
+--B13: pagamentiribamultipli-ejb
+--B13: revoche-ejb
 
---B14: ricordamidi-ejb
+--B14: applepay-ejb
+--B14: bonus-ejb
+--B14: catalogo-prodotti-ejb
+--B14: masterpass-ejb
+--B14: nfc-ejb
+--B14: opricorrenti-ejb
+--B14: pagamentimultipli-ejb
+--B14: ristampapin-ejb
 
---B15: comunicazioni-ejb
+--B15: ricordamidi-ejb
 
---B16: miogestore-ejb
+--B16: comunicazioni-ejb
 
---B17: bloccosblocco-ejb
---B17: condivisione-ejb
---B17: conto-ejb
---B17: globalposition-ejb
---B17: identitadigitale-ejb
---B17: proposte-ejb
+--B17: miogestore-ejb
 
---B18: digitalwallet-ejb
---B18: pulsantiera-ejb
---B18: trading-ejb
+--B18: bloccosblocco-ejb
+--B18: condivisione-ejb
+--B18: conto-ejb
+--B18: globalposition-ejb
+--B18: identitadigitale-ejb
+--B18: proposte-ejb
 
---B19: listaoperazioni-ejb
+--B19: digitalwallet-ejb
+--B19: pulsantiera-ejb
+--B19: trading-ejb
+
+--B20: listaoperazioni-ejb
