@@ -6,7 +6,6 @@
 <callmeback.version>1.16.0</callmeback.version>
 <customerjourney.version>1.15.0</customerjourney.version>
 <deviceregistry.version>1.16.0</deviceregistry.version>
-<ricerca.version>1.7.0</ricerca.version>
 <stampe.version>1.16.0</stampe.version>
 <userpreferences.version>1.15.0</userpreferences.version>
 <wishlist.version>1.8.0</wishlist.version>
@@ -108,3 +107,5 @@
 <trading.version>1.20.0</trading.version>
 
 <listaoperazioni.version>1.76.0</listaoperazioni.version>
+
+<ricerca.version>1.7.0</ricerca.version>

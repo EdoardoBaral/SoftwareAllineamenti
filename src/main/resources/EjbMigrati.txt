@@ -4,7 +4,6 @@
 --B1: callmeback-ejb
 --B1: customerjourney-ejb
 --B1: deviceregistry-ejb
---B1: ricerca-ejb
 --B1: stampe-ejb
 --B1: userpreferences-ejb
 --B1: wishlist-ejb
@@ -106,3 +105,5 @@
 --B19: trading-ejb
 
 --B20: listaoperazioni-ejb
+
+--B21: ricerca-ejb
