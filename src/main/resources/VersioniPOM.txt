@@ -14,7 +14,7 @@
 <notification.version>1.59.0-env-svis-SNAPSHOT</notification.version>
 <postvendita-common.version>1.16.0-env-svis-SNAPSHOT</postvendita-common.version>
 
-<profilocliente.version>1.97.0-env-svis-SNAPSHOT</profilocliente.version>
+<profilocliente.version>1.99.0-env-svis-SNAPSHOT</profilocliente.version>
 
 <adue.version>1.20.0-env-svis-SNAPSHOT</adue.version>
 <agenda.version>1.19.0-env-svis-SNAPSHOT</agenda.version>
@@ -24,7 +24,7 @@
 <condizionieconomiche.version>1.14.0-env-svis-SNAPSHOT</condizionieconomiche.version>
 <digitalcollaboration.version>1.17.0-env-svis-SNAPSHOT</digitalcollaboration.version>
 <duplicatocarta.version>1.18.0-env-svis-SNAPSHOT</duplicatocarta.version>
-<filialevirtuale.version>1.71.0-env-svis-SNAPSHOT</filialevirtuale.version>
+<filialevirtuale.version>1.74.0-env-svis-SNAPSHOT</filialevirtuale.version>
 <firmaunica.version>1.22.0-env-svis-SNAPSHOT</firmaunica.version>
 <gestorelimiti.version>1.17.0-env-svis-SNAPSHOT</gestorelimiti.version>
 <guestarea.version>1.28.0-env-svis-SNAPSHOT</guestarea.version>
@@ -69,7 +69,7 @@
 <tasse.version>1.61.0-env-svis-SNAPSHOT</tasse.version>
 
 <bonifico.version>1.35.0-env-svis-SNAPSHOT</bonifico.version>
-<cardless.version>1.32.0-env-svis-SNAPSHOT</cardless.version>
+<cardless.version>1.33.0-env-svis-SNAPSHOT</cardless.version>
 <giroconto.version>1.22.0-env-svis-SNAPSHOT</giroconto.version>
 <pagamentibollette.version>1.78.0-env-svis-SNAPSHOT</pagamentibollette.version>
 <ricaricacellulare.version>1.20.0-env-svis-SNAPSHOT</ricaricacellulare.version>
@@ -81,7 +81,7 @@
 <revoche.version>1.19.0-env-svis-SNAPSHOT</revoche.version>
 
 <applepay.version>1.20.0-env-svis-SNAPSHOT</applepay.version>
-<bonus.version>1.19.0-env-svis-SNAPSHOT</bonus.version>
+<bonus.version>1.20.0-env-svis-SNAPSHOT</bonus.version>
 <catalogo-prodotti.version>1.12.0-env-svis-SNAPSHOT</catalogo-prodotti.version>
 <masterpass.version>1.48.0-env-svis-SNAPSHOT</masterpass.version>
 <nfc.version>1.56.0-env-svis-SNAPSHOT</nfc.version>
@@ -91,11 +91,11 @@
 
 <ricordamidi.version>1.28.0-env-svis-SNAPSHOT</ricordamidi.version>
 
-<comunicazioni.version>1.237.0-env-svis-SNAPSHOT</comunicazioni.version>
+<comunicazioni.version>1.239.0-env-svis-SNAPSHOT</comunicazioni.version>
 
 <miogestore.version>1.149.0-env-svis-SNAPSHOT</miogestore.version>
 
-<bloccosblocco.version>1.21.0-env-svis-SNAPSHOT</bloccosblocco.version>
+<bloccosblocco.version>1.149.0-env-svis-SNAPSHOT</bloccosblocco.version>
 <condivisione.version>1.19.0-env-svis-SNAPSHOT</condivisione.version>
 <conto.version>1.39.0-env-svis-SNAPSHOT</conto.version>
 <globalposition.version>1.133.0-env-svis-SNAPSHOT</globalposition.version>
