@@ -715,10 +715,13 @@ public class FunzioniVerticali
 		
 		boolean flagConflitti;
 		
-		System.out.println("--- Merge di tutti i verticali dal branch master\n");
-		flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
-		if(flagConflitti)
-			proceduraGestioneConflitti(listaVerticali, percorso);
+		if(nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
+		{
+			System.out.println("--- Merge di tutti i verticali dal branch master\n");
+			flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
+			if(flagConflitti)
+				proceduraGestioneConflitti(listaVerticali, percorso);
+		}
 		
 		proceduraSostituzioneVersioniPom(percorso, listaVerticali);
 		verificaModificheNonCommittate();
