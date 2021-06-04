@@ -93,6 +93,7 @@
 
 --B17: miogestore-ejb
 
+--B18: appuntamento-ejb
 --B18: bloccosblocco-ejb
 --B18: condivisione-ejb
 --B18: conto-ejb
