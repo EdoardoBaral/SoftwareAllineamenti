@@ -130,8 +130,8 @@ public class FunzioniEjb
 			}
 			System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
 			
-//			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
-//			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
+			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			
 			System.out.println("--- Allineamento degli EJB migrati del blocco "+ nomeBloccoEjb +" completato\n");
 			allineamentoEjbTerminato = verificaTerminazioneAllineamento(nomeBranch);
