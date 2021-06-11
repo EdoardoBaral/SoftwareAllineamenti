@@ -286,9 +286,9 @@ public class FunzioniEjb
 		{
 			boolean checkoutAvvenuto = gitCheckout(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
 			if(checkoutAvvenuto)
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
 			else
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
 			
 			return checkoutAvvenuto;
 		}
@@ -332,7 +332,7 @@ public class FunzioniEjb
 	 */
 	private static void pullEjb(String percorso)
 	{
-		System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
+		System.out.print("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL);
 		try
 		{
 			gitPull(StringConstants.COMANDO_GIT_PULL, percorso);
@@ -377,9 +377,9 @@ public class FunzioniEjb
 		{
 			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine, percorso);
 			if(!flagConflitti)
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine +" --> OK");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine +" --> OK");
 			else
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine +" --> CONFLITTI");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + nomeBranchOrigine +" --> CONFLITTI");
 			
 			return flagConflitti;
 		}
@@ -413,9 +413,9 @@ public class FunzioniEjb
 		{
 			boolean flagCommit = gitCommitConflitto(StringConstants.COMANDO_GIT_COMMIT, percorso);
 			if(flagCommit)
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> CONFLITTI RISOLTI");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> CONFLITTI RISOLTI");
 			else
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
 		}
 		catch (IOException ex)
 		{
@@ -454,9 +454,9 @@ public class FunzioniEjb
 		{
 			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER, percorso);
 			if(!flagConflitti)
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> OK");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> OK");
 			else
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> CONFLITTI");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> CONFLITTI");
 			
 			return flagConflitti;
 		}
@@ -543,9 +543,9 @@ public class FunzioniEjb
 		{
 			boolean flagCommit = gitStatus(StringConstants.COMANDO_GIT_STATUS, percorso);
 			if(flagCommit)
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> NESSUNA MODIFICA DA COMMITTARE");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> NESSUNA MODIFICA DA COMMITTARE");
 			else
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> CI SONO MODIFICHE DA COMMITTARE");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> CI SONO MODIFICHE DA COMMITTARE");
 			
 			return flagCommit;
 		}
@@ -605,12 +605,12 @@ public class FunzioniEjb
 		{
 			if(StringConstants.BRANCH_SVIL.equals(nomeBranch))
 			{
-				System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_RELEASE);
+				System.out.print("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_RELEASE);
 				gitCommitVuoto(StringConstants.COMANDO_GIT_RELEASE, percorso);
 			}
 			else
 			{
-				System.out.print("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO);
+				System.out.print("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO);
 				gitCommitVuoto(StringConstants.COMANDO_GIT_COMMIT_EJB_VUOTO, percorso);
 			}
 			System.out.println(" --> OK");
@@ -646,9 +646,9 @@ public class FunzioniEjb
 		{
 			boolean flagPush = gitPush(StringConstants.COMANDO_GIT_PUSH, percorso);
 			if(flagPush)
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> OK");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> OK");
 			else
-				System.out.println("-- EJB: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> ERRORE");
+				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> ERRORE");
 		}
 		catch(IOException ex)
 		{
@@ -733,7 +733,7 @@ public class FunzioniEjb
 	{
 		String urlEjb = StringConstants.URL_BITBUCKET + ejb +".git";
 		String comando = StringConstants.COMANDO_GIT_CLONE + urlEjb;
-		System.out.print("-- EJB: "+ percorso +" - "+ comando);
+		System.out.print("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ comando);
 		try
 		{
 			gitClone(comando, percorso, ejb);
