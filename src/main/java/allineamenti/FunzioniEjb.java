@@ -9,17 +9,31 @@ import static allineamenti.GitCommands.gitPullOrigin;
 import static allineamenti.GitCommands.gitPush;
 import static allineamenti.GitCommands.gitStatus;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Classe che contiene i metodi necessari per le operazioni di allineamento sugli EJB migrati di Alten
@@ -49,6 +63,13 @@ public class FunzioniEjb
 		
 		System.out.println("--- Pull di tutti gli EJB migrati\n");
 		pullTuttiEjb(mapEjb, percorso);
+		
+		System.out.println("--- Inizializzazione dell'hashmap per le versioni delle dipendenze");
+		HashMap<String, String> mappaDipendenze = new HashMap<>();
+		System.out.print(">>> Indica la versione di arch.core.ndce: ");
+		String archCoreNdceVersion = inputScelta();
+		mappaDipendenze.put("arch.core.ndce.version", archCoreNdceVersion);
+		System.out.println();
 		
 		String nomeBloccoEjb;
 		boolean allineamentoEjbTerminato;
@@ -89,7 +110,7 @@ public class FunzioniEjb
 				}
 				if(flagConflitti)
 					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+				aggiornamentoVersioniDipendenzePOM(mappaDipendenze, mapEjb, nomeBloccoEjb, percorso);
 			}
 			
 			if(StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
@@ -98,7 +119,7 @@ public class FunzioniEjb
 				flagConflitti = pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 				if(flagConflitti)
 					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-				confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+				aggiornamentoVersioniDipendenzePOM(mappaDipendenze, mapEjb, nomeBloccoEjb, percorso);
 			}
 			
 			boolean tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
@@ -109,8 +130,8 @@ public class FunzioniEjb
 			}
 			System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
 			
-			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
-			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+//			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
+//			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			
 			System.out.println("--- Allineamento degli EJB migrati del blocco "+ nomeBloccoEjb +" completato\n");
 			allineamentoEjbTerminato = verificaTerminazioneAllineamento(nomeBranch);
@@ -191,6 +212,7 @@ public class FunzioniEjb
 				listaEjbNonSwitchati = checkoutEjbNonSwitchati(listaEjbNonSwitchati, nomeBranch, percorso);
 			}
 		}
+		System.out.println();
 	}
 	
 	/**
@@ -723,5 +745,133 @@ public class FunzioniEjb
 			System.out.println("Errore durante la clone dell'EJB '"+ ejb +"'");
 			ex.printStackTrace();
 		}
+	}
+	
+	private static void aggiornamentoVersioniDipendenzePOM(Map<String, String> mappaDipendenze, Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
+	{
+		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
+		for(String ejb : bloccoEjb)
+		{
+			File pom = new File(percorso +"\\"+ ejb +"\\pom.xml");
+			try
+			{
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				Document document = builder.parse(pom);
+				
+				System.out.println("--- Lettura del file "+ percorso +"\\"+ ejb +"\\pom.xml");
+				
+				aggiornamentoVersioneArchCodeNdce(document, mappaDipendenze.get("arch.core.ndce.version"));
+				List<Node> listaDipendenzeEjb = ricercaDipendenzeEjb(document);
+				aggiornamentoVersioniDipendenzeEjb(listaDipendenzeEjb, mappaDipendenze, ejb);
+				aggiornamentoPOMEjb(document, pom);
+			}
+			catch(ParserConfigurationException | SAXException | IOException | TransformerException ex)
+			{
+				System.err.println("--- Errore nella sostituzione delle versioni nel POM "+ pom.getAbsolutePath());
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	private static void aggiornamentoVersioneArchCodeNdce(Document document, String versione)
+	{
+		NodeList archCoreList = document.getElementsByTagName("arch.core.ndce.version");
+		if(archCoreList.getLength() > 0)
+		{
+			Node archCoreNode = archCoreList.item(0);
+			System.out.print("--- "+ archCoreNode.getNodeName() +" [PRIMA] "+ archCoreNode.getTextContent());
+			archCoreNode.setTextContent(versione);
+			System.out.println(" - [DOPO] "+ archCoreNode.getTextContent());
+		}
+	}
+	
+	private static List<Node> ricercaDipendenzeEjb(Document document)
+	{
+		List<Node> listaDipendenzeEjb = new ArrayList<>();
+		NodeList propertiesList = document.getElementsByTagName("properties");
+		if(propertiesList.getLength() > 0)
+		{
+			Node propertiesNode = propertiesList.item(0);
+			for(int i=0; i< propertiesNode.getChildNodes().getLength(); i++)
+			{
+				Node node = propertiesNode.getChildNodes().item(i);
+				if(isTagValido(node))
+					listaDipendenzeEjb.add(node);
+			}
+		}
+		
+		return listaDipendenzeEjb;
+	}
+	
+	private static boolean isTagValido(Node node)
+	{
+		String nomeTag = node.getNodeName();
+		return !"arch.core.ndce.version".equals(nomeTag) && !"junit.version".equals(nomeTag)
+			&& !"notificator-model.version".equals(nomeTag) && !"notificator-common.version".equals(nomeTag) && !"xmlbeans.version".equals(nomeTag) && !"notificator-client-listener.version".equals(nomeTag)
+			&& !"notificator-client-push.version".equals(nomeTag) && !"notificator-client-gateway.version".equals(nomeTag) && !"notificator-dispatcher.version".equals(nomeTag)
+			&& !"ojdbc14.version".equals(nomeTag) && !"investimenti.version".equals(nomeTag) && !"jacoco.version".equals(nomeTag) && !"log4j.version".equals(nomeTag) && !"eclipselink.version".equals(nomeTag)
+			&& !"j2ee.version".equals(nomeTag) && !"coherence.version".equals(nomeTag) && !"connector.version".equals(nomeTag) && !"opricorrenti.hazelcast.version".equals(nomeTag)
+			&& !"notificator-domain-abc.version".equals(nomeTag)
+			&& nomeTag.contains(".version");
+	}
+	
+	private static void aggiornamentoVersioniDipendenzeEjb(List<Node> listaDipendenzeEjb, Map<String, String> mappaDipendenze, String ejb)
+	{
+		for(Node node : listaDipendenzeEjb)
+		{
+			String versione = mappaDipendenze.get(node.getNodeName());
+			if(versione == null) //Caso dipendenza non ancora inserita nell'hashmap
+			{
+				//Gestione dipendenze circolari che non vanno salvate nell'hashmap
+				if(isDipendenzaCircolare(ejb, node))
+				{
+					System.out.print(">>> "+ node.getNodeName() +" non presente (dipendenza circolare). Indicare la versione da salvare: ");
+					versione = inputScelta();
+					
+					System.out.print("--- "+ node.getNodeName() +" [PRIMA - Dipendenza circolare] "+ node.getTextContent());
+					node.setTextContent(versione);
+					System.out.println(" - [DOPO - Dipendenza circolare] "+ node.getTextContent());
+				}
+				else //Gestione dipendenze non circolari da salvare nell'hashmap
+				{
+					System.out.print(">>> "+ node.getNodeName() +" non presente. Indicare la versione da salvare: ");
+					versione = inputScelta();
+					
+					mappaDipendenze.put(node.getNodeName(), versione);
+					System.out.print("--- "+ node.getNodeName() +" [PRIMA] "+ node.getTextContent());
+					node.setTextContent(versione);
+					System.out.println(" - [DOPO] "+ node.getTextContent());
+				}
+			}
+			else //Caso dipendenza già inserita nell'hashmap
+			{
+				System.out.print("--- "+ node.getNodeName() +" [PRIMA] "+ node.getTextContent());
+				node.setTextContent(versione);
+				System.out.println(" - [DOPO] "+ node.getTextContent());
+			}
+		}
+	}
+	
+	private static boolean isDipendenzaCircolare(String ejb, Node node)
+	{
+		return (ejb.equalsIgnoreCase("filialevirtuale-ejb") && node.getNodeName().equals("miogestore.version"))
+			|| (ejb.equalsIgnoreCase("commonssmallbusiness-ejb") && node.getNodeName().equals("pagamentiribamultipli.version"))
+			|| (ejb.equalsIgnoreCase("pfm-ejb") && node.getNodeName().equals("globalposition.version"))
+			|| (ejb.equalsIgnoreCase("pfm-ejb") && node.getNodeName().equals("salvadanaio.version"))
+			|| (ejb.equalsIgnoreCase("comunicazioni-ejb") && node.getNodeName().equals("miogestore.version"));
+	}
+	
+	private static void aggiornamentoPOMEjb(Document document, File pom) throws TransformerException
+	{
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty("omit-xml-declaration", "yes");
+		DOMSource source = new DOMSource(document);
+		StreamResult result = new StreamResult(pom);
+		
+		transformer.transform(source, result);
+		System.out.println("--- Scrittura completata");
+		System.out.println();
 	}
 }
