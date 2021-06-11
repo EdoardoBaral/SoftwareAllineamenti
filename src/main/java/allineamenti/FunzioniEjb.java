@@ -133,6 +133,13 @@ public class FunzioniEjb
 			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
 			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			
+			/* Richiamo della funzione che scrive su VersioniPOM.txt le versioni attualmente presenti nell'hashmap.
+			 * La chiamata viene per il momento inibita in quanto si basa sulle versioni delle dipendenze inserite nella mappa nel momento in cui vengono chieste all'utente.
+			 * Siccome ricerca-ejb viene compilato per ultimo e non vi è alcun EJB che dipenda da esso, la sua versione non viene mai chiesta all'utente e, pertanto, non
+			 * viene mai inserita nell'hashmap e scritta nel file, a meno che non vengano inserite logiche ad hoc */
+//			SetupApplication setupApplication = new SetupApplication();
+//			setupApplication.aggiornamentoFileVersioniPOM(mappaDipendenze);
+			
 			System.out.println("--- Allineamento degli EJB migrati del blocco "+ nomeBloccoEjb +" completato\n");
 			allineamentoEjbTerminato = verificaTerminazioneAllineamento(nomeBranch);
 		} while(!mapEjb.containsKey(nomeBloccoEjb) || !allineamentoEjbTerminato);
@@ -782,7 +789,7 @@ public class FunzioniEjb
 			Node archCoreNode = archCoreList.item(0);
 			System.out.print("--- "+ archCoreNode.getNodeName() +" [PRIMA] "+ archCoreNode.getTextContent());
 			archCoreNode.setTextContent(versione);
-			System.out.println(" - [DOPO] "+ archCoreNode.getTextContent());
+			System.out.println(" --> [DOPO] "+ archCoreNode.getTextContent());
 		}
 	}
 	
@@ -841,14 +848,14 @@ public class FunzioniEjb
 					mappaDipendenze.put(node.getNodeName(), versione);
 					System.out.print("--- "+ node.getNodeName() +" [PRIMA] "+ node.getTextContent());
 					node.setTextContent(versione);
-					System.out.println(" - [DOPO] "+ node.getTextContent());
+					System.out.println(" --> [DOPO] "+ node.getTextContent());
 				}
 			}
 			else //Caso dipendenza già inserita nell'hashmap
 			{
 				System.out.print("--- "+ node.getNodeName() +" [PRIMA] "+ node.getTextContent());
 				node.setTextContent(versione);
-				System.out.println(" - [DOPO] "+ node.getTextContent());
+				System.out.println(" --> [DOPO] "+ node.getTextContent());
 			}
 		}
 	}
