@@ -93,7 +93,7 @@ public class FunzioniEjb
 					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, branchOrigine);
 					if(flagConflitti)
 						proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-					confermaVersioniPomEjbBlocco(nomeBloccoEjb);
+//					confermaVersioniPomEjbBlocco(nomeBloccoEjb);
 				}
 			}
 			else
@@ -819,7 +819,7 @@ public class FunzioniEjb
 			&& !"notificator-client-push.version".equals(nomeTag) && !"notificator-client-gateway.version".equals(nomeTag) && !"notificator-dispatcher.version".equals(nomeTag)
 			&& !"ojdbc14.version".equals(nomeTag) && !"investimenti.version".equals(nomeTag) && !"jacoco.version".equals(nomeTag) && !"log4j.version".equals(nomeTag) && !"eclipselink.version".equals(nomeTag)
 			&& !"j2ee.version".equals(nomeTag) && !"coherence.version".equals(nomeTag) && !"connector.version".equals(nomeTag) && !"opricorrenti.hazelcast.version".equals(nomeTag)
-			&& !"notificator-domain-abc.version".equals(nomeTag)
+			&& !"notificator-domain-abc.version".equals(nomeTag) && !"jasperreports.version".equals(nomeTag) && !"barbecue.version".equals(nomeTag)
 			&& nomeTag.contains(".version");
 	}
 	
