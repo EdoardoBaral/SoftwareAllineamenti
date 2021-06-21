@@ -31,7 +31,7 @@ public class Main
 		Map<String, List<String>> mapEjb = setupApplication.caricaListeEjb();
 		List<String> listaVerticali = setupApplication.caricaListaVerticali();
 		
-		System.out.println(">>> NDCE GIT BRANCH MANAGER (v4.0) <<<\n");
+		System.out.println(">>> NDCE GIT BRANCH MANAGER (v5.0) <<<\n");
 		
 		String comando;
 		do

@@ -9,7 +9,9 @@ import static allineamenti.GitCommands.gitPullOrigin;
 import static allineamenti.GitCommands.gitPush;
 import static allineamenti.GitCommands.gitStatus;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,16 +57,16 @@ public class FunzioniEjb
 		if(partiComando.length == 3)
 			branchOrigine = partiComando[2];
 		
-		System.out.println("--- Allineamento EJB migrati - Branch: "+ nomeBranch +" ---\n");
+		System.out.println("********** Allineamento EJB migrati - Branch: "+ nomeBranch +" **********\n");
 		
 		String percorso = inputPercorsoCartellaEjb();
 		
 		proceduraCheckoutTuttiEjb(mapEjb, nomeBranch, percorso);
 		
-		System.out.println("--- Pull di tutti gli EJB migrati\n");
+		System.out.println("********** Pull di tutti gli EJB migrati **********\n");
 		pullTuttiEjb(mapEjb, percorso);
 		
-		System.out.println("--- Inizializzazione dell'hashmap per le versioni delle dipendenze");
+		System.out.println("********** Inizializzazione dell'hashmap per le versioni delle dipendenze **********");
 		HashMap<String, String> mappaDipendenze = new HashMap<>();
 		System.out.print(">>> Indica la versione di arch.core.ndce: ");
 		String archCoreNdceVersion = inputScelta();
@@ -78,7 +80,7 @@ public class FunzioniEjb
 			do {
 				System.out.print(">>> Quale blocco di EJB intendi compilare (es. B0, B1, B2...)? ");
 				nomeBloccoEjb = StringUtils.upperCase(inputScelta());
-				if (!mapEjb.containsKey(nomeBloccoEjb))
+				if(!mapEjb.containsKey(nomeBloccoEjb))
 					System.out.println("Il blocco selezionato non esiste. Riprovare\n");
 			}	while((!mapEjb.containsKey(nomeBloccoEjb)));
 			System.out.println();
@@ -89,23 +91,22 @@ public class FunzioniEjb
 			{
 				if(branchOrigine != null)
 				{
-					System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"'\n");
+					System.out.println("********** Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"' **********\n");
 					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, branchOrigine);
 					if(flagConflitti)
 						proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
-//					confermaVersioniPomEjbBlocco(nomeBloccoEjb);
 				}
 			}
 			else
 			{
 				if(branchOrigine == null)
 				{
-					System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ StringConstants.BRANCH_SVIL +"'\n");
+					System.out.println("********** Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ StringConstants.BRANCH_SVIL +"' **********\n");
 					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, StringConstants.BRANCH_SVIL);
 				}
 				else
 				{
-					System.out.println("--- Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"'\n");
+					System.out.println("********** Merge di tutti gli EJB migrati del blocco "+ nomeBloccoEjb +" dal branch '"+ branchOrigine +"' **********\n");
 					flagConflitti = pullOriginEjbBlocco(mapEjb, nomeBloccoEjb, percorso, branchOrigine);
 				}
 				if(flagConflitti)
@@ -115,7 +116,7 @@ public class FunzioniEjb
 			
 			if(StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
 			{
-				System.out.println("--- Merge di tutti gli EJB migrati dal branch master\n");
+				System.out.println("********** Merge di tutti gli EJB migrati dal branch master **********\n");
 				flagConflitti = pullOriginMasterEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 				if(flagConflitti)
 					proceduraGestioneConflitti(mapEjb, nomeBloccoEjb, percorso);
@@ -128,19 +129,13 @@ public class FunzioniEjb
 				verificaModificheNonCommittate(nomeBloccoEjb);
 				tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			}
-			System.out.println("--- Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate");
+			System.out.println("********** Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate **********");
 			
 			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
 			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
+			aggiornamentoFileVersioniPOM(mapEjb, mappaDipendenze, nomeBloccoEjb);
 			
-			/* Richiamo della funzione che scrive su VersioniPOM.txt le versioni attualmente presenti nell'hashmap.
-			 * La chiamata viene per il momento inibita in quanto si basa sulle versioni delle dipendenze inserite nella mappa nel momento in cui vengono chieste all'utente.
-			 * Siccome ricerca-ejb viene compilato per ultimo e non vi è alcun EJB che dipenda da esso, la sua versione non viene mai chiesta all'utente e, pertanto, non
-			 * viene mai inserita nell'hashmap e scritta nel file, a meno che non vengano inserite logiche ad hoc */
-//			SetupApplication setupApplication = new SetupApplication();
-//			setupApplication.aggiornamentoFileVersioniPOM(mappaDipendenze);
-			
-			System.out.println("--- Allineamento degli EJB migrati del blocco "+ nomeBloccoEjb +" completato\n");
+			System.out.println("********** Allineamento degli EJB migrati del blocco "+ nomeBloccoEjb +" completato **********\n");
 			allineamentoEjbTerminato = verificaTerminazioneAllineamento(nomeBranch);
 		} while(!mapEjb.containsKey(nomeBloccoEjb) || !allineamentoEjbTerminato);
 	}
@@ -237,7 +232,7 @@ public class FunzioniEjb
 		for(String ejb : listaEjb)
 		{
 			boolean checkoutAvvenuto = checkoutEjb(percorso + "\\" + ejb, nomeBranch);
-			if (!checkoutAvvenuto)
+			if(!checkoutAvvenuto)
 				listaEjbNonSwitchati.add(ejb);
 		}
 		
@@ -256,7 +251,7 @@ public class FunzioniEjb
 		for(String ejb : ejbNonSwitchati)
 		{
 			boolean checkoutAvvenuto = checkoutEjb(percorso +"\\"+ ejb, nomeBranch);
-			if (checkoutAvvenuto)
+			if(checkoutAvvenuto)
 				ejbNonSwitchati.remove(ejb);
 		}
 		
@@ -345,7 +340,7 @@ public class FunzioniEjb
 			gitPull(StringConstants.COMANDO_GIT_PULL, percorso);
 			System.out.println(" --> OK");
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println(" --> ERROR");
 			System.out.println("Errore durante la pull dell'EJB '"+ percorso +"'");
@@ -424,7 +419,7 @@ public class FunzioniEjb
 			else
 				System.out.println("-- EJB: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante il commit per i conflitti dell'EJB '"+ percorso +"'");
 			ex.printStackTrace();
@@ -503,6 +498,7 @@ public class FunzioniEjb
 	/**
 	 * Metodo statico privato che permette all'utente di verificare la correttezza delle versioni indicate nei POM padri degli EJB del blocco indicato
 	 * @param nomeBloccoEjb: nome del blocco EJB che si sta allineando
+	 * @deprecated
 	 */
 	private static void confermaVersioniPomEjbBlocco(String nomeBloccoEjb)
 	{
@@ -724,9 +720,7 @@ public class FunzioniEjb
 			if(Files.exists(Paths.get(percorso +"\\"+ ejb)))
 				System.out.println("La cartella "+ percorso +"\\"+ ejb +" esiste gi\u00E0. Il download dell'EJB verr\u00E0 saltato");
 			else
-			{
 				cloneEjb(percorso, ejb);
-			}
 		}
 		System.out.println();
 	}
@@ -746,7 +740,7 @@ public class FunzioniEjb
 			gitClone(comando, percorso, ejb);
 			System.out.println(" --> OK");
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println(" --> ERROR");
 			System.out.println("Errore durante la clone dell'EJB '"+ ejb +"'");
@@ -754,6 +748,13 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che gestisce l'aggiornamento delle versioni delle dipendenze trovate nei POM, salvate all'interno dell'apposita hashmap
+	 * @param mappaDipendenze: hashmap contenente le versioni delle dipendenze trovate nei POM degli EJB
+	 * @param mapEjb: hashmap contenente i blocchi di compilazione degli EJB
+	 * @param nomeBloccoEjb: nome del blocco di EJB in esame
+	 * @param percorso: percorso della cartella contenente gli EJB
+	 */
 	private static void aggiornamentoVersioniDipendenzePOM(Map<String, String> mappaDipendenze, Map<String, List<String>> mapEjb, String nomeBloccoEjb, String percorso)
 	{
 		List<String> bloccoEjb = mapEjb.get(nomeBloccoEjb);
@@ -781,6 +782,11 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che permette di aggiornare nel POM di un EJB la versione della libreria arch.core.ndce
+	 * @param document: il POM parsificato dell'EJB in esame
+	 * @param versione: versione di arch.core.ndce da sostituire nel POM
+	 */
 	private static void aggiornamentoVersioneArchCodeNdce(Document document, String versione)
 	{
 		NodeList archCoreList = document.getElementsByTagName("arch.core.ndce.version");
@@ -793,6 +799,11 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che cerca all'interno di un file POM le dipendenze da altri EJB da aggiornare
+	 * @param document: il POM parsificato dell'EJB da esaminare
+	 * @return la lista di dipendenze da aggiornare trovate nel POM
+	 */
 	private static List<Node> ricercaDipendenzeEjb(Document document)
 	{
 		List<Node> listaDipendenzeEjb = new ArrayList<>();
@@ -811,6 +822,11 @@ public class FunzioniEjb
 		return listaDipendenzeEjb;
 	}
 	
+	/**
+	 * Metodo statico privato che verifica se un determinato tag XML rappresenti una dipendenza da un EJB che va aggiornata
+	 * @param node: elemento XML del POM che rappresenta un tag figlio dell'elemento properties (in cui sono contenute le versioni delle dipendenze)
+	 * @return true se l'elemento XML rappresenta una dipendenza da aggiornare, false altrimenti
+	 */
 	private static boolean isTagValido(Node node)
 	{
 		String nomeTag = node.getNodeName();
@@ -823,6 +839,12 @@ public class FunzioniEjb
 			&& nomeTag.contains(".version");
 	}
 	
+	/**
+	 * Metodo statico privato che aggiorna nel POM di un EJB le versioni delle sue dipendenze da altri EJB
+	 * @param listaDipendenzeEjb: lista di tag XML che rappresentano dipendenze verso altri EJB
+	 * @param mappaDipendenze: hashmap contenente le versioni delle dipendenze da aggiornare nei POM degli EJB
+	 * @param ejb: nome dell'EJB in esame per cui vanno aggiornate le versioni delle dipendenze
+	 */
 	private static void aggiornamentoVersioniDipendenzeEjb(List<Node> listaDipendenzeEjb, Map<String, String> mappaDipendenze, String ejb)
 	{
 		for(Node node : listaDipendenzeEjb)
@@ -860,6 +882,12 @@ public class FunzioniEjb
 		}
 	}
 	
+	/**
+	 * Metodo statico privato che verifica se, per l'EJB specificato, un determinato tag di una dipendenza rappresenti una dipendenza circolare
+	 * @param ejb: nome dell'EJB in esame
+	 * @param node: elemento XML che rappresenta una dipendenza da un altro EJB
+	 * @return true se la dipendenza verificata è circolare, false altrimenti
+	 */
 	private static boolean isDipendenzaCircolare(String ejb, Node node)
 	{
 		return (ejb.equalsIgnoreCase("filialevirtuale-ejb") && node.getNodeName().equals("miogestore.version"))
@@ -869,6 +897,12 @@ public class FunzioniEjb
 			|| (ejb.equalsIgnoreCase("comunicazioni-ejb") && node.getNodeName().equals("miogestore.version"));
 	}
 	
+	/**
+	 * Metodo statico privato che aggiorna il contenuto di un file POM in seguito all'aggiornamento delle dipendenze
+	 * @param document: parsificazione XML del file POM con le versioni aggiornate
+	 * @param pom: file POM dell'EJB che andrà aggiornato in base al contenuto dell'oggetto document
+	 * @throws TransformerException qualora si verifichi un errore nella scrittura del file POM aggiornato a partire dal document
+	 */
 	private static void aggiornamentoPOMEjb(Document document, File pom) throws TransformerException
 	{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -879,6 +913,75 @@ public class FunzioniEjb
 		
 		transformer.transform(source, result);
 		System.out.println("--- Scrittura completata");
+		System.out.println();
+	}
+	
+	/**
+	 * Metodo statico privato che permette di aggiornare l'hashmap delle versioni delle dipendenze aggiungendoci quelle degli EJB del blocco appena ricompilato
+	 * @param mapEjb: hashmap con la suddivisione in blocchi di compilazione degli EJB
+	 * @param mappaDipendenze: hashmap contenente la lista delle versioni associate al relativo EJB o libreria esterna
+	 * @param nomeBloccoEjb: nome del blocco di EJB in esame
+	 */
+	private static void aggiornamentoFileVersioniPOM(Map<String, List<String>> mapEjb, Map<String, String> mappaDipendenze, String nomeBloccoEjb)
+	{
+		List<String> nomiEjbBlocco = new ArrayList<>();
+		for(String ejb : mapEjb.get(nomeBloccoEjb))
+		{
+			String ejbPulito = ejb.equals("isp-ib-om") ? "isp-ib-om" : ejb.substring(0, ejb.length()-4);
+			
+			if(ejbPulito.equals("jiffyv2"))
+				ejbPulito = "jiffy-v2";
+			else if(ejbPulito.equals("pagamentobollette"))
+				ejbPulito = "pagamentibollette";
+			else if(ejbPulito.equals("ristampapin"))
+				ejbPulito = "ristampa-pin";
+			
+			nomiEjbBlocco.add(ejbPulito);
+		}
+		
+		for(String ejb : nomiEjbBlocco) {
+			String chiaveEjb = ejb +".version";
+			System.out.print("--- Inserire la versione di "+ ejb +"-ejb appena ricompilata: ");
+			String versione = inputScelta();
+			mappaDipendenze.put(chiaveEjb, versione);
+		}
+		System.out.println();
+		
+		scritturaFileVersioniPOM(mappaDipendenze);
+	}
+	
+	/**
+	 * Metodo statico privato che riscrive il file VersioniPOM.txt per aggiornarlo con le ultime versioni inserite nell'hashmap
+	 * @param mappaDipendenze: hashmap contenente gli EJB e librerie esterne e le relative versioni associate
+	 */
+	private static void scritturaFileVersioniPOM(Map<String, String> mappaDipendenze)
+	{
+		System.out.print("Aggiornamento del file VersioniPOM.txt ... ");
+		try
+		{
+			File file = new File("VersioniPOM.txt");
+
+			if(file == null)
+				throw new IOException("File "+ file.getAbsolutePath() +" non trovato");
+
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+
+			for(String tag : mappaDipendenze.keySet())
+			{
+				String versione = mappaDipendenze.get(tag);
+				String riga = "<"+ tag +">"+ versione +"</"+ tag +">";
+				bw.write(riga +"\n");
+				bw.flush();
+			}
+
+			bw.close();
+			System.out.println("COMPLETATO");
+		}
+		catch(IOException ex)
+		{
+			System.out.println("\n--- Aggiornamento VersioniPOM.txt interrotto a causa di un errore ---");
+			ex.printStackTrace();
+		}
 		System.out.println();
 	}
 }

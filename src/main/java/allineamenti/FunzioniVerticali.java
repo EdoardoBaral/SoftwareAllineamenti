@@ -389,7 +389,7 @@ public class FunzioniVerticali
 			else
 				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante il commit per i conflitti del verticale '"+ percorso +"'");
 			ex.printStackTrace();
@@ -430,7 +430,7 @@ public class FunzioniVerticali
 			
 			return flagConflitti;
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante il merge del verticale '"+ percorso +"' dal branch '"+ StringConstants.BRANCH_MASTER +"'");
 			ex.printStackTrace();
@@ -472,7 +472,7 @@ public class FunzioniVerticali
 			
 			return flagCommit;
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println("Errore durante la verifica dello status del verticale '"+ percorso +"'");
 			ex.printStackTrace();
@@ -628,6 +628,13 @@ public class FunzioniVerticali
 		System.out.println();
 	}
 	
+	/**
+	 * Metodo statico private che permette di avviare la procedura di sostituzione automatica delle versioni delle dipendenze all'interno
+	 * dei file POM dei verticali
+	 * @param percorsoCartellaVerticali: percorso della cartella che contiene i verticali
+	 * @param listaVerticali: lista dei nomi dei verticali
+	 * @param listaVersioni: lista delle versioni da allineare nei POM dei verticali
+	 */
 	private static void sostituzioneVersioniPom(String percorsoCartellaVerticali, List<String> listaVerticali, List<String> listaVersioni)
 	{
 		for(String verticale : listaVerticali)
@@ -685,7 +692,7 @@ public class FunzioniVerticali
 				System.out.println("--- Scrittura completata");
 			}
 		}
-		catch (ParserConfigurationException | SAXException | IOException | TransformerException ex)
+		catch(ParserConfigurationException | SAXException | IOException | TransformerException ex)
 		{
 			System.err.println("--- Errore nella sostituzione delle versioni nel POM "+ filePom.getAbsolutePath());
 			ex.printStackTrace();
@@ -814,9 +821,7 @@ public class FunzioniVerticali
 			if(Files.exists(Paths.get(percorso +"\\"+ verticale)))
 				System.out.println("La cartella "+ percorso +"\\"+ verticale +" esiste gi\u00E0. Il download dell'EJB verr\u00E0 saltato");
 			else
-			{
 				cloneVerticale(percorso, verticale);
-			}
 		}
 		System.out.println();
 	}
@@ -836,7 +841,7 @@ public class FunzioniVerticali
 			gitClone(comando, percorso, verticale);
 			System.out.println(" --> OK");
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			System.out.println(" --> ERROR");
 			System.out.println("Errore durante la clone del verticale '"+ verticale +"'");

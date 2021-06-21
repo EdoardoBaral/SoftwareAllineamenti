@@ -1,10 +1,8 @@
 package allineamenti;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,15 +37,15 @@ public class SetupApplication
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		
 		String riga;
-		while ((riga = br.readLine()) != null)
+		while((riga = br.readLine()) != null)
 		{
-			if (riga.length() > 0 && riga.contains("--B"))
+			if(riga.length() > 0 && riga.contains("--B"))
 			{
 				String nomeBlocco = riga.substring(2, riga.indexOf(':'));
 				String nomeEjb = riga.substring(riga.indexOf(':') + 2);
 				List<String> listaEjb = map.get(nomeBlocco);
 				
-				if (listaEjb == null)
+				if(listaEjb == null)
 				{
 					listaEjb = new ArrayList<>();
 					listaEjb.add(nomeEjb);
@@ -79,10 +77,8 @@ public class SetupApplication
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		
 		String riga;
-		while ((riga = br.readLine()) != null)
-		{
+		while((riga = br.readLine()) != null)
 			listaVerticali.add(riga);
-		}
 		
 		return listaVerticali;
 	}
@@ -97,47 +93,16 @@ public class SetupApplication
 	{
 		List<String> listaVersioni = new ArrayList<>();
 		String nomeFile = "VersioniPOM.txt";
-//		ClassLoader classLoader = getClass().getClassLoader();
-//		File file = new File(classLoader.getResource(nomeFile).getFile());
 		File file = new File(nomeFile);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		
 		String riga;
-		while ((riga = br.readLine()) != null )
+		while((riga = br.readLine()) != null )
 		{
-			if (!"".equals(riga))
+			if(!"".equals(riga))
 				listaVersioni.add(riga);
 		}
 		
 		return listaVersioni;
-	}
-	
-	void aggiornamentoFileVersioniPOM(Map<String, String> mappaDipendenze)
-	{
-		try
-		{
-			File file = new File("VersioniPOM.txt");
-
-			if(file == null)
-				throw new IOException("File VersioniPOM.txt non trovato");
-
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
-
-			for(String tag : mappaDipendenze.keySet())
-			{
-				String versione = mappaDipendenze.get(tag);
-				String riga = "<"+ tag +">"+ versione +"</"+ tag +">";
-				bw.write(riga +"\n");
-				bw.flush();
-			}
-
-			bw.close();
-		}
-		catch(IOException ex)
-		{
-			System.out.println("--- Aggiornamento VersioniPOM.txt interrotto a causa di un errore ---");
-			ex.printStackTrace();
-		}
-		System.out.println();
 	}
 }
