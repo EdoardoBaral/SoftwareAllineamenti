@@ -129,7 +129,7 @@ public class FunzioniEjb
 				verificaModificheNonCommittate(nomeBloccoEjb);
 				tuttoCommittatoEjbBlocco = statusEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
 			}
-			System.out.println("********** Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate **********");
+			System.out.println("********** Gli EJB del blocco "+ nomeBloccoEjb +" non presentano modifiche non committate **********\n");
 			
 			commitVuotoEjbBlocco(mapEjb, nomeBloccoEjb, nomeBranch, percorso);
 			pushEjbBlocco(mapEjb, nomeBloccoEjb, percorso);
