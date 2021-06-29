@@ -25,6 +25,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,14 +50,14 @@ public class FunzioniVerticali
 		String branchOrigine = null;
 		if(partiComando.length == 3)
 			branchOrigine = partiComando[2];
-		System.out.println("--- Allineamento verticali - Branch: "+ nomeBranch +" ---\n");
+		System.out.println("********** Allineamento verticali - Branch: "+ nomeBranch +" **********\n");
 
 		String percorso = inputPercorsoCartellaVerticali();
 
 		proceduraCheckoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
 		System.out.println();
 
-		System.out.println("--- Pull di tutti i verticali\n");
+		System.out.println("********** Pull di tutti i verticali **********\n");
 		pullTuttiVerticali(listaVerticali, percorso);
 		
 		boolean flagConflitti;
@@ -65,7 +66,7 @@ public class FunzioniVerticali
 		{
 			if(branchOrigine != null)
 			{
-				System.out.println("--- Merge di tutti i verticali dal branch '"+ branchOrigine +"'\n");
+				System.out.println("********** Merge di tutti i verticali dal branch '"+ branchOrigine +"' **********\n");
 				flagConflitti = pullOriginVerticali(listaVerticali, percorso, branchOrigine);
 				if(flagConflitti)
 					proceduraGestioneConflitti(listaVerticali, percorso);
@@ -75,12 +76,12 @@ public class FunzioniVerticali
 		{
 			if(branchOrigine == null)
 			{
-				System.out.println("--- Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL +"'\n");
+				System.out.println("********** Merge di tutti i verticali dal branch '"+ StringConstants.BRANCH_SVIL +"' **********\n");
 				flagConflitti = pullOriginVerticali(listaVerticali, percorso, StringConstants.BRANCH_SVIL);
 			}
 			else
 			{
-				System.out.println("--- Merge di tutti i verticali dal branch '"+ branchOrigine +"'\n");
+				System.out.println("********** Merge di tutti i verticali dal branch '"+ branchOrigine +"' **********\n");
 				flagConflitti = pullOriginVerticali(listaVerticali, percorso, branchOrigine);
 			}
 			if(flagConflitti)
@@ -89,7 +90,7 @@ public class FunzioniVerticali
 
 		if(StringConstants.BRANCH_SVIL.equalsIgnoreCase(nomeBranch))
 		{
-			System.out.println("--- Merge di tutti i verticali dal branch master\n");
+			System.out.println("********** Merge di tutti i verticali dal branch master **********\n");
 			flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
 			if(flagConflitti)
 				proceduraGestioneConflitti(listaVerticali, percorso);
@@ -108,7 +109,7 @@ public class FunzioniVerticali
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
 		
-		System.out.println("--- Allineamento verticali in '"+ nomeBranch +"' terminato ---\n");
+		System.out.println("********** Allineamento verticali in '"+ nomeBranch +"' terminato **********\n");
 	}
 	
 	/**
@@ -240,9 +241,9 @@ public class FunzioniVerticali
 		{
 			boolean checkoutAvvenuto = gitCheckout(StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch, percorso);
 			if(checkoutAvvenuto)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> OK");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_CHECKOUT + nomeBranch +" --> ERRORE");
 			
 			return checkoutAvvenuto;
 		}
@@ -285,7 +286,7 @@ public class FunzioniVerticali
 	 */
 	private static void pullVerticale(String percorso)
 	{
-		System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL);
+		System.out.print("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL);
 		try
 		{
 			gitPull(StringConstants.COMANDO_GIT_PULL, percorso);
@@ -328,9 +329,9 @@ public class FunzioniVerticali
 		{
 			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine, percorso);
 			if(!flagConflitti)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine +" --> OK");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine +" --> OK");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine +" --> CONFLITTI");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + branchOrigine +" --> CONFLITTI");
 			
 			return flagConflitti;
 		}
@@ -385,9 +386,9 @@ public class FunzioniVerticali
 		{
 			boolean flagCommit = gitCommitConflitto(StringConstants.COMANDO_GIT_COMMIT, percorso);
 			if(flagCommit)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> CONFLITTI RISOLTI");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> CONFLITTI RISOLTI");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_COMMIT +" --> NESSUN CONFLITTO DA RISOLVERE");
 		}
 		catch(IOException ex)
 		{
@@ -424,9 +425,9 @@ public class FunzioniVerticali
 		{
 			boolean flagConflitti = gitPullOrigin(StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER, percorso);
 			if(!flagConflitti)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> OK");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> OK");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> CONFLITTI");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PULL_ORIGIN + StringConstants.BRANCH_MASTER +" --> CONFLITTI");
 			
 			return flagConflitti;
 		}
@@ -466,9 +467,9 @@ public class FunzioniVerticali
 		{
 			boolean flagCommit = gitStatus(StringConstants.COMANDO_GIT_STATUS, percorso);
 			if(flagCommit)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> NESSUNA MODIFICA DA COMMITTARE");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> NESSUNA MODIFICA DA COMMITTARE");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> CI SONO MODIFICHE DA COMMITTARE");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_STATUS +" --> CI SONO MODIFICHE DA COMMITTARE");
 			
 			return flagCommit;
 		}
@@ -525,12 +526,12 @@ public class FunzioniVerticali
 		{
 			if(StringConstants.BRANCH_SVIL.equals(nomeBranch))
 			{
-				System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_RELEASE);
+				System.out.print("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_RELEASE);
 				gitCommitVuoto(StringConstants.COMANDO_GIT_RELEASE, percorso);
 			}
 			else
 			{
-				System.out.print("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_TAG_PROMOTE);
+				System.out.print("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_TAG_PROMOTE);
 				gitCommitVuoto(StringConstants.COMANDO_GIT_TAG_PROMOTE, percorso);
 			}
 			System.out.println(" --> OK");
@@ -569,9 +570,9 @@ public class FunzioniVerticali
 		{
 			boolean flagPush = gitPush(StringConstants.COMANDO_GIT_PUSH, percorso);
 			if(flagPush)
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> OK");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> OK");
 			else
-				System.out.println("-- Verticale: "+ percorso +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> ERRORE");
+				System.out.println("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ StringConstants.COMANDO_GIT_PUSH +" --> ERRORE");
 		}
 		catch (IOException ex)
 		{
@@ -708,15 +709,15 @@ public class FunzioniVerticali
 	static void eseguiSostituzioneAutomatica(List<String> listaVerticali, String comando)
 	{
 		String nomeBranch = comando.substring(13);
-		System.out.println("--- Procedura di sostituzione automatica delle versioni nei POM dei verticali - Branch: "+ nomeBranch +" ---\n");
+		System.out.println("********** Procedura di sostituzione automatica delle versioni nei POM dei verticali - Branch: "+ nomeBranch +" **********\n");
 		
 		String percorso = inputPercorsoCartellaVerticali();
 		
-		System.out.println("--- Checkout di tutti i verticali\n");
+		System.out.println("********** Checkout di tutti i verticali **********\n");
 		proceduraCheckoutTuttiVerticali(listaVerticali, nomeBranch, percorso);
 		System.out.println();
 		
-		System.out.println("--- Pull di tutti i verticali\n");
+		System.out.println("********** Pull di tutti i verticali **********\n");
 		pullTuttiVerticali(listaVerticali, percorso);
 		System.out.println();
 		
@@ -724,7 +725,7 @@ public class FunzioniVerticali
 		
 		if(nomeBranch.equalsIgnoreCase(StringConstants.BRANCH_SVIL))
 		{
-			System.out.println("--- Merge di tutti i verticali dal branch master\n");
+			System.out.println("********** Merge di tutti i verticali dal branch master **********\n");
 			flagConflitti = pullOriginMasterVerticali(listaVerticali, percorso);
 			if(flagConflitti)
 				proceduraGestioneConflitti(listaVerticali, percorso);
@@ -735,7 +736,7 @@ public class FunzioniVerticali
 		commitVuotoVerticali(listaVerticali, nomeBranch, percorso);
 		proceduraPushIntervalliVerticali(listaVerticali, percorso);
 		
-		System.out.println("--- Sostituzione automatica terminata ---\n");
+		System.out.println("********** Sostituzione automatica terminata **********\n");
 	}
 	
 	/**
@@ -785,7 +786,7 @@ public class FunzioniVerticali
 		String percorso = inputPercorsoCartellaDestinazioneVerticali();
 		
 		cloneTuttiVerticali(listaVerticali, percorso);
-		System.out.println("--- Download dei verticali terminato\n");
+		System.out.println("********** Download dei verticali terminato **********\n");
 	}
 	
 	/**
@@ -835,7 +836,7 @@ public class FunzioniVerticali
 	{
 		String urlVerticale = StringConstants.URL_BITBUCKET + verticale +".git";
 		String comando = StringConstants.COMANDO_GIT_CLONE + urlVerticale;
-		System.out.print("-- Verticale: "+ percorso +" - "+ comando);
+		System.out.print("-- Verticale: "+ StringUtils.rightPad(percorso, 60, " ") +" - "+ comando);
 		try
 		{
 			gitClone(comando, percorso, verticale);

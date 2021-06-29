@@ -941,7 +941,7 @@ public class FunzioniEjb
 		
 		for(String ejb : nomiEjbBlocco) {
 			String chiaveEjb = ejb +".version";
-			System.out.print("--- Inserire la versione di "+ ejb +"-ejb appena ricompilata: ");
+			System.out.print(">>> Inserire la versione di "+ ejb +"-ejb appena ricompilata: ");
 			String versione = inputScelta();
 			mappaDipendenze.put(chiaveEjb, versione);
 		}
